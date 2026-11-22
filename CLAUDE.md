@@ -3,6 +3,7 @@
 Web app to review the moves of sudoku grids already solved (level 13, magazine). Each move becomes an exercise: find which candidate of the green start cell must be eliminated to empty the red zone.
 
 - Specification: `docs/SPEC.md` (in French). Read it before working on a feature; it says what is in scope now and what is deliberately postponed ("Plus tard").
+- Progress: the "État d'avancement" section at the top of `docs/SPEC.md` lists what is done, the next steps and the open points. Read it at the start of a session, and update it at the end of each feature (with the date).
 - Visual/computation reference: `docs/sudoku-training-modele.html` (`renderCard`). It is a reference to port, not code to call.
 
 ## Working agreement

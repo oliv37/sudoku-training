@@ -3,6 +3,33 @@
 Application web pour revoir les coups des grilles de sudoku déjà résolues (niveau 13, magazine).
 Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x, colonne y, de 1 à 9).
 
+## État d'avancement
+
+> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-22.
+
+### Fait
+- **Socle** : Angular 22 + Tailwind 4, génération statique (`outputMode: "static"`, toutes les routes pré-rendues au build, serveur Express retiré). Organisation `pages/` / `exercise/` / `board/` (voir `CLAUDE.md`).
+- **Identité** : logo dans l'en-tête (pleine largeur), polices Google Fonts, couleurs en tokens Tailwind (`src/styles.css`), thème clair, fond blanc.
+- **Accueil** (`/`, chargé en lazy) : grille du 14 novembre **codée en dur** (`public/data/exercices-2026-11-14.json`), navigation libre entre les coups (‹ › et ← →, ligne « date · k / N »).
+- **Grille SVG** (`Board`) : rendu de la question et du schéma de solution, porté de `renderCard` (cercles, chiffres barrés, flèches numérotées par branche, cases non concernées en gris) + mise en évidence des derniers candidats de la zone rouge.
+- **Exercice** : question avec badges vert/rouge, boutons des candidats, « Found! » / « Lost », explication + piste, « ↺ Reset », « Next move → », question masquée après la réponse, focus et annonces pour les lecteurs d'écran.
+- **Mise en page** : l'exercice tient dans la hauteur de l'écran moins l'en-tête (minimum 30rem) ; empilé sur téléphone et tablette en portrait, côte à côte (grille à gauche, question à droite) en `md:landscape`.
+
+### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
+1. **Step by step** : afficher le schéma étape par étape (frame 0, 1, 2… jusqu'à la zone rouge) avec Previous / Next ; l'entrée `step` de `Board` est prévue mais pas encore utilisée.
+2. **`index.json` + `scripts/build-index.mjs`** (scripts `prestart` / `prebuild`), puis accueil complet : tirage d'une grille au hasard, enchaînement des grilles, liste des grilles sous l'exercice.
+3. **Page Grids** (`/grid/:nom`) et **menu** Home · Grids · Patterns.
+4. **Page Patterns** (`/patterns`) : contenu de l'artefact « Motifs de sudoku », à fournir.
+
+### Points ouverts
+- `docs/sudoku-training-modele.html` : gardé pour l'instant ; à supprimer plus tard (tout ce qui servait est porté), en mettant à jour la SPEC et `CLAUDE.md`.
+- Schéma de solution vérifié à l'œil seulement (pas de comparaison automatique avec le rendu de référence).
+- `autresReponses` : géré dans le code mais jamais testé (la grille du 14 novembre n'en a aucune).
+- Aucun audit AXE lancé pour l'instant ; pas de tests unitaires (choix de la première étape).
+- À tester sur un vrai téléphone (lisibilité du texte et de la grille).
+- Numéro du coup dans l'URL : non pour l'instant ; à envisager sur `/grid/:nom`.
+- Noms de champs du JSON en franglais : à revoir plus tard, côté export Python.
+
 ## Données
 
 Les exercices sont produits par `python3 sudoku_training.py grille-AAAA-MM-JJ.json export` (un fichier par grille). Pour ajouter une grille, il suffit de déposer son fichier dans `public/data/`.
@@ -51,7 +78,7 @@ Approche demandée (déclarative) :
 3. Même rendu : fond, traits fins et épais, chiffres posés, candidats en petits chiffres, soulignés, case de départ verte, zone rouge hachurée (motif `<pattern>`), puis en solution : cercles, chiffres barrés, flèches courbes numérotées (une couleur par branche), cases non concernées en gris. **Ajout par rapport au modèle** : les derniers candidats de la zone rouge éliminés par la chaîne (le chiffre `arrivee.chiffre` dans l'unité, ou tous les candidats si l'arrivée est une case) sont barrés comme les autres et entourés d'un carré rouge (fond rouge clair). Ne pas reprendre le texte dessiné sous la grille : l'app affiche ses propres textes en HTML.
 Correspondance des champs : dans le modèle, `m.hyp.cell` = `depart`, `m.hyp.v` = `reponse`, `m.target` = `arrivee.cases`, `m.tkind` = `arrivee.type` ; `vals`, `cands`, `under`, `frames` sont identiques.
 
-## Première étape (à faire d'abord)
+## Première étape (faite)
 
 Un test minimal, avant tout le reste. **Seul objectif : vérifier qu'on peut afficher correctement la grille et le schéma de solution dans l'application.**
 - Une seule page, qui affiche **un seul coup en dur** : le premier coup de la grille du 14 novembre (`exercices-2026-11-14.json`, `exos[0]`).
