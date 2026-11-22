@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>__FONTS__
+/* Two uses : ?m=N&s=0|1 → one 1080 px card for PNG export; no parameter → review page with all moves. */
+:root{--bg:#eef2f5;--surface:#ffffff;--ink:#123a66;--muted:#5a7290;--line:#c9d5e1;--hyp:#15924f;--bad:#e0342a;
+  --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow","Segoe UI",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1720;--surface:#17212c;--ink:#e3ecf5;--muted:#93a7bc;--line:#2c3a49;--hyp:#4fd08a;--bad:#ff6b5f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1720;--surface:#17212c;--ink:#e3ecf5;--muted:#93a7bc;--line:#2c3a49;--hyp:#4fd08a;--bad:#ff6b5f;color-scheme:dark}
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+body.export{background:#888} body.export svg{display:block;width:1080px}
+.wrap{height:100vh;height:100dvh;max-width:760px;margin:0 auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+header{flex:none;display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+h1{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:1.25rem;margin:0}
+h1 span{color:#d9a400}
+.sub{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--muted);margin:0;text-transform:uppercase}
+.chips{flex:none;display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chips button{flex:none;position:relative;font:600 .85rem var(--body);min-width:32px;height:30px;border-radius:7px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
+.chips button[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.chips button.pub::after{content:"";position:absolute;top:2px;right:2px;width:5px;height:5px;border-radius:50%;background:#d9a400}
+button:focus-visible{outline:2px solid #1f6fd6;outline-offset:2px}
+.card{flex:1 1 0;min-height:0;position:relative}
+.card svg{display:block;position:absolute;top:0;left:50%;transform:translateX(-50%);border-radius:8px;box-shadow:0 1px 0 var(--line),0 6px 18px rgba(18,58,102,.12)}
+.info{flex:none;margin:0;font-size:.85rem;line-height:1.4;color:var(--muted);max-height:7em;overflow-y:auto}
+.info b{color:var(--ink);font-weight:600}
+.info .g{color:var(--hyp)} .info .r{color:var(--bad)}
+.actions{flex:none;display:flex;gap:6px;align-items:center;justify-content:center}
+.actions button{font:600 .9rem var(--body);padding:7px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.actions button:disabled{opacity:.4;cursor:default}
+.actions .primary{background:var(--hyp);border-color:var(--hyp);color:#fff;min-width:150px}
+</style></head>
+<body>
+<script>const DATA=__DATA__;</script>
+<script>// Rendu d'une carte Sudoku Training (1080 x 1350) en SVG.
+// renderCard(svg, DATA, moveIndex, showSolution, theme, opts)
+const THEMES = {
+  sky: {
+    name:'Ciel',
+    sheet:'#f4f8fb', ink:'#123a66', thin:'#2b2d30', thick:'#123a66',
+    cand:'#1d3557', candOff:'#a3b4c8', given:'#0f2a4a', solved:'#2b6cb0',
+    brand:'#ffd23a', head:'#ffffff', outline:'#123a66',
+    hyp:'#15924f', hypBg:'#d2f2df', bad:'#e0342a', badBg:'#fbd8d3',
+    branches:['#1f6fd6','#9b3fd4','#e07800','#0f9aa0'], strike:'#e0342a', text:'#0f2a4a', muted:'#5a7290', crop:'#9fb3c8', stamp:'#1f6fd6', grid:true, sky:true
+  },
+  plan: { // A : plan technique
+    name:'Plan technique',
+    bg:'#0e1a2b', sheet:'#eef2f6', ink:'#0e1a2b', thin:'#9fb0c3', thick:'#0e1a2b',
+    cand:'#22324a', candOff:'#9aa9ba', given:'#0e1a2b', solved:'#2c5d94',
+    brand:'#f5c518', brandInk:'#0e1a2b', head:'#eef2f6', headMuted:'#8ea3bb',
+    hyp:'#17834f', hypBg:'#d3efdf', bad:'#d23a2c', badBg:'#f8d9d4',
+    arrow:'#2c5d94', strike:'#d23a2c', text:'#0e1a2b', muted:'#5b6b80', crop:'#0e1a2b', grid:true
+  },
+  mil: { // B : papier millimétré
+    name:'Papier millimétré',
+    bg:'#f7f8f4', sheet:'#ffffff', ink:'#1c2c6b', thin:'#b9c2e0', thick:'#1c2c6b',
+    cand:'#1c2c6b', candOff:'#a7b0cf', given:'#111a44', solved:'#3b58c4',
+    brand:'#1c2c6b', brandInk:'#f7f8f4', head:'#1c2c6b', headMuted:'#6f7cab',
+    hyp:'#14804a', hypBg:'#d5f0e0', bad:'#d6332a', badBg:'#fadad6',
+    arrow:'#3b58c4', strike:'#d6332a', text:'#111a44', muted:'#5d6893', crop:'#1c2c6b', grid:false, graph:true
+  },
+  noir: { // C : noir et signal
+    name:'Noir & signal',
+    bg:'#121212', sheet:'#1c1c1c', ink:'#f1f1ee', thin:'#3d3d3d', thick:'#d8d8d4',
+    cand:'#e6e6e2', candOff:'#6c6c6a', given:'#ffffff', solved:'#ffd23f',
+    brand:'#ffd23f', brandInk:'#121212', head:'#f1f1ee', headMuted:'#8c8c88',
+    hyp:'#3fd68a', hypBg:'#16382a', bad:'#ff5a4e', badBg:'#4a1f1c',
+    arrow:'#7fb2ff', strike:'#ff5a4e', text:'#f1f1ee', muted:'#9a9a96', crop:'#d8d8d4', grid:false
+  }
+};
+const NSV='http://www.w3.org/2000/svg';
+function el(t,a,txt){const e=document.createElementNS(NSV,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;return e;}
+function renderCard(svg, DATA, mi, sol, T, opts){
+  opts=opts||{};
+  const W=1080,H=(opts.H||1235), CS=96, GX=108, GY=236, m=DATA.moves[mi], N=DATA.moves.length;
+  svg.setAttribute('viewBox','0 0 1080 '+H); svg.textContent='';
+  let root=svg; const add=(t,a,x)=>root.appendChild(el(t,a,x));
+  const defs=add('defs',{});
+  const hat=el('pattern',{id:'hatch',width:14,height:14,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'});
+  hat.appendChild(el('rect',{width:14,height:14,fill:T.badBg,opacity:.55}));
+  hat.appendChild(el('line',{x1:0,y1:0,x2:0,y2:14,stroke:T.bad,'stroke-width':2.2,opacity:.55}));
+  defs.appendChild(hat);
+  add('rect',{x:0,y:0,width:W,height:H,fill:T.sheet});
+  [[18,18,1,1],[W-18,18,-1,1],[18,H-18,1,-1],[W-18,H-18,-1,-1]].forEach(([x,y,dx,dy])=>{
+    add('line',{x1:x,y1:y,x2:x+dx*20,y2:y,stroke:T.crop,'stroke-width':2.5}); add('line',{x1:x,y1:y,x2:x,y2:y+dy*20,stroke:T.crop,'stroke-width':2.5}); });
+  const K=1008/(9*CS); root=el('g',{transform:`translate(${36-GX*K} ${36-GY*K}) scale(${K})`}); svg.appendChild(root);
+  // zones
+  add('rect',{x:GX,y:GY,width:9*CS,height:9*CS,fill:'#ffffff'});
+  const h=m.hyp.cell;
+  const cellX=c=>GX+c*CS, cellY=r=>GY+r*CS;
+  if(m.tkind==='unit'){
+    const rs=m.target.map(p=>p[0]),cs=m.target.map(p=>p[1]); const r0=Math.min(...rs),r1=Math.max(...rs),c0=Math.min(...cs),c1=Math.max(...cs);
+    add('rect',{x:cellX(c0),y:cellY(r0),width:(c1-c0+1)*CS,height:(r1-r0+1)*CS,fill:'url(#hatch)'});
+  } else { const [r,c]=m.target[0]; add('rect',{x:cellX(c),y:cellY(r),width:CS,height:CS,fill:'url(#hatch)'}); }
+  add('rect',{x:cellX(h[1]),y:cellY(h[0]),width:CS,height:CS,fill:T.hypBg});
+  // grille
+  for(let i=0;i<=9;i++){ const th=i%3===0;
+    add('line',{x1:GX,y1:GY+i*CS,x2:GX+9*CS,y2:GY+i*CS,stroke:th?T.thick:T.thin,'stroke-width':th?7:1.8,'stroke-linecap':'square'});
+    add('line',{x1:GX+i*CS,y1:GY,x2:GX+i*CS,y2:GY+9*CS,stroke:th?T.thick:T.thin,'stroke-width':th?7:1.8,'stroke-linecap':'square'}); }
+  // contours départ / cible
+  if(m.tkind==='unit'){ const rs=m.target.map(p=>p[0]),cs=m.target.map(p=>p[1]); const r0=Math.min(...rs),r1=Math.max(...rs),c0=Math.min(...cs),c1=Math.max(...cs);
+    add('rect',{x:cellX(c0)+3,y:cellY(r0)+3,width:(c1-c0+1)*CS-6,height:(r1-r0+1)*CS-6,fill:'none',stroke:T.bad,'stroke-width':4,'stroke-dasharray':'12 7'}); }
+  else { const [r,c]=m.target[0]; add('rect',{x:cellX(c)+4,y:cellY(r)+4,width:CS-8,height:CS-8,fill:'none',stroke:T.bad,'stroke-width':5}); }
+  add('rect',{x:cellX(h[1])+4,y:cellY(h[0])+4,width:CS-8,height:CS-8,fill:'none',stroke:T.hyp,'stroke-width':5});
+  // chiffres
+  const P=(r,c,d)=>[GX+c*CS+20+((d-1)%3)*28, GY+r*CS+21+Math.floor((d-1)/3)*27];
+  let touched=null, kept=new Map(), struck=new Set();
+  if(sol){ touched=new Set();
+    m.frames.forEach(f=>{ if(f.circle){kept.set(f.circle.join(),f.kind); touched.add(f.circle[0]+','+f.circle[1]);} (f.strikes||[]).forEach(s=>{struck.add(s.join()); touched.add(s[0]+','+s[1]);}); });
+    // seules comptent les cases de la chaîne, la zone rouge et les cases qui justifient un singleton caché
+    touched=new Set(m.target.map(p=>p.join()));
+    m.frames.forEach(f=>{ if(!f.circle) return; touched.add(f.circle[0]+','+f.circle[1]);
+      const w=/^caché (ligne|colonne|bloc) (\d)$/.exec(f.why||''); if(!w) return; const n=+w[2]-1, d=f.circle[2];
+      for(let r=0;r<9;r++)for(let c=0;c<9;c++){ const inU=w[1]==='ligne'?r===n:w[1]==='colonne'?c===n:(Math.floor(r/3)*3+Math.floor(c/3))===n;
+        if(inU&&(m.cands[r+','+c]||[]).includes(d)) touched.add(r+','+c); } }); }
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+    const v=m.vals[r*9+c];
+    if(v){ add('text',{x:GX+c*CS+CS/2,y:GY+r*CS+CS/2+20,'text-anchor':'middle',fill:T.given,'font-family':'Barlow','font-weight':700,'font-size':58},v); continue; }
+    (m.cands[r+','+c]||[]).forEach(d=>{ const [x,y]=P(r,c,d); const off=touched&&!touched.has(r+','+c);
+      add('text',{x:x,y:y+8,'text-anchor':'middle',fill:off?T.candOff:T.cand,'font-family':'Barlow','font-weight':600,'font-size':23},d);
+      // chiffre souligné : 2 places seulement dans sa ligne, sa colonne ou son bloc
+      if((m.under||[]).some(u=>u[0]===r&&u[1]===c&&u[2]===d)) add('line',{x1:x-8,y1:y+13,x2:x+8,y2:y+13,stroke:off?T.candOff:'#111111','stroke-width':2.4,'stroke-linecap':'round'}); });
+  }
+  if(sol){
+    const F0=m.frames, br=[], num=[]; let nb=0; const cnt={};
+    F0.forEach((f,i)=>{ if(f.kind!=='dom')return; br[i]= f.cause===0 ? (nb++) : br[f.cause]; num[i]=i; });
+    const BC=b=>(T.branches||[T.arrow])[b%((T.branches||[T.arrow]).length)];
+    const keptBr=new Map(); F0.forEach((f,i)=>{ if(f.kind==='dom') keptBr.set(f.circle.join(),br[i]); });
+    struck.forEach(k=>{ if(kept.has(k))return; const [r,c,d]=k.split(',').map(Number); const [x,y]=P(r,c,d); const off=!touched.has(r+','+c);
+      add('line',{x1:x-9,y1:y+9,x2:x+9,y2:y-9,stroke:off?T.candOff:T.strike,'stroke-width':off?2:3,'stroke-linecap':'round'}); });
+    kept.forEach((kind,k)=>{ const [r,c,d]=k.split(',').map(Number); const [x,y]=P(r,c,d);
+      add('circle',{cx:x,cy:y,r:14,fill:'none',stroke:kind==='hyp'?T.hyp:BC(keptBr.get(k)),'stroke-width':kind==='hyp'?3.6:3}); });
+    // flèches
+    let obst=[], badges=[];
+    for(let r=0;r<9;r++)for(let c=0;c<9;c++) if(m.vals[r*9+c]) obst.push({x:GX+c*CS+CS/2,y:GY+r*CS+CS/2,r:32,w:1});
+    kept.forEach((v,k)=>{ const [x,y]=P(...k.split(',').map(Number)); obst.push({x,y,r:27,w:3}); });
+    struck.forEach(k=>{ const [x,y]=P(...k.split(',').map(Number)); obst.push({x,y,r:17,w:1}); });
+    const pen=p=>{let s=0;for(const o of obst){const d=Math.hypot(p[0]-o.x,p[1]-o.y); if(d<o.r) s+=o.w*(1-d/o.r);} return s;};
+    const q=(s,mm,e,t)=>{const u=1-t;return [u*u*s[0]+2*u*t*mm[0]+t*t*e[0],u*u*s[1]+2*u*t*mm[1]+t*t*e[1]];};
+    const arrow=(a,b,num,col)=>{
+      const [x1,y1]=P(...a),[x2,y2]=P(...b); const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy); if(len<1)return;
+      const ux=dx/len,uy=dy/len, S0=[x1+ux*17,y1+uy*17], E0=[x2-ux*27,y2-uy*27]; let best=null;
+      for(const k of [0.12,-0.12,0.24,-0.24,0.04,-0.04,0.36,-0.36]){
+        const off=Math.sign(k)*Math.min(Math.abs(k)*len,Math.abs(k)>0.3?96:Math.abs(k)>0.2?66:38);
+        const mm=[(S0[0]+E0[0])/2-uy*off,(S0[1]+E0[1])/2+ux*off]; let sc=Math.abs(k)*1.5;
+        for(let t=0.12;t<0.9;t+=0.08) sc+=pen(q(S0,mm,E0,t));
+        const z=q(S0,mm,E0,0.5); if(z[0]<GX+6||z[0]>GX+9*CS-6||z[1]<GY+6||z[1]>GY+9*CS-6) sc+=5;
+        if(!best||sc<best.sc) best={sc,mm}; }
+      const mm=best.mm;
+      add('path',{d:`M${S0[0]} ${S0[1]} Q${mm[0]} ${mm[1]} ${E0[0]} ${E0[1]}`,fill:'none',stroke:col,'stroke-width':3.2});
+      const tx=E0[0]-mm[0],ty=E0[1]-mm[1],tl=Math.hypot(tx,ty)||1,vx=tx/tl,vy=ty/tl;
+      add('path',{d:`M${E0[0]+vx*11} ${E0[1]+vy*11} L${E0[0]-vy*6.5} ${E0[1]+vx*6.5} L${E0[0]+vy*6.5} ${E0[1]-vx*6.5} Z`,fill:col});
+      let bb=null; for(const t of [0.5,0.42,0.58,0.34,0.66,0.26,0.74]) for(const sh of (len<130?[19,-19]:[0])){
+        const z=q(S0,mm,E0,t), pt=[z[0]-uy*sh,z[1]+ux*sh]; const sc=pen(pt)+Math.abs(t-0.5)*0.6; if(!bb||sc<bb.sc) bb={sc,pt}; }
+      badges.push([bb.pt[0],bb.pt[1],num,col]); obst.push({x:bb.pt[0],y:bb.pt[1],r:28,w:4});
+      for(let t=0.15;t<0.9;t+=0.1){const z=q(S0,mm,E0,t); obst.push({x:z[0],y:z[1],r:14,w:1.2});}
+    };
+    const F=m.frames; F.forEach((f,i)=>{ if(f.kind==='dom') arrow(F[f.cause].circle,f.circle,num[i],BC(br[i])); });
+    badges.forEach(([x,y,n,col])=>{ add('circle',{cx:x,cy:y,r:13,fill:col}); add('text',{x:x,y:y+6,'text-anchor':'middle',fill:'#ffffff','font-family':'Barlow','font-weight':700,'font-size':17},n); });
+  }
+  // texte sous la grille
+  const TY=GY+9*CS+62;
+  if(!sol){
+    const n=m.frames.length-2;
+    add('text',{x:GX,y:TY,fill:T.text,'font-family':'Barlow','font-weight':600,'font-size':38},'Which candidate can you rule out in the green cell?');
+    add('text',{x:GX,y:TY+50,fill:T.muted,'font-family':'IBM Plex Mono','font-weight':500,'font-size':24,'letter-spacing':1},n+'-STEP CHAIN');
+  } else {
+    const F=m.frames, items=[]; let nb2=0; const brs={};
+    const br2=[]; F.forEach((f,i)=>{ if(f.kind!=='dom')return; br2[i]= f.cause===0 ? (nb2++) : br2[f.cause]; (brs[br2[i]]=brs[br2[i]]||[]).push(f.circle[2]); });
+    const cols=T.branches||[T.arrow];
+    const concl = m.tkind==='cell' ? 'The red cell is empty,' : 'No '+m.contra.match(/plus de (\d)/)[1]+' left in the red zone,';
+    items.push({t:concl,c:T.bad,w:700});
+    items.push({t:'so the green cell is not '+m.hyp.v+'.',c:T.text,w:700});
+    let x=GX, y=TY-4; const maxX=GX+9*CS, lh=46;
+    const g=el('g',{}); root.appendChild(g);
+    items.forEach(it=>{
+      if(it.gap){ x+=14; return; }
+      const tmp=el('text',{x:0,y:0,'font-family':'Barlow','font-weight':it.w||600,'font-size':32},it.t); g.appendChild(tmp);
+      const tw=tmp.getComputedTextLength(); g.removeChild(tmp);
+      const w=(it.b!==undefined?34:0)+tw+14;
+      if(x+w>maxX && x>GX){ x=GX; y+=lh; }
+      if(it.b!==undefined){ g.appendChild(el('circle',{cx:x+14,cy:y-11,r:14,fill:it.col})); g.appendChild(el('text',{x:x+14,y:y-4.5,'text-anchor':'middle',fill:'#ffffff','font-family':'Barlow','font-weight':700,'font-size':18},it.b)); x+=34; }
+      g.appendChild(el('text',{x:x,y:y,fill:it.c||T.text,'font-family':'Barlow','font-weight':it.w||600,'font-size':32},it.t)); x+=tw+14;
+    });
+  }
+}
+// Fond : bleu vif qui file vers le blanc.
+function drawSky(svg,defs,W,H,T){
+  const add=(t,a,x)=>svg.appendChild(el(t,a,x));
+  const lg=el('linearGradient',{id:'skyg',x1:0,y1:0,x2:.75,y2:1});
+  [['#0f6fd8',0],['#2a8cf0',.3],['#6cbcff',.62],['#cfe9ff',.85],['#ffffff',1]].forEach(([c,o])=>lg.appendChild(el('stop',{offset:o,'stop-color':c})));
+  defs.appendChild(lg);
+  const rg=el('radialGradient',{id:'glow',cx:.85,cy:.95,r:.75});
+  [['#ffffff',0,1],['#ffffff',.35,.55],['#ffffff',1,0]].forEach(([c,o,op])=>rg.appendChild(el('stop',{offset:o,'stop-color':c,'stop-opacity':op})));
+  defs.appendChild(rg);
+  add('rect',{x:0,y:0,width:W,height:H,fill:'url(#skyg)'});
+  add('rect',{x:0,y:0,width:W,height:H,fill:'url(#glow)'});
+}
+
+// Cachet « ST » façon tampon encreur, légèrement incliné.
+function drawStamp(svg,cx,cy,T){
+  const g=el('g',{transform:`translate(${cx} ${cy}) rotate(-12)`,opacity:.9}); svg.appendChild(g);
+  const c=T.stamp||T.ink, R=74;
+  g.appendChild(el('circle',{r:R,fill:'none',stroke:c,'stroke-width':5}));
+  g.appendChild(el('circle',{r:R-11,fill:'none',stroke:c,'stroke-width':2}));
+  g.appendChild(el('circle',{r:37,fill:'none',stroke:c,'stroke-width':2}));
+  const id='arc'+Math.random().toString(36).slice(2,7);
+  const defs=el('defs',{}); g.appendChild(defs);
+  defs.appendChild(el('path',{id:id,d:`M ${-(R-28)} 0 A ${R-28} ${R-28} 0 1 1 ${R-28} 0 A ${R-28} ${R-28} 0 1 1 ${-(R-28)} 0`}));
+  const t=el('text',{fill:c,'font-family':'Barlow Condensed','font-weight':800,'font-size':16});
+  const tp=el('textPath',{href:'#'+id,startOffset:'0',textLength:2*Math.PI*(R-28)-6,lengthAdjust:'spacing'}); tp.textContent='SUDOKU ★ TRAINING ★ '; t.appendChild(tp); g.appendChild(t);
+  g.appendChild(el('text',{x:0,y:15,'text-anchor':'middle',fill:c,'font-family':'Barlow Condensed','font-weight':800,'font-size':44,'letter-spacing':1},'ST'));
+}
+</script>
+<script>
+const P=new URLSearchParams(location.search);
+const nm=p=>'R'+(p[0]+1)+'C'+(p[1]+1);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+if(P.has('m')){
+  document.body.className='export';
+  const svg=document.createElementNS(NSV,'svg'); svg.id='c'; document.body.appendChild(svg);
+  document.fonts.ready.then(()=>{ renderCard(svg,DATA,(+P.get('m')||1)-1,P.get('s')==='1',THEMES.sky);
+    svg.style.height=svg.viewBox.baseVal.height+'px'; document.body.dataset.ready=1; });
+} else {
+  const N=DATA.moves.length, sel=new Set(DATA.selection||[]);
+  document.body.innerHTML=`<div class="wrap">
+    <header><h1>Sudoku <span>Training</span></h1><p class="sub">${DATA.titre||''} · ${N} moves · dot = published</p></header>
+    <nav class="chips" id="chips" aria-label="Moves"></nav>
+    <div class="card"><svg id="c" role="img"></svg></div>
+    <p class="info" id="info"></p>
+    <div class="actions"><button type="button" id="prev" aria-label="Previous move">‹ Prev</button><button type="button" id="toggle" class="primary">Show solution</button><button type="button" id="next" aria-label="Next move">Next ›</button></div>
+    </div>`;
+  let mi=0, sol=false;
+  const svg=document.getElementById('c'), chips=document.getElementById('chips');
+  DATA.moves.forEach((m,i)=>{ const b=document.createElement('button'); b.type='button'; b.textContent=i+1;
+    b.title='Move '+(i+1)+': '+nm(m.hyp.cell)+', '+(m.frames.length-2)+' steps'; if(sel.has(i+1)) b.classList.add('pub');
+    b.addEventListener('click',()=>go(i,false)); chips.appendChild(b); });
+  const box=document.querySelector('.card');
+  function fit(){ const vb=svg.viewBox.baseVal; if(!vb||!vb.width)return; const r=vb.width/vb.height;
+    const w=Math.min(box.clientWidth, box.clientHeight*r); svg.style.width=w+'px'; svg.style.height=(w/r)+'px'; }
+  window.addEventListener('resize',fit); if(window.ResizeObserver) new ResizeObserver(fit).observe(box);
+  function render(){
+    const m=DATA.moves[mi], n=m.frames.length-2;
+    renderCard(svg,DATA,mi,sol,THEMES.sky);
+    svg.setAttribute('aria-label','Move '+(mi+1)+(sol?', solution':', question'));
+    let t='<b>Move '+(mi+1)+'</b> · green cell <b class="g">'+nm(m.hyp.cell)+'</b> · '+n+' step'+(n>1?'s':'');
+    if(sol){ t+=' · <b class="g">'+nm(m.hyp.cell)+' ≠ '+m.hyp.v+'</b>';
+      if(m.after.length) t+='<br>Then: '+(m.after.length>8?m.after.slice(0,8).join(', ')+', then the rest of the grid':m.after.join(', '))+'.';
+      if(m.extra.length) t+='<br><b class="r">Not only singles:</b> '+m.extra.join('; ')+'.';
+      // champ facultatif : absent sur les anciennes grilles
+      if(m.piste) t+='<br><b>What should have caught your eye:</b> '+esc(m.piste); }
+    document.getElementById('info').innerHTML=t;
+    document.getElementById('toggle').textContent=sol?'Back to question':'Show solution';
+    document.getElementById('prev').disabled=mi===0; document.getElementById('next').disabled=mi===N-1;
+    chips.querySelectorAll('button').forEach((b,j)=>b.setAttribute('aria-current',j===mi?'true':'false'));
+    fit();
+  }
+  function go(i,s){ mi=Math.max(0,Math.min(N-1,i)); sol=!!s; try{history.replaceState(null,'','#coup-'+(mi+1)+(sol?'-solution':''));}catch(e){} render(); }
+  document.getElementById('prev').addEventListener('click',()=>go(mi-1,false));
+  document.getElementById('next').addEventListener('click',()=>go(mi+1,false));
+  document.getElementById('toggle').addEventListener('click',()=>go(mi,!sol));
+  document.addEventListener('keydown',e=>{ if(e.key==='ArrowRight')go(mi+1,false); else if(e.key==='ArrowLeft')go(mi-1,false); });
+  const h=/^#coup-(\d+)(-solution)?$/.exec(location.hash); if(h){ mi=Math.min(N-1,Math.max(0,+h[1]-1)); sol=!!h[2]; }
+  window.addEventListener('hashchange',()=>{ const h=/^#coup-(\d+)(-solution)?$/.exec(location.hash); if(h){ mi=Math.min(N-1,Math.max(0,+h[1]-1)); sol=!!h[2]; render(); } });
+  document.fonts.ready.then(render);
+}
+</script></body></html>
