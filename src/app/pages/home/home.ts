@@ -1,11 +1,10 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Exercise } from '../../exercise/exercise';
 import { ExerciseFile } from '../../exercise/exercise.model';
 
-/** First step: a single hard-coded move (November 14 grid, move 1). */
+/** For now: a single hard-coded grid (November 14), browsable move by move. */
 const GRID_FILE = '/data/exercices-2026-11-14.json';
-const MOVE_INDEX = 0;
 
 @Component({
   selector: 'app-home',
@@ -15,25 +14,44 @@ const MOVE_INDEX = 0;
   host: {
     class:
       'mx-auto flex h-[calc(100dvh-var(--header-height))] min-h-120 w-full max-w-xl flex-col justify-center px-4 py-4 md:landscape:max-w-none md:landscape:pb-10',
+    '(document:keydown)': 'onKeydown($event)',
   },
-  template: `
-    @if (exo(); as e) {
-      <app-exercise [exo]="e" class="min-h-0 shrink">
-        <p
-          class="flex-none text-center font-mono text-xs md:landscape:text-sm tracking-wider text-muted uppercase"
-        >
-          {{ grid.value()?.nom }} · {{ e.coup }} / {{ grid.value()?.exos?.length }} ·
-          {{ e.etapes }}-step chain
-        </p>
-      </app-exercise>
-    } @else if (grid.error()) {
-      <p role="alert" class="text-bad">Could not load the exercise.</p>
-    } @else {
-      <p class="text-muted">Loading…</p>
-    }
-  `,
+  templateUrl: './home.html',
 })
 export class Home {
   protected readonly grid = httpResource<ExerciseFile>(() => GRID_FILE);
-  protected readonly exo = computed(() => this.grid.value()?.exos[MOVE_INDEX]);
+  protected readonly moveIndex = signal(0);
+
+  protected readonly total = computed(() => this.grid.value()?.exos.length ?? 0);
+  protected readonly exo = computed(() => this.grid.value()?.exos[this.moveIndex()]);
+  protected readonly hasPrevious = computed(() => this.moveIndex() > 0);
+  protected readonly hasNext = computed(() => this.moveIndex() < this.total() - 1);
+  /** Width reserved for the move number, so "9 / 20" → "10 / 20" does not shift the line. */
+  protected readonly counterWidth = computed(() => String(this.total()).length);
+
+  protected previous(): void {
+    if (this.hasPrevious()) this.moveIndex.update((i) => i - 1);
+  }
+
+  protected next(): void {
+    if (this.hasNext()) this.moveIndex.update((i) => i + 1);
+  }
+
+  /** ← / → change move, unless the user is typing or using a shortcut. */
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
+      return;
+    const target = event.target;
+    if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"]')) {
+      return;
+    }
+    if (event.key === 'ArrowLeft') {
+      this.previous();
+    } else if (event.key === 'ArrowRight') {
+      this.next();
+    } else {
+      return;
+    }
+    event.preventDefault();
+  }
 }

@@ -21,7 +21,7 @@
 >
   <h2
     id="question"
-    class="text-center text-base leading-tight font-semibold md:landscape:text-2xl md:landscape:leading-snug"
+    class="text-center text-base leading-relaxed font-semibold md:landscape:text-2xl md:landscape:leading-relaxed"
   >
     Which candidate of
     <span class="whitespace-nowrap rounded-md border-2 border-hyp bg-hyp-bg px-1.5">{{
@@ -41,6 +41,11 @@
       >?
     }
   </h2>
+  <p
+    class="-mt-2 text-center font-mono text-xs tracking-wider text-muted uppercase md:landscape:-mt-3 md:landscape:text-sm"
+  >
+    {{ exo().etapes }}-step chain
+  </p>
 
   <div
     role="group"

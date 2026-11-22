@@ -62,6 +62,8 @@ Un test minimal, avant tout le reste. **Seul objectif : vérifier qu'on peut aff
 
 ## Écrans (version complète)
 
+**Navigation libre entre les coups** (ajoutée après la première étape) : au-dessus de la grille, « ‹ AAAA-MM-JJ · k / N › ». Les boutons ‹ / › et les touches ← / → passent au coup précédent / suivant **à tout moment**, sans avoir à répondre (‹ désactivé au premier coup, › au dernier). Le numéro du coup a une largeur fixe (pas de décalage de 9 à 10). Le nombre d'étapes (« 2-STEP CHAIN ») est affiché sous la question. Changer de coup réaffiche le nouveau coup en mode question. Pas de numéro de coup dans l'URL pour l'instant.
+
 ### Accueil (`/`)
 1. **Un exercice s'affiche immédiatement**, sans clic : charger `index.json`, tirer une grille au hasard, et afficher son **premier coup**.
 2. Après chaque exercice (gagné ou perdu) : bouton **« Next exercise »** → coup suivant de la **même grille**, dans l'ordre des coups ; afficher le titre de la grille et « Move k / N ».
