@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
-import { THEME, VIEW_BOX, boardScene } from './board-geometry';
+import { THEME, VIEW_BOX, boardScene } from './geometry/board-geometry';
 import { BoardData, Highlights } from './board.model';
-import { solutionScene } from './solution-geometry';
+import { solutionScene } from './geometry/solution-geometry';
 
 let nextId = 0;
 

@@ -4,7 +4,7 @@
  * origin moved to (0, 0): GX = GY = 0, CS = 96 (so the arrow tuning constants stay identical).
  * The solution diagram is in solution-geometry.ts.
  */
-import { BoardData, Cell, Highlights, candidatesOf } from './board.model';
+import { BoardData, Cell, Highlights, candidatesOf } from '../board.model';
 
 /** Cell size, in SVG user units. */
 export const CS = 96;

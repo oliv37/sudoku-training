@@ -3,7 +3,7 @@
  * in docs/sudoku-training-modele.html. Same constants and same arrow-routing algorithm,
  * with the grid origin at (0, 0) instead of (GX, GY).
  */
-import { BoardData, Cell, CellDigit, Frame, candidatesOf } from './board.model';
+import { BoardData, Cell, CellDigit, Frame, candidatesOf } from '../board.model';
 import { CS, GRID_SIZE, P } from './board-geometry';
 
 /** One color per branch of the chain (THEMES.sky.branches). */

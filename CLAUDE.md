@@ -23,7 +23,7 @@ Web app to review the moves of sudoku grids already solved (level 13, magazine).
 - Organized by pages and domains, no type-based folders, no `shared/` unless really needed. File names without `.component` suffix (`home.ts`, `board.ts`).
   - `src/app/pages/<page>/` — components loaded by a route. Every route is lazy-loaded with `loadComponent` (the prerendered HTML preloads the chunk of the current page).
   - `src/app/exercise/` — exercise domain: `Exercise` component (question, answer state, result, `next` output), `ExerciseData` model, `exerciseHighlights()`.
-  - `src/app/board/` — reusable SVG sudoku board, knows nothing about exercises: `Board` component (`board` + optional `highlights` inputs: start cell, red zone, solution frames), `BoardData`/`Frame` models, pure geometry in `board-geometry.ts` (grid) and `solution-geometry.ts` (circles, strikes, arrows — port of `renderCard`, keep the algorithm as is).
+  - `src/app/board/` — reusable SVG sudoku board, knows nothing about exercises: `Board` component (`board` + optional `highlights` inputs: start cell, red zone, solution frames), `BoardData`/`Frame` models, pure geometry in `geometry/board-geometry.ts` (grid) and `geometry/solution-geometry.ts` (circles, strikes, arrows — port of `renderCard`, keep the algorithm as is).
 - Vocabulary: "grid" means a magazine puzzle (a JSON file with its moves, route `/grid/:nom`); "board" means the 9×9 drawing.
 - Board rendering is declarative: pure functions compute the scene, the template renders it with `@for` / `@if`. No `ElementRef`, no imperative DOM creation.
 
@@ -100,7 +100,7 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 ## Styling
 
 - Style with Tailwind utility classes in templates; no per-component CSS files.
-- Use the theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values in templates. The SVG board keeps its colors in `THEME` (`board-geometry.ts`).
+- Use the theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values in templates. The SVG board keeps its colors in `THEME` (`board/geometry/board-geometry.ts`).
 
 ## Services
 
