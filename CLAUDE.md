@@ -12,6 +12,7 @@ Today's exercise type: find which candidate of the green start cell must be elim
 
 - Do not make design or product choices on your own: when something is ambiguous or several options are reasonable, ask first.
 - Commits: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`…), subject line only. Commit only when asked.
+- Formatting: run Prettier (`pnpm exec prettier --write <files>`) on every file you create or edit, before finishing. The user's editor formats on save with the project's `.prettierrc`, so unformatted files show up as unexpected changes. `.prettierignore` excludes the exercise data and the reference HTML.
 
 ## Commands
 
