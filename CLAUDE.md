@@ -1,6 +1,8 @@
 # Sudoku Training
 
-Web app to review the moves of sudoku grids already solved (level 13, magazine). Each move becomes an exercise: find which candidate of the green start cell must be eliminated to empty the red zone.
+Web app for anyone who wants to train and improve at sudoku. It offers exercises taken from real grids: at key moments of a solve, the user looks for the right deduction, then the app shows the reasoning behind it.
+
+Today's exercise type: find which candidate of the green start cell must be eliminated to empty the red zone. The exercises come as JSON files, one per grid (format in `docs/SPEC.md`); the tool that produces them is outside this project.
 
 - Specification: `docs/SPEC.md` (in French). Read it before working on a feature; it says what is in scope now and what is deliberately postponed ("Plus tard").
 - Progress: the "État d'avancement" section at the top of `docs/SPEC.md` lists what is done, the next steps and the open points. Read it at the start of a session, and update it at the end of each feature (with the date).
