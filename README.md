@@ -34,6 +34,7 @@ Then open <http://localhost:4200/>.
 | ------------ | ----------------------------------------------------------------------------- |
 | `pnpm start` | Development server with live reload                                           |
 | `pnpm build` | Production build; prerendered static files in `dist/sudoku-training/browser/` |
+| `pnpm lint`  | Lint TypeScript and templates (ESLint, angular-eslint)                        |
 | `pnpm test`  | Unit tests (Vitest)                                                           |
 | `pnpm watch` | Development build in watch mode                                               |
 

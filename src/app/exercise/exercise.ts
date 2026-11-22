@@ -25,6 +25,13 @@ import { ExerciseData, exerciseHighlights } from './exercise.model';
  */
 type CandidateState = 'idle' | 'found' | 'wrong' | 'answer' | 'inactive';
 
+/** Classes shared by every candidate button (size, font, focus ring). */
+const CANDIDATE_BASE_CLASSES =
+  'h-11 min-w-11 rounded-lg border-2 px-3 text-xl font-bold text-navy tabular-nums ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain ' +
+  'md:landscape:h-16 md:landscape:min-w-16 md:landscape:rounded-xl md:landscape:text-3xl';
+
+/** Classes depending on the candidate state (colors). */
 const CANDIDATE_CLASSES: Record<CandidateState, string> = {
   // Hover fade only on unanswered buttons: result colors (and back to idle) appear instantly.
   idle: 'cursor-pointer border-line bg-white hover:border-navy hover:transition-colors',
@@ -126,7 +133,7 @@ export class Exercise {
       return {
         d,
         state,
-        classes: CANDIDATE_CLASSES[state],
+        classes: `${CANDIDATE_BASE_CLASSES} ${CANDIDATE_CLASSES[state]}`,
         label: `${CANDIDATE_LABELS[state]} ${d}`,
       };
     });
