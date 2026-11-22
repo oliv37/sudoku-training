@@ -1,0 +1,11 @@
+# Generated / installed
+dist
+node_modules
+.angular
+pnpm-lock.yaml
+
+# Exercise data: produced outside this project, kept as delivered (compact JSON)
+public/data
+
+# Reference renderer, kept as delivered
+docs/sudoku-training-modele.html
