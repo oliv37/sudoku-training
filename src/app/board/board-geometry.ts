@@ -3,7 +3,7 @@
  * Same computations as `renderCard` in sudoku-training-modele.html, with the grid
  * origin moved to (0, 0): GX = GY = 0, CS = 96 (so arrow tuning constants stay identical later).
  */
-import { Board, Cell, Highlights, candidatesOf } from './grid.model';
+import { BoardData, Cell, Highlights, candidatesOf } from './board.model';
 
 /** Cell size, in SVG user units. */
 export const CS = 96;
@@ -66,7 +66,7 @@ export interface RedZone {
   outline: Rect;
 }
 
-export interface GridScene {
+export interface BoardScene {
   lines: GridLine[];
   values: ValueText[];
   candidates: CandidateText[];
@@ -120,7 +120,7 @@ export function redZone({ type, cases }: NonNullable<Highlights['redZone']>): Re
   return { kind: 'cell', fill: cellRect(cases[0]), outline: cellRect(cases[0], 4) };
 }
 
-export function valueTexts(board: Board): ValueText[] {
+export function valueTexts(board: BoardData): ValueText[] {
   const out: ValueText[] = [];
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
@@ -135,7 +135,7 @@ export function valueTexts(board: Board): ValueText[] {
  * Candidates (small digits) and underlines.
  * `touched`: cells involved in the solution; null in the question (nothing greyed out).
  */
-export function candidateTexts(board: Board, touched: Set<string> | null = null): CandidateText[] {
+export function candidateTexts(board: BoardData, touched: Set<string> | null = null): CandidateText[] {
   const underlined = new Set((board.under ?? []).map((u) => u.join()));
   const out: CandidateText[] = [];
   for (let r = 0; r < 9; r++) {
@@ -152,7 +152,7 @@ export function candidateTexts(board: Board, touched: Set<string> | null = null)
 }
 
 /** Everything needed to draw a board and its (optional) highlights. */
-export function gridScene(board: Board, highlights: Highlights = {}): GridScene {
+export function boardScene(board: BoardData, highlights: Highlights = {}): BoardScene {
   const { start } = highlights;
   return {
     lines: gridLines(),

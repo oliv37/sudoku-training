@@ -7,10 +7,10 @@
   <!-- Square by default (height = width), shrinks when the height runs out;
        the grid is the largest square fitting this box. -->
   <div class="aspect-square min-h-0 w-full shrink @container-size">
-    <app-grid
+    <app-board
       [board]="exo()"
       [highlights]="highlights()"
-      [label]="gridLabel()"
+      [label]="boardLabel()"
       class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_rgba(18,58,102,0.12)]"
     />
   </div>

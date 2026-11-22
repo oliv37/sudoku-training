@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { ExerciseComponent } from '../exercise/exercise.component';
-import { ExerciseFile } from '../exercise/exercise.model';
+import { Exercise } from '../../exercise/exercise';
+import { ExerciseFile } from '../../exercise/exercise.model';
 
 /** First step: a single hard-coded move (November 14 grid, move 1). */
 const GRID_FILE = '/data/exercices-2026-11-14.json';
@@ -9,7 +9,7 @@ const MOVE_INDEX = 0;
 
 @Component({
   selector: 'app-home',
-  imports: [ExerciseComponent],
+  imports: [Exercise],
   // Exercise screen: never taller than the viewport minus the header (the grid shrinks to fit),
   // but never shorter than 30rem — below that the page scrolls instead of shrinking the grid further.
   host: {
@@ -33,7 +33,7 @@ const MOVE_INDEX = 0;
     }
   `,
 })
-export class HomeComponent {
+export class Home {
   protected readonly grid = httpResource<ExerciseFile>(() => GRID_FILE);
   protected readonly exo = computed(() => this.grid.value()?.exos[MOVE_INDEX]);
 }

@@ -1,4 +1,4 @@
-import { Cell, CellDigit, Highlights } from '../grid/grid.model';
+import { Cell, CellDigit, Highlights } from '../board/board.model';
 
 export interface HypFrame {
   kind: 'hyp';
@@ -38,7 +38,7 @@ export interface Arrival {
   cases: Cell[];
 }
 
-export interface Exercise {
+export interface ExerciseData {
   coup: number;
   /** 81 values, row by row, 0 = empty. */
   vals: number[];
@@ -60,10 +60,10 @@ export interface Exercise {
 export interface ExerciseFile {
   nom: string;
   titre: string;
-  exos: Exercise[];
+  exos: ExerciseData[];
 }
 
 /** Question marks of the standard mode: green start cell and red arrival zone. */
-export function exerciseHighlights(exo: Exercise): Highlights {
+export function exerciseHighlights(exo: ExerciseData): Highlights {
   return { start: exo.depart, redZone: exo.arrivee };
 }
