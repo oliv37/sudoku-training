@@ -1,0 +1,60 @@
+<div
+  class="flex min-h-0 shrink flex-col gap-4 md:landscape:h-full md:landscape:w-[min(calc(100cqh-2.5rem),calc(100cqw-20rem-2.5rem))] md:landscape:flex-none md:landscape:justify-center"
+>
+  <!-- Info line above the grid, provided by the page -->
+  <ng-content />
+
+  <!-- Square by default (height = width), shrinks when the height runs out;
+       the grid is the largest square fitting this box. -->
+  <div class="aspect-square min-h-0 w-full shrink @container-size">
+    <app-grid
+      [board]="exo()"
+      [highlights]="highlights()"
+      [label]="gridLabel()"
+      class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_rgba(18,58,102,0.12)]"
+    />
+  </div>
+</div>
+
+<div
+  class="flex flex-none flex-col gap-4 md:landscape:max-w-md md:landscape:min-w-80 md:landscape:flex-1 md:landscape:justify-center md:landscape:gap-6"
+>
+  <h2
+    id="question"
+    class="text-center text-base leading-tight font-semibold md:landscape:text-2xl md:landscape:leading-snug"
+  >
+    Which candidate of
+    <span class="whitespace-nowrap rounded-md border-2 border-hyp bg-hyp-bg px-1.5">{{
+      startName()
+    }}</span>
+    must be eliminated to
+    @if (exo().arrivee.type === 'cell') {
+      leave
+      <span class="whitespace-nowrap rounded-md border-2 border-bad bg-bad-bg px-1.5">{{
+        exo().arrivee.nom
+      }}</span>
+      without candidates?
+    } @else {
+      empty the
+      <span class="whitespace-nowrap rounded-md border-2 border-dashed border-bad bg-bad-bg px-1.5"
+        >red zone</span
+      >?
+    }
+  </h2>
+
+  <div
+    role="group"
+    aria-labelledby="question"
+    class="flex flex-wrap justify-center gap-2 md:landscape:gap-3"
+  >
+    @for (d of candidates(); track d) {
+      <button
+        type="button"
+        class="h-11 min-w-11 cursor-pointer rounded-lg border-2 border-line bg-white px-3 text-xl md:landscape:h-16 md:landscape:min-w-16 md:landscape:rounded-xl md:landscape:text-3xl font-bold text-navy tabular-nums transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain"
+        [attr.aria-label]="'Eliminate ' + d"
+      >
+        {{ d }}
+      </button>
+    }
+  </div>
+</div>

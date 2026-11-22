@@ -1,3 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/* Sudoku Training visual identity (SPEC § Identité visuelle). Light theme only for now. */
+@theme {
+  --color-navy: #123a66;
+  --color-hyp: #15924f;
+  --color-hyp-bg: #d2f2df;
+  --color-bad: #e0342a;
+  --color-bad-bg: #fbd8d3;
+  --color-chain: #1f6fd6;
+  --color-muted: #5a7290;
+  --color-line: #c9d5e1;
+
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-sans: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+:root {
+  color-scheme: light;
+  --header-height: 3rem;
+}
+
+body {
+  @apply bg-white font-sans text-navy;
+}
