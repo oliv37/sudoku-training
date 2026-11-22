@@ -1,7 +1,8 @@
 /**
  * Pure geometry of the sudoku grid (no DOM).
  * Same computations as `renderCard` in sudoku-training-modele.html, with the grid
- * origin moved to (0, 0): GX = GY = 0, CS = 96 (so arrow tuning constants stay identical later).
+ * origin moved to (0, 0): GX = GY = 0, CS = 96 (so the arrow tuning constants stay identical).
+ * The solution diagram is in solution-geometry.ts.
  */
 import { BoardData, Cell, Highlights, candidatesOf } from './board.model';
 
@@ -94,7 +95,12 @@ export function gridLines(): GridLine[] {
 }
 
 export function cellRect([r, c]: Cell, inset = 0): Rect {
-  return { x: cellX(c) + inset, y: cellY(r) + inset, width: CS - 2 * inset, height: CS - 2 * inset };
+  return {
+    x: cellX(c) + inset,
+    y: cellY(r) + inset,
+    width: CS - 2 * inset,
+    height: CS - 2 * inset,
+  };
 }
 
 /** Bounding rectangle of a set of cells (a row, column or box). */
@@ -125,7 +131,8 @@ export function valueTexts(board: BoardData): ValueText[] {
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
       const value = board.vals[r * 9 + c];
-      if (value) out.push({ key: `${r},${c}`, x: cellX(c) + CS / 2, y: cellY(r) + CS / 2 + 20, value });
+      if (value)
+        out.push({ key: `${r},${c}`, x: cellX(c) + CS / 2, y: cellY(r) + CS / 2 + 20, value });
     }
   }
   return out;
@@ -135,7 +142,10 @@ export function valueTexts(board: BoardData): ValueText[] {
  * Candidates (small digits) and underlines.
  * `touched`: cells involved in the solution; null in the question (nothing greyed out).
  */
-export function candidateTexts(board: BoardData, touched: Set<string> | null = null): CandidateText[] {
+export function candidateTexts(
+  board: BoardData,
+  touched: Set<string> | null = null,
+): CandidateText[] {
   const underlined = new Set((board.under ?? []).map((u) => u.join()));
   const out: CandidateText[] = [];
   for (let r = 0; r < 9; r++) {
@@ -144,20 +154,34 @@ export function candidateTexts(board: BoardData, touched: Set<string> | null = n
       const off = touched !== null && !touched.has(`${r},${c}`);
       for (const digit of candidatesOf(board, [r, c])) {
         const [x, y] = P(r, c, digit);
-        out.push({ key: `${r},${c},${digit}`, x, y, digit, off, underlined: underlined.has(`${r},${c},${digit}`) });
+        out.push({
+          key: `${r},${c},${digit}`,
+          x,
+          y,
+          digit,
+          off,
+          underlined: underlined.has(`${r},${c},${digit}`),
+        });
       }
     }
   }
   return out;
 }
 
-/** Everything needed to draw a board and its (optional) highlights. */
-export function boardScene(board: BoardData, highlights: Highlights = {}): BoardScene {
+/**
+ * Everything needed to draw a board and its (optional) start cell and red zone.
+ * `touched`: cells involved in the solution (others are greyed), null when no solution is shown.
+ */
+export function boardScene(
+  board: BoardData,
+  highlights: Highlights = {},
+  touched: Set<string> | null = null,
+): BoardScene {
   const { start } = highlights;
   return {
     lines: gridLines(),
     values: valueTexts(board),
-    candidates: candidateTexts(board),
+    candidates: candidateTexts(board, touched),
     start: start ? { fill: cellRect(start), outline: cellRect(start, 4) } : null,
     redZone: highlights.redZone ? redZone(highlights.redZone) : null,
   };

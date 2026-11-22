@@ -22,6 +22,7 @@
   <h2
     id="question"
     class="text-center text-base leading-relaxed font-semibold md:landscape:text-2xl md:landscape:leading-relaxed"
+    [class.sr-only]="answer() !== null"
   >
     Which candidate of
     <span class="whitespace-nowrap rounded-md border-2 border-hyp bg-hyp-bg px-1.5">{{
@@ -43,6 +44,7 @@
   </h2>
   <p
     class="-mt-2 text-center font-mono text-xs tracking-wider text-muted uppercase md:landscape:-mt-3 md:landscape:text-sm"
+    [class.sr-only]="answer() !== null"
   >
     {{ exo().etapes }}-step chain
   </p>
@@ -52,14 +54,66 @@
     aria-labelledby="question"
     class="flex flex-wrap justify-center gap-2 md:landscape:gap-3"
   >
-    @for (d of candidates(); track d) {
+    @for (c of candidates(); track c.d) {
       <button
+        #candidateButton
         type="button"
-        class="h-11 min-w-11 cursor-pointer rounded-lg border-2 border-line bg-white px-3 text-xl md:landscape:h-16 md:landscape:min-w-16 md:landscape:rounded-xl md:landscape:text-3xl font-bold text-navy tabular-nums transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain"
-        [attr.aria-label]="'Eliminate ' + d"
+        class="h-11 min-w-11 rounded-lg border-2 px-3 text-xl font-bold text-navy tabular-nums focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:h-16 md:landscape:min-w-16 md:landscape:rounded-xl md:landscape:text-3xl"
+        [class]="c.classes"
+        [attr.aria-label]="c.label"
+        [disabled]="c.state !== 'idle'"
+        (click)="choose(c.d)"
       >
-        {{ d }}
+        {{ c.d }}
       </button>
+    }
+  </div>
+
+  <!-- Result, once a candidate has been chosen (announced to screen readers) -->
+  <div aria-live="polite" class="contents">
+    @if (answer() !== null) {
+      <div
+        #result
+        tabindex="-1"
+        class="flex flex-col gap-3 text-center text-base leading-snug focus:outline-none md:landscape:gap-5 md:landscape:text-xl"
+      >
+        <p>
+          @if (found()) {
+            <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold"
+              >Found!</span
+            >
+          } @else {
+            <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
+          }
+          {{ exo().texte }}, so {{ startName() }} ≠ {{ eliminated() }}.
+        </p>
+        @if (exo().piste; as piste) {
+          <p class="text-sm text-muted md:landscape:text-base">
+            <b class="font-semibold text-navy">What should have caught your eye:</b> {{ piste }}
+          </p>
+        }
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+            (click)="reset()"
+          >
+            ↺ Reset
+          </button>
+          @if (hasNext()) {
+            <button
+              #nextButton
+              type="button"
+              class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+              (click)="next.emit()"
+            >
+              Next move →
+            </button>
+          } @else {
+            <p class="font-semibold">Last move of this grid.</p>
+          }
+        </div>
+      </div>
     }
   </div>
 </div>

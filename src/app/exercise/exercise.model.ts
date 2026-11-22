@@ -1,28 +1,4 @@
-import { Cell, CellDigit, Highlights } from '../board/board.model';
-
-export interface HypFrame {
-  kind: 'hyp';
-  circle: CellDigit;
-  strikes: CellDigit[];
-}
-
-export interface DomFrame {
-  kind: 'dom';
-  circle: CellDigit;
-  strikes: CellDigit[];
-  /** Index of the frame whose circle causes this one. */
-  cause: number;
-  /** "nu" (naked single) or "caché ligne 3" / "caché colonne 2" / "caché bloc 5" (hidden single). */
-  why: string;
-}
-
-export interface BadFrame {
-  kind: 'bad';
-  cells: Cell[];
-  unit: string | null;
-}
-
-export type Frame = HypFrame | DomFrame | BadFrame;
+import { Cell, CellDigit, Frame, Highlights } from '../board/board.model';
 
 export interface OtherAnswer {
   v: number;
@@ -65,5 +41,6 @@ export interface ExerciseFile {
 
 /** Question marks of the standard mode: green start cell and red arrival zone. */
 export function exerciseHighlights(exo: ExerciseData): Highlights {
-  return { start: exo.depart, redZone: exo.arrivee };
+  const { type, cases, chiffre } = exo.arrivee;
+  return { start: exo.depart, redZone: { type, cases, digit: chiffre } };
 }

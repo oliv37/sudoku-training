@@ -88,6 +88,22 @@
     </text>
   }
 
+  <!-- Last candidates of the red zone: red square around the digit (drawn before the candidates) -->
+  @if (solution(); as sol) {
+    @for (l of sol.lastCandidates; track l.key) {
+      <rect
+        [attr.x]="l.square.x"
+        [attr.y]="l.square.y"
+        [attr.width]="l.square.size"
+        [attr.height]="l.square.size"
+        rx="5"
+        [attr.fill]="T.badBg"
+        [attr.stroke]="T.bad"
+        stroke-width="1.5"
+      />
+    }
+  }
+
   <!-- Candidates and underlines -->
   @for (c of s.candidates; track c.key) {
     <text
@@ -111,6 +127,49 @@
         stroke-width="2.4"
         stroke-linecap="round"
       />
+    }
+  }
+
+  <!-- Solution diagram: struck candidates, circles, arrows, then numbered badges on top -->
+  @if (solution(); as sol) {
+    @for (s of sol.strikes; track s.key) {
+      <line
+        [attr.x1]="s.x1"
+        [attr.y1]="s.y1"
+        [attr.x2]="s.x2"
+        [attr.y2]="s.y2"
+        [attr.stroke]="s.off ? T.candOff : T.bad"
+        [attr.stroke-width]="s.off ? 2 : 3"
+        stroke-linecap="round"
+      />
+    }
+    @for (c of sol.circles; track c.key) {
+      <circle
+        [attr.cx]="c.cx"
+        [attr.cy]="c.cy"
+        r="14"
+        fill="none"
+        [attr.stroke]="c.color"
+        [attr.stroke-width]="c.hyp ? 3.6 : 3"
+      />
+    }
+    @for (a of sol.arrows; track a.key) {
+      <path [attr.d]="a.path" fill="none" [attr.stroke]="a.color" stroke-width="3.2" />
+      <path [attr.d]="a.head" [attr.fill]="a.color" />
+    }
+    @for (b of sol.badges; track b.key) {
+      <circle [attr.cx]="b.x" [attr.cy]="b.y" r="13" [attr.fill]="b.color" />
+      <text
+        [attr.x]="b.x"
+        [attr.y]="b.y + 6"
+        text-anchor="middle"
+        fill="#ffffff"
+        font-family="Barlow"
+        font-weight="700"
+        font-size="17"
+      >
+        {{ b.step }}
+      </text>
     }
   }
 </svg>
