@@ -1,9 +1,12 @@
-<div
-  class="flex min-h-0 shrink flex-col gap-4 md:landscape:h-full md:landscape:w-[min(calc(100cqh-2.5rem),calc(100cqw-20rem-2.5rem))] md:landscape:flex-none md:landscape:justify-center"
->
-  <!-- Info line above the grid, provided by the page -->
+<!-- Move navigation, provided by the page: above the board on phones,
+     top of the right column on wide landscape screens -->
+<div class="flex-none md:landscape:col-start-2 md:landscape:row-start-1">
   <ng-content />
+</div>
 
+<div
+  class="flex min-h-0 shrink flex-col md:landscape:col-start-1 md:landscape:row-span-full md:landscape:row-start-1 md:landscape:h-full md:landscape:w-[min(100cqh,calc(100cqw-20rem-2.5rem))] md:landscape:justify-center"
+>
   <!-- Square by default (height = width), shrinks when the height runs out;
        the grid is the largest square fitting this box. -->
   <div class="aspect-square min-h-0 w-full shrink @container-size">
@@ -18,7 +21,7 @@
 </div>
 
 <div
-  class="flex flex-none flex-col gap-4 md:landscape:max-w-md md:landscape:min-w-80 md:landscape:flex-1 md:landscape:justify-center md:landscape:gap-6"
+  class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
 >
   <h2
     id="question"

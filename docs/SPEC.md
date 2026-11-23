@@ -16,7 +16,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 - **Exercice** : question avec badges vert/rouge, boutons des candidats, « Found! » / « Lost », explication + piste, « ↺ Reset », « Next move → », question masquée après la réponse, focus et annonces pour les lecteurs d'écran.
 - **Pas à pas** : animation des étapes du schéma (0,6 s par étape) et ronds numérotés cliquables pour n'afficher la solution que jusqu'à une étape.
 - **Outillage** : Prettier (tout le projet, `.prettierignore`), ESLint avec angular-eslint (`pnpm lint`, règles d'accessibilité des templates et conventions du `CLAUDE.md`).
-- **Mise en page** : l'exercice tient dans la hauteur de l'écran moins l'en-tête (minimum 30rem) ; empilé sur téléphone et tablette en portrait, côte à côte (grille à gauche, question à droite) en `md:landscape`.
+- **Mise en page** : l'exercice tient dans la hauteur de l'écran moins l'en-tête (minimum 30rem) ; empilé sur téléphone et tablette en portrait, côte à côte en `md:landscape` (grille sur toute la hauteur à gauche ; à droite, tout aligné en haut : navigation entre les coups, puis question et résultat).
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 

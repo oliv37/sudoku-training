@@ -64,14 +64,14 @@ const CANDIDATE_LABELS: Record<CandidateState, string> = {
 @Component({
   selector: 'app-exercise',
   imports: [Board],
-  // Stacked by default. On wide landscape screens (≥ 768px and wider than tall):
-  // info line + grid on the left, question + buttons on the right, centered vertically.
-  // There the host is a size container: the left column is exactly as wide as the grid
-  // (limited by the height minus the info line, and by the width minus the question panel),
-  // and the question panel takes all the remaining width.
+  // Stacked by default (navigation, board, question). On wide landscape screens (≥ 768px and
+  // wider than tall) the host becomes a grid: the board fills the height of the left column, the
+  // right column reads from the top: navigation (row 1), then the question panel (row 2), so the
+  // panel only grows downward when the result appears (row 3 takes the remaining space). The host is a size container: the board column is as wide
+  // as the height allows, minus room for the right panel (20rem) and the gap.
   host: {
     class:
-      'flex flex-col gap-4 md:landscape:h-full md:landscape:flex-row md:landscape:justify-center md:landscape:gap-10 md:landscape:@container-size',
+      'flex flex-col gap-4 md:landscape:grid md:landscape:h-full md:landscape:grid-cols-[auto_minmax(20rem,28rem)] md:landscape:grid-rows-[auto_auto_1fr] md:landscape:justify-center md:landscape:gap-x-10 md:landscape:gap-y-8 md:landscape:@container-size',
   },
   templateUrl: './exercise.html',
 })

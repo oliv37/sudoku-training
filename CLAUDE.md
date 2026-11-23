@@ -43,7 +43,7 @@ Today's exercise type: find which candidate of the green start cell must be elim
 - Interface texts in English.
 - Light theme only, white background. Theme colors and fonts are Tailwind tokens in `src/styles.css` (`navy`, `hyp` green, `bad` red, `chain` blue; Barlow / Barlow Condensed / IBM Plex Mono from Google Fonts).
 - Header height is the CSS variable `--header-height`. The home exercise fits in `100dvh - header` with a minimum height (page scrolls below it); this constraint is local to the home page, not site-wide.
-- Responsive: stacked on phones and portrait tablets; side by side (board left, question right) on `md:landscape:`.
+- Responsive: stacked on phones and portrait tablets (move navigation, board, question); side by side on `md:landscape:` (board filling the height on the left; on the right, everything aligned to the top: move navigation, then the question panel), via a CSS grid on the `Exercise` host.
 - Colored text must keep WCAG AA contrast: use colored backgrounds/borders (badges) rather than green/red text.
 
 # Angular guidelines
