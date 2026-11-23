@@ -46,7 +46,8 @@ src/
   app/
     app.ts, app.routes.ts       shell (header) and routes (all lazy-loaded)
     pages/                      components loaded by a route
-    exercise/                   exercise screen and its data model
+    exercise/                   an exercise: the moves of one grid, navigation between them
+      move/                     one move: question, answer, solution
     board/                      reusable SVG sudoku board (knows nothing about exercises)
       geometry/                 pure functions computing what to draw
 public/

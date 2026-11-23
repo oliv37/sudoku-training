@@ -27,7 +27,9 @@ Today's exercise type: find which candidate of the green start cell must be elim
 - Static site generation: `outputMode: "static"`, every route is prerendered (`app.routes.server.ts`). No Node server in production; `main.server.ts` / `app.config.server.ts` are only used at build time.
 - Organized by pages and domains, no type-based folders, no `shared/` unless really needed. File names without `.component` suffix (`home.ts`, `board.ts`).
   - `src/app/pages/<page>/` — components loaded by a route. Every route is lazy-loaded with `loadComponent` (the prerendered HTML preloads the chunk of the current page).
-  - `src/app/exercise/` — exercise domain: `Exercise` component (question, answer state, result, `next` output), `ExerciseData` model, `exerciseHighlights()`.
+  - `src/app/exercise/` — exercise domain. An exercise is the sequence of moves of one grid (`ExerciseData`). `Exercise` component: input `grid`, owns the current move, the move navigation (‹ ›) and the ← → keys, and lays out the screen (CSS grid).
+    - `src/app/exercise/move/` — one move: `Move` component (question, answer state, solution animation, result, `next` output; host `display: contents`, so its board and panel sit in the `Exercise` grid), `MoveData` model, `moveHighlights()` (maps a move to board highlights). Keep sub-parts of a domain in their own subfolder rather than letting the domain folder grow flat.
+  - Pages only load data: `Home` loads a grid file and renders `<app-exercise [grid]>`.
   - `src/app/board/` — reusable SVG sudoku board, knows nothing about exercises: `Board` component (`board` + optional `highlights` inputs: start cell, red zone, solution frames), `BoardData`/`Frame` models, pure geometry in `geometry/board-geometry.ts` (grid) and `geometry/solution-geometry.ts` (circles, strikes, arrows — port of `renderCard`, keep the algorithm as is).
 - Vocabulary: "grid" means a magazine puzzle (a JSON file with its moves, route `/grid/:nom`); "board" means the 9×9 drawing.
 - Board rendering is declarative: pure functions compute the scene, the template renders it with `@for` / `@if`. No `ElementRef`, no imperative DOM creation.

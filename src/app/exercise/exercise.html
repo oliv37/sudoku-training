@@ -1,146 +1,60 @@
-<!-- Move navigation, provided by the page: above the board on phones,
-     top of the right column on wide landscape screens -->
+<!-- Move navigation: above the board on phones, top of the right column on wide landscape screens -->
 <div class="flex-none md:landscape:col-start-2 md:landscape:row-start-1">
-  <ng-content />
-</div>
-
-<div
-  class="flex min-h-0 shrink flex-col md:landscape:col-start-1 md:landscape:row-span-full md:landscape:row-start-1 md:landscape:h-full md:landscape:w-[min(100cqh,calc(100cqw-20rem-2.5rem))] md:landscape:justify-center"
->
-  <!-- Square by default (height = width), shrinks when the height runs out;
-       the grid is the largest square fitting this box. -->
-  <div class="aspect-square min-h-0 w-full shrink @container-size">
-    <app-board
-      [board]="exo()"
-      [highlights]="highlights()"
-      [label]="boardLabel()"
-      [step]="shownStep()"
-      class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_rgba(18,58,102,0.12)]"
-    />
-  </div>
-</div>
-
-<div
-  class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
->
-  <h2
-    id="question"
-    class="text-center text-base leading-relaxed font-semibold md:landscape:text-2xl md:landscape:leading-relaxed"
-    [class.sr-only]="answer() !== null"
+  <nav
+    aria-label="Moves"
+    class="flex flex-none items-center justify-center gap-3 font-mono text-xs tracking-wider text-muted uppercase md:landscape:text-sm"
   >
-    Which candidate of
-    <span class="whitespace-nowrap rounded-md border-2 border-hyp bg-hyp-bg px-1.5">{{
-      startName()
-    }}</span>
-    must be eliminated to
-    @if (exo().arrivee.type === 'cell') {
-      leave
-      <span class="whitespace-nowrap rounded-md border-2 border-bad bg-bad-bg px-1.5">{{
-        exo().arrivee.nom
+    <button
+      type="button"
+      class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-navy transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-chain disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
+      aria-label="Previous move"
+      [disabled]="!hasPrevious()"
+      (click)="previous()"
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        class="size-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M15 6l-6 6 6 6" />
+      </svg>
+    </button>
+
+    <p class="tabular-nums" aria-hidden="true">
+      {{ grid().nom }} ·
+      <span class="inline-block text-right" [style.width.ch]="counterWidth()">{{
+        move().coup
       }}</span>
-      without candidates?
-    } @else {
-      empty the
-      <span class="whitespace-nowrap rounded-md border-2 border-dashed border-bad bg-bad-bg px-1.5"
-        >red zone</span
-      >?
-    }
-  </h2>
-  <p
-    class="-mt-2 text-center font-mono text-xs tracking-wider text-muted uppercase md:landscape:-mt-3 md:landscape:text-sm"
-    [class.sr-only]="answer() !== null"
-  >
-    {{ exo().etapes }}-step chain
-  </p>
+      / {{ total() }}
+    </p>
+    <p class="sr-only" aria-live="polite">Move {{ move().coup }} of {{ total() }}</p>
 
-  <div
-    role="group"
-    aria-labelledby="question"
-    class="flex flex-wrap justify-center gap-2 md:landscape:gap-3"
-  >
-    @for (c of candidates(); track c.d) {
-      <button
-        #candidateButton
-        type="button"
-        [class]="c.classes"
-        [attr.aria-label]="c.label"
-        [disabled]="c.state !== 'idle'"
-        (click)="choose(c.d)"
+    <button
+      type="button"
+      class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-navy transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-chain disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
+      aria-label="Next move"
+      [disabled]="!hasNext()"
+      (click)="next()"
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        class="size-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       >
-        {{ c.d }}
-      </button>
-    }
-  </div>
-
-  <!-- Verdict, announced to screen readers: the live region exists before its content appears -->
-  <div aria-live="polite" class="contents">
-    @if (answer() !== null) {
-      <p
-        #result
-        tabindex="-1"
-        class="text-center text-base leading-snug focus:outline-none md:landscape:text-xl"
-      >
-        @if (found()) {
-          <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold">Found!</span>
-        } @else {
-          <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
-        }
-        {{ exo().texte }}, so {{ startName() }} ≠ {{ eliminated() }}.
-      </p>
-    }
-  </div>
-
-  @if (answer() !== null) {
-    <!-- Numbered steps of the solution, same numbers and colors as on the board -->
-    @if (stepButtons().length) {
-      <div
-        role="group"
-        aria-label="Solution steps"
-        class="flex flex-wrap justify-center gap-x-3 gap-y-2"
-      >
-        @for (s of stepButtons(); track s.step) {
-          <button
-            type="button"
-            [class]="s.classes"
-            [style.background-color]="s.reached ? s.color : null"
-            [disabled]="animating()"
-            [attr.aria-pressed]="s.selected"
-            [attr.aria-label]="'Show steps 1 to ' + s.step"
-            (click)="showUpTo(s.step)"
-          >
-            {{ s.step }}
-          </button>
-        }
-      </div>
-    }
-
-    <!-- Hint, only after a wrong answer -->
-    @if (!found() && exo().piste; as piste) {
-      <p class="text-center text-sm leading-snug text-muted md:landscape:text-base">
-        <b class="font-semibold text-navy">What should have caught your eye:</b> {{ piste }}
-      </p>
-    }
-
-    <div class="flex flex-wrap items-center justify-center gap-3">
-      <button
-        type="button"
-        class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-        (click)="reset()"
-      >
-        ↺ Reset
-      </button>
-      @if (hasNext()) {
-        <button
-          #nextButton
-          type="button"
-          class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-          (click)="next.emit()"
-        >
-          Next move →
-        </button>
-      } @else {
-        <p class="text-base font-semibold md:landscape:text-xl">Last move of this grid.</p>
-      }
-    </div>
-  }
+        <path d="M9 6l6 6-6 6" />
+      </svg>
+    </button>
+  </nav>
 </div>
+
+<app-move [move]="move()" [hasNext]="hasNext()" (next)="next()" />
