@@ -12,6 +12,7 @@ What is planned, what is done and what comes next: see [docs/SPEC.md](docs/SPEC.
 
 - [Angular](https://angular.dev) 22 (standalone components, signals, zoneless, `httpResource`)
 - [Tailwind CSS](https://tailwindcss.com) 4
+- [NgRx Signal Store](https://ngrx.io/guide/signals) (`@ngrx/signals`) for component state
 - Static site generation with `@angular/ssr` (`outputMode: "static"`)
 - [Vitest](https://vitest.dev) for unit tests
 - [pnpm](https://pnpm.io) as package manager
