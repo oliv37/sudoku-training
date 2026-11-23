@@ -18,6 +18,13 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 - **Outillage** : Prettier (tout le projet, `.prettierignore`), ESLint avec angular-eslint (`pnpm lint`, règles d'accessibilité des templates et conventions du `CLAUDE.md`).
 - **Mise en page** : l'exercice tient dans la hauteur de l'écran moins l'en-tête (minimum 30rem) ; empilé sur téléphone et tablette en portrait, côte à côte en `md:landscape` (grille sur toute la hauteur à gauche ; à droite, tout aligné en haut : navigation entre les coups, puis question et résultat).
 
+### Revue du code en cours (règles : section « Code readability » et « State Management » du `CLAUDE.md`)
+
+Revue composant par composant, avec l'utilisateur, pour rendre le code explicite et déplacer l'état dans des Signal Stores locaux.
+
+- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`).
+- À faire, dans l'ordre : `Move` (état de la réponse et de l'animation à passer dans un store ; supprimer les ternaires imbriqués du calcul de l'état des boutons), `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
+
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 
 1. **`index.json` + `scripts/build-index.mjs`** (scripts `prestart` / `prebuild`), puis accueil complet : tirage d'une grille au hasard, enchaînement des grilles, liste des grilles sous l'exercice.
