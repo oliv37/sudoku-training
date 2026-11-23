@@ -89,7 +89,7 @@
   }
 
   <!-- Last candidates of the red zone: red square around the digit (drawn before the candidates) -->
-  @if (solution(); as sol) {
+  @if (shownSolution(); as sol) {
     @for (l of sol.lastCandidates; track l.key) {
       <rect
         [attr.x]="l.square.x"
@@ -131,7 +131,7 @@
   }
 
   <!-- Solution diagram: struck candidates, circles, arrows, then numbered badges on top -->
-  @if (solution(); as sol) {
+  @if (shownSolution(); as sol) {
     @for (s of sol.strikes; track s.key) {
       <line
         [attr.x1]="s.x1"

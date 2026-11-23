@@ -11,6 +11,7 @@
       [board]="exo()"
       [highlights]="highlights()"
       [label]="boardLabel()"
+      [step]="shownStep()"
       class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_rgba(18,58,102,0.12)]"
     />
   </div>
@@ -67,6 +68,29 @@
       </button>
     }
   </div>
+
+  <!-- Numbered steps of the solution, same numbers and colors as on the board -->
+  @if (stepButtons().length) {
+    <div
+      role="group"
+      aria-label="Solution steps"
+      class="flex flex-wrap justify-center gap-x-3 gap-y-2"
+    >
+      @for (s of stepButtons(); track s.step) {
+        <button
+          type="button"
+          [class]="s.classes"
+          [style.background-color]="s.reached ? s.color : null"
+          [disabled]="animating()"
+          [attr.aria-pressed]="s.selected"
+          [attr.aria-label]="'Show steps 1 to ' + s.step"
+          (click)="showUpTo(s.step)"
+        >
+          {{ s.step }}
+        </button>
+      }
+    </div>
+  }
 
   <!-- Result, once a candidate has been chosen (announced to screen readers) -->
   <div aria-live="polite" class="contents">

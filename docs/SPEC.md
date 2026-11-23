@@ -5,7 +5,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 ## État d'avancement
 
-> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-22.
+> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-23.
 
 ### Fait
 
@@ -14,14 +14,15 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 - **Accueil** (`/`, chargé en lazy) : grille du 14 novembre **codée en dur** (`public/data/exercices-2026-11-14.json`), navigation libre entre les coups (‹ › et ← →, ligne « date · k / N »).
 - **Grille SVG** (`Board`) : rendu de la question et du schéma de solution, porté de `renderCard` (cercles, chiffres barrés, flèches numérotées par branche, cases non concernées en gris) + mise en évidence des derniers candidats de la zone rouge.
 - **Exercice** : question avec badges vert/rouge, boutons des candidats, « Found! » / « Lost », explication + piste, « ↺ Reset », « Next move → », question masquée après la réponse, focus et annonces pour les lecteurs d'écran.
+- **Pas à pas** : animation des étapes du schéma (0,6 s par étape) et ronds numérotés cliquables pour n'afficher la solution que jusqu'à une étape.
+- **Outillage** : Prettier (tout le projet, `.prettierignore`), ESLint avec angular-eslint (`pnpm lint`, règles d'accessibilité des templates et conventions du `CLAUDE.md`).
 - **Mise en page** : l'exercice tient dans la hauteur de l'écran moins l'en-tête (minimum 30rem) ; empilé sur téléphone et tablette en portrait, côte à côte (grille à gauche, question à droite) en `md:landscape`.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 
-1. **Step by step** : afficher le schéma étape par étape (frame 0, 1, 2… jusqu'à la zone rouge) avec Previous / Next ; l'entrée `step` de `Board` est prévue mais pas encore utilisée.
-2. **`index.json` + `scripts/build-index.mjs`** (scripts `prestart` / `prebuild`), puis accueil complet : tirage d'une grille au hasard, enchaînement des grilles, liste des grilles sous l'exercice.
-3. **Page Grids** (`/grid/:nom`) et **menu** Home · Grids · Patterns.
-4. **Page Patterns** (`/patterns`) : contenu de l'artefact « Motifs de sudoku », à fournir.
+1. **`index.json` + `scripts/build-index.mjs`** (scripts `prestart` / `prebuild`), puis accueil complet : tirage d'une grille au hasard, enchaînement des grilles, liste des grilles sous l'exercice.
+2. **Page Grids** (`/grid/:nom`) et **menu** Home · Grids · Patterns.
+3. **Page Patterns** (`/patterns`) : contenu de l'artefact « Motifs de sudoku », à fournir.
 
 ### Points ouverts
 
@@ -29,6 +30,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 - Schéma de solution vérifié à l'œil seulement (pas de comparaison automatique avec le rendu de référence).
 - `autresReponses` : géré dans le code mais jamais testé (la grille du 14 novembre n'en a aucune).
 - Aucun audit AXE lancé pour l'instant ; pas de tests unitaires (choix de la première étape).
+- Contraste : texte blanc sur les couleurs des 3e et 4e branches (orange `#e07800`, turquoise `#0f9aa0`) sous le seuil WCAG AA (ronds numérotés et pastilles de la grille) ; à décider (assombrir ces couleurs ou non).
 - À tester sur un vrai téléphone (lisibilité du texte et de la grille).
 - Numéro du coup dans l'URL : non pour l'instant ; à envisager sur `/grid/:nom`.
 - Noms de champs du JSON en franglais : à revoir plus tard, côté export Python.
@@ -125,7 +127,7 @@ Clic sur une grille → ses exercices **dans l'ordre des coups** (1, 2, 3…), �
 - Clic sur `reponse` ou une des `autresReponses` → **« Found! »** + schéma de solution (celui du chiffre choisi), `texte`, et `piste` si présente.
 - Clic sur un autre candidat → **arrêt immédiat** : **« Lost »**, le bouton cliqué passe en rouge (barré), le bon candidat (`reponse`) est entouré de vert, schéma de solution de `reponse`.
 - Une seule réponse par coup : ensuite les boutons sont désactivés. Le résultat affiche `texte`, « so RxCy ≠ v » et `piste` ; un bouton « Next move → » (qui reçoit le focus) passe au coup suivant, ou « Last move of this grid. » au dernier coup ; à sa gauche, un bouton secondaire « ↺ Reset » remet le coup en mode question pour réessayer. Une fois la réponse donnée, la question et « N-STEP CHAIN » sont masquées visuellement (gardées pour les lecteurs d'écran) pour laisser la place au résultat et à la piste ; sur téléphone, tout doit tenir sans défilement.
-- Bouton **« Step by step »** : afficher le schéma étape par étape (frame 0, puis 1, 2… jusqu'à la zone rouge), avec Previous / Next. Indispensable pour les chaînes longues (jusqu'à 12 étapes).
+- **Pas à pas** (remplace le bouton « Step by step » prévu à l'origine) : à la réponse, l'hypothèse s'affiche tout de suite, puis une étape toutes les 0,6 s (tout d'un coup si le système demande de réduire les animations). Au-dessus du texte du résultat, un rond numéroté par étape (mêmes numéros et couleurs de branche que sur la grille) : tous présents dès le début, gris tant que l'étape n'est pas affichée, colorés ensuite. Une fois l'animation finie, cliquer sur un rond n'affiche que les étapes jusqu'à celle-ci (les suivantes sont masquées sur la grille et leurs ronds repassent en gris). Les carrés rouges de la conclusion n'apparaissent qu'avec la dernière étape ; les cases grisées sont là dès le début.
 
 ### Motifs (`/patterns`)
 

@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { THEME, VIEW_BOX, boardScene } from './geometry/board-geometry';
 import { BoardData, Highlights } from './board.model';
-import { solutionScene } from './geometry/solution-geometry';
+import { solutionScene, solutionUpTo } from './geometry/solution-geometry';
 
 let nextId = 0;
 
@@ -20,7 +20,10 @@ export class Board {
   readonly highlights = input<Highlights>({});
   /** Accessible description of the grid (role="img"). */
   readonly label = input('Sudoku grid');
-  /** Not used yet: step-by-step display of the solution (frame index). */
+  /**
+   * Solution shown up to this step (frame index; 0 = hypothesis only), null = the whole diagram.
+   * Grey cells stay those of the whole solution.
+   */
   readonly step = input<number | null>(null);
 
   protected readonly T = THEME;
@@ -34,6 +37,11 @@ export class Board {
     // What disappears from the red zone: every candidate of a cell, or one digit of a unit.
     const lastDigit = redZone?.type === 'cell' ? 'all' : (redZone?.digit ?? null);
     return solutionScene(this.board(), solution, redZone?.cases ?? [], lastDigit, THEME.hyp);
+  });
+  /** Part of the solution currently drawn. */
+  protected readonly shownSolution = computed(() => {
+    const solution = this.solution();
+    return solution ? solutionUpTo(solution, this.step()) : null;
   });
   protected readonly scene = computed(() =>
     boardScene(this.board(), this.highlights(), this.solution()?.touched ?? null),

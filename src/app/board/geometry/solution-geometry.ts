@@ -11,6 +11,8 @@ export const BRANCH_COLORS = ['#1f6fd6', '#9b3fd4', '#e07800', '#0f9aa0'] as con
 
 export interface StrikeLine {
   key: string;
+  /** Step this element belongs to (frame index; 0 = hypothesis). */
+  frame: number;
   x1: number;
   y1: number;
   x2: number;
@@ -25,12 +27,16 @@ export interface StrikeLine {
  */
 export interface LastCandidate {
   key: string;
+  /** Step this element belongs to (frame index; 0 = hypothesis). */
+  frame: number;
   /** Red square around the digit. */
   square: { x: number; y: number; size: number };
 }
 
 export interface SolutionCircle {
   key: string;
+  /** Step this element belongs to (frame index; 0 = hypothesis). */
+  frame: number;
   cx: number;
   cy: number;
   /** Hypothesis (green, thicker) or forced placement (branch color). */
@@ -40,6 +46,8 @@ export interface SolutionCircle {
 
 export interface SolutionArrow {
   key: string;
+  /** Step this element belongs to (frame index; 0 = hypothesis). */
+  frame: number;
   /** Quadratic curve from the cause circle to the forced circle. */
   path: string;
   /** Triangle at the end of the curve. */
@@ -49,6 +57,8 @@ export interface SolutionArrow {
 
 export interface StepBadge {
   key: string;
+  /** Step this element belongs to (frame index; 0 = hypothesis). */
+  frame: number;
   x: number;
   y: number;
   step: number;
@@ -207,20 +217,18 @@ export function solutionScene(
     targetCells.has(cellKey(r, c)) && (targetDigit === 'all' || d === targetDigit);
 
   // Kept circles and struck candidates, as in the reference (a circled candidate is never struck).
-  const kept = new Map<string, { cd: CellDigit; hyp: boolean }>();
-  const struck = new Map<string, CellDigit>();
-  for (const f of frames) {
-    if (f.kind !== 'bad') kept.set(f.circle.join(), { cd: f.circle, hyp: f.kind === 'hyp' });
-    for (const s of f.kind === 'bad' ? [] : f.strikes) struck.set(s.join(), s);
-  }
-
-  // Branch of each forced placement: a new branch for each direct consequence of the hypothesis.
-  const branch: number[] = [];
-  let nextBranch = 0;
+  const kept = new Map<string, { cd: CellDigit; hyp: boolean; frame: number }>();
+  const struck = new Map<string, { cd: CellDigit; frame: number }>();
   frames.forEach((f, i) => {
-    if (f.kind === 'dom') branch[i] = f.cause === 0 ? nextBranch++ : branch[f.cause];
+    if (f.kind !== 'bad')
+      kept.set(f.circle.join(), { cd: f.circle, hyp: f.kind === 'hyp', frame: i });
+    for (const s of f.kind === 'bad' ? [] : f.strikes) {
+      // A candidate struck several times belongs to the first step that strikes it.
+      if (!struck.has(s.join())) struck.set(s.join(), { cd: s, frame: i });
+    }
   });
-  const colorOf = (b: number) => BRANCH_COLORS[b % BRANCH_COLORS.length];
+
+  const branch = branchesOf(frames);
   const keptBranch = new Map<string, number>();
   frames.forEach((f, i) => {
     if (f.kind === 'dom') keptBranch.set(f.circle.join(), branch[i]);
@@ -228,14 +236,18 @@ export function solutionScene(
 
   const strikes: StrikeLine[] = [];
   const lastCandidates: LastCandidate[] = [];
-  for (const [key, [r, c, d]] of struck) {
+  const last = lastStep(frames);
+  for (const [key, { cd, frame }] of struck) {
     if (kept.has(key)) continue;
+    const [r, c, d] = cd;
     const [x, y] = P(r, c, d);
-    if (isLastCandidate([r, c, d])) {
-      lastCandidates.push({ key, square: { x: x - 14, y: y - 14, size: 28 } });
+    if (isLastCandidate(cd)) {
+      // The conclusion: shown with the last step only.
+      lastCandidates.push({ key, frame: last, square: { x: x - 14, y: y - 14, size: 28 } });
     }
     strikes.push({
       key,
+      frame,
       x1: x - 9,
       y1: y + 9,
       x2: x + 9,
@@ -245,9 +257,10 @@ export function solutionScene(
   }
 
   const circles: SolutionCircle[] = [];
-  for (const [key, { cd, hyp }] of kept) {
+  for (const [key, { cd, hyp, frame }] of kept) {
     const [cx, cy] = P(...cd);
-    circles.push({ key, cx, cy, hyp, color: hyp ? hypColor : colorOf(keptBranch.get(key) ?? 0) });
+    const color = hyp ? hypColor : branchColor(keptBranch.get(key) ?? 0);
+    circles.push({ key, frame, cx, cy, hyp, color });
   }
 
   // Arrows: obstacles are placed digits, circles and struck candidates, then each drawn arrow.
@@ -262,7 +275,7 @@ export function solutionScene(
     const [x, y] = P(...cd);
     obstacles.push({ x, y, r: 27, w: 3 });
   }
-  for (const cd of struck.values()) {
+  for (const { cd } of struck.values()) {
     const [x, y] = P(...cd);
     obstacles.push({ x, y, r: 17, w: 1 });
   }
@@ -275,10 +288,58 @@ export function solutionScene(
     if (!cause || cause.kind === 'bad') return;
     const routed = routeArrow(cause.circle, f.circle, obstacles);
     if (!routed) return;
-    const color = colorOf(branch[i]);
-    arrows.push({ key: `a${i}`, path: routed.path, head: routed.head, color });
-    badges.push({ key: `b${i}`, x: routed.badge[0], y: routed.badge[1], step: i, color });
+    const color = branchColor(branch[i]);
+    arrows.push({ key: `a${i}`, frame: i, path: routed.path, head: routed.head, color });
+    badges.push({ key: `b${i}`, frame: i, x: routed.badge[0], y: routed.badge[1], step: i, color });
   });
 
   return { touched, strikes, lastCandidates, circles, arrows, badges };
+}
+
+/** Branch of each forced placement: a new branch for each direct consequence of the hypothesis. */
+function branchesOf(frames: Frame[]): number[] {
+  const branch: number[] = [];
+  let nextBranch = 0;
+  frames.forEach((f, i) => {
+    if (f.kind === 'dom') branch[i] = f.cause === 0 ? nextBranch++ : branch[f.cause];
+  });
+  return branch;
+}
+
+function branchColor(branch: number): string {
+  return BRANCH_COLORS[branch % BRANCH_COLORS.length];
+}
+
+/** Number of the last step (index of the last forced placement); 0 if there is none. */
+export function lastStep(frames: Frame[]): number {
+  let last = 0;
+  frames.forEach((f, i) => {
+    if (f.kind === 'dom') last = i;
+  });
+  return last;
+}
+
+/** The numbered steps of a solution with their branch color, as on the board badges. */
+export function solutionSteps(frames: Frame[]): { step: number; color: string }[] {
+  const branch = branchesOf(frames);
+  return frames.flatMap((f, i) =>
+    f.kind === 'dom' ? [{ step: i, color: branchColor(branch[i]) }] : [],
+  );
+}
+
+/**
+ * The scene limited to the hypothesis and steps 1..`step` (null: everything).
+ * Positions are those of the full diagram, so nothing moves while steps appear.
+ */
+export function solutionUpTo(scene: SolutionScene, step: number | null): SolutionScene {
+  if (step === null) return scene;
+  const upTo = <T extends { frame: number }>(items: T[]) => items.filter((it) => it.frame <= step);
+  return {
+    touched: scene.touched,
+    strikes: upTo(scene.strikes),
+    lastCandidates: upTo(scene.lastCandidates),
+    circles: upTo(scene.circles),
+    arrows: upTo(scene.arrows),
+    badges: upTo(scene.badges),
+  };
 }
