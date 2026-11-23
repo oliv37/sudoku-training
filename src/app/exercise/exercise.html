@@ -69,74 +69,75 @@
     }
   </div>
 
-  <!-- Numbered steps of the solution, same numbers and colors as on the board -->
-  @if (stepButtons().length) {
-    <div
-      role="group"
-      aria-label="Solution steps"
-      class="flex flex-wrap justify-center gap-x-3 gap-y-2"
-    >
-      @for (s of stepButtons(); track s.step) {
+  <!-- Verdict, announced to screen readers: the live region exists before its content appears -->
+  <div aria-live="polite" class="contents">
+    @if (answer() !== null) {
+      <p
+        #result
+        tabindex="-1"
+        class="text-center text-base leading-snug focus:outline-none md:landscape:text-xl"
+      >
+        @if (found()) {
+          <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold">Found!</span>
+        } @else {
+          <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
+        }
+        {{ exo().texte }}, so {{ startName() }} ≠ {{ eliminated() }}.
+      </p>
+    }
+  </div>
+
+  @if (answer() !== null) {
+    <!-- Numbered steps of the solution, same numbers and colors as on the board -->
+    @if (stepButtons().length) {
+      <div
+        role="group"
+        aria-label="Solution steps"
+        class="flex flex-wrap justify-center gap-x-3 gap-y-2"
+      >
+        @for (s of stepButtons(); track s.step) {
+          <button
+            type="button"
+            [class]="s.classes"
+            [style.background-color]="s.reached ? s.color : null"
+            [disabled]="animating()"
+            [attr.aria-pressed]="s.selected"
+            [attr.aria-label]="'Show steps 1 to ' + s.step"
+            (click)="showUpTo(s.step)"
+          >
+            {{ s.step }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Hint, only after a wrong answer -->
+    @if (!found() && exo().piste; as piste) {
+      <p class="text-center text-sm leading-snug text-muted md:landscape:text-base">
+        <b class="font-semibold text-navy">What should have caught your eye:</b> {{ piste }}
+      </p>
+    }
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+        (click)="reset()"
+      >
+        ↺ Reset
+      </button>
+      @if (hasNext()) {
         <button
+          #nextButton
           type="button"
-          [class]="s.classes"
-          [style.background-color]="s.reached ? s.color : null"
-          [disabled]="animating()"
-          [attr.aria-pressed]="s.selected"
-          [attr.aria-label]="'Show steps 1 to ' + s.step"
-          (click)="showUpTo(s.step)"
+          class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+          (click)="next.emit()"
         >
-          {{ s.step }}
+          Next move →
         </button>
+      } @else {
+        <p class="text-base font-semibold md:landscape:text-xl">Last move of this grid.</p>
       }
     </div>
   }
-
-  <!-- Result, once a candidate has been chosen (announced to screen readers) -->
-  <div aria-live="polite" class="contents">
-    @if (answer() !== null) {
-      <div
-        #result
-        tabindex="-1"
-        class="flex flex-col gap-3 text-center text-base leading-snug focus:outline-none md:landscape:gap-5 md:landscape:text-xl"
-      >
-        <p>
-          @if (found()) {
-            <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold"
-              >Found!</span
-            >
-          } @else {
-            <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
-          }
-          {{ exo().texte }}, so {{ startName() }} ≠ {{ eliminated() }}.
-        </p>
-        @if (!found() && exo().piste; as piste) {
-          <p class="text-sm text-muted md:landscape:text-base">
-            <b class="font-semibold text-navy">What should have caught your eye:</b> {{ piste }}
-          </p>
-        }
-        <div class="flex flex-wrap items-center justify-center gap-3">
-          <button
-            type="button"
-            class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-            (click)="reset()"
-          >
-            ↺ Reset
-          </button>
-          @if (hasNext()) {
-            <button
-              #nextButton
-              type="button"
-              class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-              (click)="next.emit()"
-            >
-              Next move →
-            </button>
-          } @else {
-            <p class="font-semibold">Last move of this grid.</p>
-          }
-        </div>
-      </div>
-    }
-  </div>
 </div>
