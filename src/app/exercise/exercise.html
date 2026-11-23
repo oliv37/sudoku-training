@@ -110,7 +110,7 @@
           }
           {{ exo().texte }}, so {{ startName() }} ≠ {{ eliminated() }}.
         </p>
-        @if (exo().piste; as piste) {
+        @if (!found() && exo().piste; as piste) {
           <p class="text-sm text-muted md:landscape:text-base">
             <b class="font-semibold text-navy">What should have caught your eye:</b> {{ piste }}
           </p>
