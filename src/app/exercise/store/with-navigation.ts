@@ -74,14 +74,14 @@ export function withNavigation() {
         if (!store.hasPrevious()) {
           return;
         }
-        patchState(store, { questionIndex: store.questionIndex() - 1 });
+        patchState(store, (state) => ({ questionIndex: state.questionIndex - 1 }));
       },
 
       next(): void {
         if (!store.hasNext()) {
           return;
         }
-        patchState(store, { questionIndex: store.questionIndex() + 1 });
+        patchState(store, (state) => ({ questionIndex: state.questionIndex + 1 }));
       },
     })),
   );
