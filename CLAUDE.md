@@ -11,7 +11,7 @@ Today's exercise type: find which candidate of the green start cell must be elim
 ## Working agreement
 
 - Do not make design, product or code-structure choices on your own (naming, where state lives, how to split a component…): when something is ambiguous, several options are reasonable, or you are unsure what the user prefers, ask first.
-- Commits: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`…), subject line only. Commit only when asked.
+- Commits: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`…), subject line only. Commit only when the user explicitly asks, for that change: the user reviews all the code first. A plan that mentions commits, or a "go" on that plan, is not a commit request.
 - Linting: run `pnpm lint` before each commit, or when the user asks; not after every edit. Fix what it reports (ask first if a fix changes behavior or a rule seems wrong).
 - Formatting: run Prettier (`pnpm exec prettier --write <files>`) on every file you create or edit, before finishing. The user's editor formats on save with the project's `.prettierrc`, so unformatted files show up as unexpected changes. `.prettierignore` excludes the exercise data and the reference HTML.
 
@@ -20,12 +20,14 @@ Today's exercise type: find which candidate of the green start cell must be elim
 The code must be easy to understand for a human reading it. Prefer more lines of explicit code over compact or clever code.
 
 - Short functions and methods, each doing one thing, with a name that says what it does or returns.
-- Explicit names for variables and parameters (`answer`, `digit`, `move`), no one-letter names, except where the meaning is obvious and conventional: `r` / `c` for row / column on the 9×9 grid, `(m) => m.Home` in a lazy route import.
+- Explicit names for variables and parameters (`answer`, `digit`, `question`), no one-letter names, except where the meaning is obvious and conventional: `r` / `c` for row / column on the 9×9 grid, `(m) => m.Home` in a lazy route import.
 - No nested ternaries. Use `if` / `else`, early returns, a `switch`, or a small named function. A single, simple ternary is fine.
 - Functions returning a boolean: when the cases have different reasons (each deserving its own comment), a series of `if (condition) { return true; }` ending with `return false;`. When the conditions read naturally as one sentence (e.g. `target instanceof Element && target.closest(…) !== null`), a single `return` with `&&` is clearer.
 - Break long expressions and conditions into named intermediate variables or helper functions (e.g. `isExpectedAnswer(digit)` rather than a raw comparison inside a bigger condition).
 - Avoid dense one-liners (`flatMap` + ternary + spread in one expression…) when a short loop or two steps read better.
 - Comments explain _why_ (intent, constraints, non-obvious choices), not what the code already says.
+- Functions are named as actions or relations (`highlightsOf`, `toCandidateButton`), values as nouns (`questionHighlights`). Never use a leading `_` just to avoid a name clash (`_` means private or unused).
+- No special value whose meaning must be guessed (e.g. `null` meaning "everything"): group the value with what it depends on (`BoardSolution` = frames + `shownStep`).
 
 ## Commands
 
@@ -59,7 +61,7 @@ The code must be easy to understand for a human reading it. Prefer more lines of
 - Interface texts in English.
 - Light theme only, white background. Theme colors and fonts are Tailwind tokens in `src/styles.css` (`navy`, `hyp` green, `bad` red, `chain` blue; Barlow / Barlow Condensed / IBM Plex Mono from Google Fonts).
 - Header height is the CSS variable `--header-height`. The home exercise fits in `100dvh - header` with a minimum height (page scrolls below it); this constraint is local to the home page, not site-wide.
-- Responsive: stacked on phones and portrait tablets (move navigation, board, question); side by side on `md:landscape:` (board filling the height on the left; on the right, everything aligned to the top: move navigation, then the question panel), via a CSS grid on the `Exercise` host.
+- Responsive: stacked on phones and portrait tablets (question navigation, board, question); side by side on `md:landscape:` (board filling the height on the left; on the right, everything aligned to the top: question navigation, then the question, candidates and result), via a CSS grid on the `Exercise` host.
 - Colored text must keep WCAG AA contrast: use colored backgrounds/borders (badges) rather than green/red text.
 
 # Angular guidelines
@@ -87,6 +89,8 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 
 - It MUST pass all AXE checks.
 - It MUST follow all WCAG AA minimums, including focus management, color contrast, and ARIA attributes.
+- Never put ARIA attributes or roles on an element with `display: contents` (some browsers drop it from the accessibility tree).
+- Ids used by `aria-labelledby` (or other ARIA references) are generated once in the component (`exercise-question-0`), not written as strings in two places.
 
 ## Components
 
@@ -95,6 +99,8 @@ You are an expert in TypeScript, Angular, and scalable web application developme
   - Every condition that shows or hides a block (`@if`, visual hiding with `sr-only`, an `aria-live` region that must exist beforehand) is written in the parent template, with a short comment when the reason is not obvious (accessibility…). A child must not hide itself or render nothing depending on an input: reading the parent would suggest it is always displayed.
   - Child components are presentational by default: inputs/outputs only; the parent connects them to its store. Injecting the parent's store in a child is acceptable only when passing values through several levels would become heavy; ask the user first.
   - The name says what the block is in its context (`ExerciseMissedClue`, not `ExerciseHint`, which suggests help before answering). Propose the split and the names to the user before coding.
+  - When a feature adds a new visible block to a component, create a child component for it instead of growing the template. A template with several distinct blocks, or over ~30 lines, is the signal to propose a split.
+  - Data a template needs for a list (classes, labels, disabled…) is built in a `computed` that maps each item (e.g. `toCandidateButton`), not by methods called from the template.
 - Use `input()` and `output()` functions instead of decorators
 - Use `model()` for two-way bound properties with `[(prop)]` syntax instead of pairing `input()` with `output()`
 - Use `computed()` for derived state
@@ -111,6 +117,8 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Store file next to the component: `<name>-store.ts` (kebab-case, as in the NgRx docs: `books-store.ts`); once the store is split into features (`signalStoreFeature`, one file each, named after its function as in the NgRx docs: `withAnswer()` in `with-answer.ts`), the store and its features go in a `store/` subfolder next to the component. The store file exports `XxxStore = signalStore(withState(...), withComputed(...), withMethods(...))`. Change state only with `patchState` inside store methods; keep methods short and explicit like any other code.
 - Put all the state of the component in the store, including data that arrives through an input, so there is one place to look. Feed inputs with a `signalMethod` of the store, called with the input signal in the component constructor (e.g. `this.store.setExercise(this.exercise)`).
 - Such input-fed state starts as `null` (the store is created before Angular sets the inputs). Handle the null inside the store's computed values, and in the template narrow it once with a single `@if (store.x(); as x)` at the top, rather than scattering checks.
+- When a store holds several concerns (e.g. navigation, answer, animation), split it into one `signalStoreFeature` per concern. Members starting with `_` are private to the store (NgRx convention); say so in a comment where they are defined.
+- `patchState` with an updater `(state) => ({ … })` when the new value depends on the previous one; a plain object otherwise.
 - Plain signals in a component only for purely visual details that are not state to manage (e.g. a hover flag); everything else goes to the store.
 - Keep state transformations pure and predictable
 - Use `set` or `update` to change a signal
