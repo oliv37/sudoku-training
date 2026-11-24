@@ -1,7 +1,7 @@
 <!-- The store gets the exercise from the input before the first render: this @if only narrows the type. -->
 @if (store.move(); as move) {
   <!-- Above the board on phones, top of the right column on wide landscape screens -->
-  <app-move-nav
+  <app-exercise-nav
     class="flex-none md:landscape:col-start-2 md:landscape:row-start-1"
     [name]="store.exerciseName()"
     [moveNumber]="move.coup"

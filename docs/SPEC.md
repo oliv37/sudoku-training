@@ -22,7 +22,8 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 Revue composant par composant, avec l'utilisateur, pour rendre le code explicite et déplacer l'état dans des Signal Stores locaux.
 
-- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`), `MoveNav` (navigation entre les coups sortie d'`Exercise` le 2026-11-24 : composant de présentation, inputs/outputs, gère aussi ← →).
+- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`), `ExerciseNav` (navigation entre les coups sortie d'`Exercise` le 2026-11-24 : composant de présentation, inputs/outputs, gère aussi ← →).
+- Convention décidée le 2026-11-24 : tous les fichiers, classes et sélecteurs du domaine exercice commencent par `exercise`. Le mot « move » (`Move`, `MoveData`, inputs `moveNumber` / `moveCount`) doit disparaître : nouveau nom à choisir avec l'utilisateur.
 - À faire, dans l'ordre : `Move` (état de la réponse et de l'animation à passer dans un store ; supprimer les ternaires imbriqués du calcul de l'état des boutons), `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)

@@ -6,13 +6,13 @@ import { Component, computed, input, output } from '@angular/core';
  * `previous` / `next` outputs.
  */
 @Component({
-  selector: 'app-move-nav',
+  selector: 'app-exercise-nav',
   host: {
     '(document:keydown)': 'onKeydown($event)',
   },
-  templateUrl: './move-nav.html',
+  templateUrl: './exercise-nav.html',
 })
-export class MoveNav {
+export class ExerciseNav {
   /** Name of the exercise (its grid date). */
   readonly name = input.required<string>();
   /** Number of the current move, as shown to the user (1 = first move). */

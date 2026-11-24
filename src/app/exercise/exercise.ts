@@ -2,15 +2,15 @@ import { Component, inject, input } from '@angular/core';
 import { ExerciseData } from './exercise.model';
 import { ExerciseStore } from './exercise.store';
 import { Move } from './move/move';
-import { MoveNav } from './move-nav/move-nav';
+import { ExerciseNav } from './exercise-nav/exercise-nav';
 
 /**
- * An exercise: the sequence of moves of one grid. Lays out the move navigation (`MoveNav`) and
+ * An exercise: the sequence of moves of one grid. Lays out the move navigation (`ExerciseNav`) and
  * the current move (`Move`), and connects them to `ExerciseStore`, where all the exercise state lives.
  */
 @Component({
   selector: 'app-exercise',
-  imports: [MoveNav, Move],
+  imports: [ExerciseNav, Move],
   providers: [ExerciseStore],
   // Stacked by default (navigation, board, question). On wide landscape screens (≥ 768px and
   // wider than tall) the host becomes a grid: the board fills the height of the left column, the
