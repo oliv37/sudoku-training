@@ -20,9 +20,9 @@ const EXERCISE_URL = '/data/exercices-2026-11-14.json';
     @if (exerciseResource.value(); as exercise) {
       <app-exercise [exercise]="exercise" class="min-h-0 shrink" />
     } @else if (exerciseResource.error()) {
-      <p role="alert" class="text-bad">Could not load the exercise.</p>
+      <p role="alert" class="text-center text-bad">Could not load the exercise.</p>
     } @else {
-      <p class="text-muted">Loading…</p>
+      <p class="animate-delayed-appear text-center text-muted">Loading…</p>
     }
   `,
 })

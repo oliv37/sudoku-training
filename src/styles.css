@@ -14,6 +14,20 @@
   --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
   --font-sans: 'Barlow', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* For loading messages: invisible for the first 500 ms, then fades in. A fast load never shows
+     the message, so it does not flash on screen for a split second. `both` keeps the element at
+     opacity 0 during the delay. */
+  --animate-delayed-appear: delayed-appear 300ms ease-out 500ms both;
+
+  @keyframes delayed-appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 :root {
