@@ -11,7 +11,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 - **Socle** : Angular 22 + Tailwind 4, génération statique (`outputMode: "static"`, toutes les routes pré-rendues au build, serveur Express retiré). Organisation `pages/` / `exercise/` / `board/` (voir `CLAUDE.md`).
 - **Identité** : logo dans l'en-tête (pleine largeur), polices Google Fonts, couleurs en tokens Tailwind (`src/styles.css`), thème clair, fond blanc.
-- **Accueil** (`/`, chargé en lazy) : grille du 14 novembre **codée en dur** (`public/data/exercices-2026-11-14.json`), navigation libre entre les coups (‹ › et ← →, ligne « date · k / N »).
+- **Accueil** (`/`, chargé en lazy) : grille du 14 novembre **codée en dur** (`public/data/exercices-2026-11-14.json`), navigation libre entre les questions (‹ › et ← →, ligne « date · k / N »).
 - **Grille SVG** (`Board`) : rendu de la question et du schéma de solution, porté de `renderCard` (cercles, chiffres barrés, flèches numérotées par branche, cases non concernées en gris) + mise en évidence des derniers candidats de la zone rouge.
 - **Exercice** : question avec badges vert/rouge, boutons des candidats, « Found! » / « Lost », explication + piste, « ↺ Reset », « Next move → », question masquée après la réponse, focus et annonces pour les lecteurs d'écran.
 - **Pas à pas** : animation des étapes du schéma (0,6 s par étape) et ronds numérotés cliquables pour n'afficher la solution que jusqu'à une étape.
@@ -22,9 +22,9 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 Revue composant par composant, avec l'utilisateur, pour rendre le code explicite et déplacer l'état dans des Signal Stores locaux.
 
-- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`), `ExerciseNav` (navigation entre les coups sortie d'`Exercise` le 2026-11-24 : composant de présentation, inputs/outputs, gère aussi ← →).
-- Convention décidée le 2026-11-24 : tous les fichiers, classes et sélecteurs du domaine exercice commencent par `exercise`. Le mot « move » (`Move`, `MoveData`, inputs `moveNumber` / `moveCount`) doit disparaître : nouveau nom à choisir avec l'utilisateur.
-- À faire, dans l'ordre : `Move` (état de la réponse et de l'animation à passer dans un store ; supprimer les ternaires imbriqués du calcul de l'état des boutons), `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
+- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`).
+- 2026-11-24 : « move » renommé « question » partout (code et interface : « Next question → », « Question 3 of 20 »). Tous les fichiers, classes et sélecteurs du domaine exercice commencent par `exercise`. `Move` découpé en composants de présentation (`ExerciseNav`, `ExerciseBoard`, `ExerciseQuestion`, `ExerciseCandidates`, `ExerciseResult`) assemblés dans `exercise.html` ; état de la réponse et de l'animation dans `ExerciseStore`, découpé en trois features (navigation, réponse, animation) ; ternaires imbriqués supprimés.
+- À faire, dans l'ordre : `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 
