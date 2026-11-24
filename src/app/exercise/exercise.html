@@ -35,6 +35,14 @@
       [candidates]="store.candidates()"
       (choose)="choose($event)"
     />
-    <app-move (resetAnswer)="reset()" />
+    <app-exercise-result
+      [result]="store.result()"
+      [steps]="store.solutionSteps()"
+      [animating]="store.animating()"
+      [hasNext]="store.hasNext()"
+      (showUpTo)="store.showUpTo($event)"
+      (resetAnswer)="reset()"
+      (next)="store.next()"
+    />
   </div>
 }

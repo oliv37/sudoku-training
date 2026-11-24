@@ -1,0 +1,71 @@
+<!-- Verdict, announced to screen readers: the live region exists before its content appears -->
+<div aria-live="polite" class="contents">
+  @if (result(); as answerResult) {
+    <p
+      #verdict
+      tabindex="-1"
+      class="text-center text-base leading-snug focus:outline-none md:landscape:text-xl"
+    >
+      @if (answerResult.found) {
+        <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold">Found!</span>
+      } @else {
+        <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
+      }
+      {{ answerResult.explanation }}
+    </p>
+  }
+</div>
+
+@if (result(); as answerResult) {
+  <!-- Numbered steps of the solution, same numbers and colors as on the board -->
+  @if (steps().length > 0) {
+    <div
+      role="group"
+      aria-label="Solution steps"
+      class="flex flex-wrap justify-center gap-x-3 gap-y-2"
+    >
+      @for (step of steps(); track step.step) {
+        <button
+          type="button"
+          [class]="stepClasses(step)"
+          [style.background-color]="step.reached ? step.color : null"
+          [disabled]="animating()"
+          [attr.aria-pressed]="step.selected"
+          [attr.aria-label]="'Show steps 1 to ' + step.step"
+          (click)="showUpTo.emit(step.step)"
+        >
+          {{ step.step }}
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Hint, only after a wrong answer -->
+  @if (answerResult.hint; as hint) {
+    <p class="text-center text-sm leading-snug text-muted md:landscape:text-base">
+      <b class="font-semibold text-navy">What should have caught your eye:</b> {{ hint }}
+    </p>
+  }
+
+  <div class="flex flex-wrap items-center justify-center gap-3">
+    <button
+      type="button"
+      class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+      (click)="resetAnswer.emit()"
+    >
+      ↺ Reset
+    </button>
+    @if (hasNext()) {
+      <button
+        #nextButton
+        type="button"
+        class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+        (click)="next.emit()"
+      >
+        Next question →
+      </button>
+    } @else {
+      <p class="text-base font-semibold md:landscape:text-xl">Last question of this grid.</p>
+    }
+  </div>
+}
