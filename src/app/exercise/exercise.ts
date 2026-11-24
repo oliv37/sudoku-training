@@ -1,23 +1,25 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, Injector, afterNextRender, inject, input, viewChild } from '@angular/core';
 import { ExerciseData } from './exercise.model';
 import { ExerciseStore } from './exercise.store';
 import { Move } from './move/move';
 import { ExerciseBoard } from './exercise-board/exercise-board';
+import { ExerciseCandidates } from './exercise-candidates/exercise-candidates';
 import { ExerciseNav } from './exercise-nav/exercise-nav';
+import { ExerciseQuestion } from './exercise-question/exercise-question';
 
 /**
- * An exercise: the sequence of questions of one grid. Lays out the navigation (`ExerciseNav`) and
- * the current question (`Move`), and connects them to `ExerciseStore`, where all the exercise state lives.
+ * An exercise: the sequence of questions of one grid. Lays out its parts (navigation, board,
+ * question, candidates, result), connects them to `ExerciseStore`, where all the exercise state
+ * lives, and moves the focus between them.
  */
 @Component({
   selector: 'app-exercise',
-  imports: [ExerciseNav, ExerciseBoard, Move],
+  imports: [ExerciseNav, ExerciseBoard, ExerciseQuestion, ExerciseCandidates, Move],
   providers: [ExerciseStore],
   // Stacked by default (navigation, board, question). On wide landscape screens (≥ 768px and
   // wider than tall) the host becomes a grid: the board fills the height of the left column, the
   // right column reads from the top: navigation (row 1), then the question panel (row 2), so the
   // panel only grows downward when the result appears (row 3 takes the remaining space).
-  // `Move` uses `display: contents`, so its panel is an item of this grid.
   // The host is a size container: the board column is as wide as the height allows, minus room
   // for the right panel (20rem) and the gap.
   host: {
@@ -31,8 +33,27 @@ export class Exercise {
 
   protected readonly store = inject(ExerciseStore);
 
+  private readonly injector = inject(Injector);
+  private readonly candidates = viewChild.required(ExerciseCandidates);
+  private readonly result = viewChild.required(Move);
+
   constructor() {
     // Keep the store in sync with the input: a new exercise starts again from its first question.
     this.store.setExercise(this.exercise);
+  }
+
+  /**
+   * The user picks a candidate. The candidate buttons become disabled, so the focus moves to the
+   * result (once it is rendered) instead of being lost.
+   */
+  protected choose(digit: number): void {
+    this.store.choose(digit);
+    afterNextRender(() => this.result().focusAfterAnswer(), { injector: this.injector });
+  }
+
+  /** Back to the same question; the focus returns to the first candidate. */
+  protected reset(): void {
+    this.store.reset();
+    afterNextRender(() => this.candidates().focusFirstCandidate(), { injector: this.injector });
   }
 }

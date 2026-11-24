@@ -1,129 +1,73 @@
 @if (store.question(); as question) {
-  <div
-    class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
-  >
-    <h2
-      id="question"
-      class="text-center text-base leading-relaxed font-semibold md:landscape:text-2xl md:landscape:leading-relaxed"
-      [class.sr-only]="store.answered()"
-    >
-      Which candidate of
-      <span class="whitespace-nowrap rounded-md border-2 border-hyp bg-hyp-bg px-1.5">{{
-        startName()
-      }}</span>
-      must be eliminated to
-      @if (question.arrivee.type === 'cell') {
-        leave
-        <span class="whitespace-nowrap rounded-md border-2 border-bad bg-bad-bg px-1.5">{{
-          question.arrivee.nom
-        }}</span>
-        without candidates?
-      } @else {
-        empty the
-        <span
-          class="whitespace-nowrap rounded-md border-2 border-dashed border-bad bg-bad-bg px-1.5"
-          >red zone</span
-        >?
-      }
-    </h2>
-    <p
-      class="-mt-2 text-center font-mono text-xs tracking-wider text-muted uppercase md:landscape:-mt-3 md:landscape:text-sm"
-      [class.sr-only]="store.answered()"
-    >
-      {{ question.etapes }}-step chain
-    </p>
-
-    <div
-      role="group"
-      aria-labelledby="question"
-      class="flex flex-wrap justify-center gap-2 md:landscape:gap-3"
-    >
-      @for (c of candidates(); track c.digit) {
-        <button
-          #candidateButton
-          type="button"
-          [class]="c.classes"
-          [attr.aria-label]="c.label"
-          [disabled]="c.state !== 'idle'"
-          (click)="choose(c.digit)"
-        >
-          {{ c.digit }}
-        </button>
-      }
-    </div>
-
-    <!-- Verdict, announced to screen readers: the live region exists before its content appears -->
-    <div aria-live="polite" class="contents">
-      @if (store.result(); as answerResult) {
-        <p
-          #result
-          tabindex="-1"
-          class="text-center text-base leading-snug focus:outline-none md:landscape:text-xl"
-        >
-          @if (answerResult.found) {
-            <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold"
-              >Found!</span
-            >
-          } @else {
-            <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
-          }
-          {{ answerResult.explanation }}
-        </p>
-      }
-    </div>
-
+  <!-- Verdict, announced to screen readers: the live region exists before its content appears -->
+  <div aria-live="polite" class="contents">
     @if (store.result(); as answerResult) {
-      <!-- Numbered steps of the solution, same numbers and colors as on the board -->
-      @if (stepButtons().length) {
-        <div
-          role="group"
-          aria-label="Solution steps"
-          class="flex flex-wrap justify-center gap-x-3 gap-y-2"
-        >
-          @for (s of stepButtons(); track s.step) {
-            <button
-              type="button"
-              [class]="s.classes"
-              [style.background-color]="s.reached ? s.color : null"
-              [disabled]="store.animating()"
-              [attr.aria-pressed]="s.selected"
-              [attr.aria-label]="'Show steps 1 to ' + s.step"
-              (click)="store.showUpTo(s.step)"
-            >
-              {{ s.step }}
-            </button>
-          }
-        </div>
-      }
-
-      <!-- Hint, only after a wrong answer -->
-      @if (answerResult.hint; as hint) {
-        <p class="text-center text-sm leading-snug text-muted md:landscape:text-base">
-          <b class="font-semibold text-navy">What should have caught your eye:</b> {{ hint }}
-        </p>
-      }
-
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <button
-          type="button"
-          class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-          (click)="reset()"
-        >
-          ↺ Reset
-        </button>
-        @if (store.hasNext()) {
-          <button
-            #nextButton
-            type="button"
-            class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
-            (click)="store.next()"
-          >
-            Next question →
-          </button>
+      <p
+        #result
+        tabindex="-1"
+        class="text-center text-base leading-snug focus:outline-none md:landscape:text-xl"
+      >
+        @if (answerResult.found) {
+          <span class="mr-1 rounded-md border-2 border-hyp bg-hyp-bg px-1.5 font-bold">Found!</span>
         } @else {
-          <p class="text-base font-semibold md:landscape:text-xl">Last question of this grid.</p>
+          <span class="mr-1 rounded-md border-2 border-bad bg-bad-bg px-1.5 font-bold">Lost</span>
+        }
+        {{ answerResult.explanation }}
+      </p>
+    }
+  </div>
+
+  @if (store.result(); as answerResult) {
+    <!-- Numbered steps of the solution, same numbers and colors as on the board -->
+    @if (stepButtons().length) {
+      <div
+        role="group"
+        aria-label="Solution steps"
+        class="flex flex-wrap justify-center gap-x-3 gap-y-2"
+      >
+        @for (s of stepButtons(); track s.step) {
+          <button
+            type="button"
+            [class]="s.classes"
+            [style.background-color]="s.reached ? s.color : null"
+            [disabled]="store.animating()"
+            [attr.aria-pressed]="s.selected"
+            [attr.aria-label]="'Show steps 1 to ' + s.step"
+            (click)="store.showUpTo(s.step)"
+          >
+            {{ s.step }}
+          </button>
         }
       </div>
     }
-  </div>
+
+    <!-- Hint, only after a wrong answer -->
+    @if (answerResult.hint; as hint) {
+      <p class="text-center text-sm leading-snug text-muted md:landscape:text-base">
+        <b class="font-semibold text-navy">What should have caught your eye:</b> {{ hint }}
+      </p>
+    }
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        class="cursor-pointer rounded-lg border-2 border-line bg-white px-4 py-1 text-sm font-semibold text-navy transition-colors hover:border-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+        (click)="resetAnswer.emit()"
+      >
+        ↺ Reset
+      </button>
+      @if (store.hasNext()) {
+        <button
+          #nextButton
+          type="button"
+          class="cursor-pointer rounded-lg border-2 border-navy bg-navy px-4 py-1 text-sm font-semibold text-white transition-colors hover:border-chain hover:bg-chain focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chain md:landscape:px-5 md:landscape:py-1.5 md:landscape:text-base"
+          (click)="store.next()"
+        >
+          Next question →
+        </button>
+      } @else {
+        <p class="text-base font-semibold md:landscape:text-xl">Last question of this grid.</p>
+      }
+    </div>
+  }
 }

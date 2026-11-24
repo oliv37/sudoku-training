@@ -21,5 +21,20 @@
     [step]="store.shownStep()"
   />
 
-  <app-move />
+  <!-- Right column on wide landscape screens, below the navigation -->
+  <div
+    class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
+  >
+    <app-exercise-question
+      id="exercise-question"
+      [question]="question"
+      [answered]="store.answered()"
+    />
+    <app-exercise-candidates
+      labelledBy="exercise-question"
+      [candidates]="store.candidates()"
+      (choose)="choose($event)"
+    />
+    <app-move (resetAnswer)="reset()" />
+  </div>
 }
