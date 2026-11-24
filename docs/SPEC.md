@@ -5,7 +5,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 ## État d'avancement
 
-> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-23.
+> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-24.
 
 ### Fait
 
@@ -22,7 +22,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 Revue composant par composant, avec l'utilisateur, pour rendre le code explicite et déplacer l'état dans des Signal Stores locaux.
 
-- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`).
+- Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`), `MoveNav` (navigation entre les coups sortie d'`Exercise` le 2026-11-24 : composant de présentation, inputs/outputs, gère aussi ← →).
 - À faire, dans l'ordre : `Move` (état de la réponse et de l'animation à passer dans un store ; supprimer les ternaires imbriqués du calcul de l'état des boutons), `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)

@@ -61,10 +61,7 @@ export const ExerciseStore = signalStore(
     const hasPrevious = computed(() => moveIndex() > 0);
     const hasNext = computed(() => moveIndex() < moveCount() - 1);
 
-    /** Width reserved for the move number, so "9 / 20" → "10 / 20" does not shift the line. */
-    const counterWidth = computed(() => String(moveCount()).length);
-
-    return { moveCount, exerciseName, move, hasPrevious, hasNext, counterWidth };
+    return { moveCount, exerciseName, move, hasPrevious, hasNext };
   }),
 
   withMethods((store) => ({
