@@ -7,7 +7,7 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { ExerciseData, ExerciseQuestionData } from './exercise.model';
+import { ExerciseData, ExerciseQuestionData } from '../exercise-model';
 
 interface NavigationState {
   /**
@@ -55,10 +55,13 @@ export function withNavigation() {
         return current.exos[questionIndex()];
       });
 
+      /** Number of the current question, as shown to the user (1 = first question). */
+      const questionNumber = computed(() => questionIndex() + 1);
+
       const hasPrevious = computed(() => questionIndex() > 0);
       const hasNext = computed(() => questionIndex() < questionCount() - 1);
 
-      return { questionCount, exerciseName, question, hasPrevious, hasNext };
+      return { questionCount, exerciseName, question, questionNumber, hasPrevious, hasNext };
     }),
 
     withMethods((store) => ({

@@ -1,20 +1,34 @@
 import { Component, Injector, afterNextRender, inject, input, viewChild } from '@angular/core';
-import { ExerciseData } from './exercise.model';
-import { ExerciseStore } from './exercise.store';
+import { ExerciseData } from './exercise-model';
+import { ExerciseStore } from './store/exercise-store';
 import { ExerciseBoard } from './exercise-board/exercise-board';
 import { ExerciseCandidates } from './exercise-candidates/exercise-candidates';
+import { ExerciseMissedClue } from './exercise-missed-clue/exercise-missed-clue';
 import { ExerciseNav } from './exercise-nav/exercise-nav';
+import { ExerciseNextActions } from './exercise-next-actions/exercise-next-actions';
 import { ExerciseQuestion } from './exercise-question/exercise-question';
-import { ExerciseResult } from './exercise-result/exercise-result';
+import { ExerciseSolutionSteps } from './exercise-solution-steps/exercise-solution-steps';
+import { ExerciseVerdict } from './exercise-verdict/exercise-verdict';
+
+let nextId = 0;
 
 /**
  * An exercise: the sequence of questions of one grid. Lays out its parts (navigation, board,
- * question, candidates, result), connects them to `ExerciseStore`, where all the exercise state
- * lives, and moves the focus between them.
+ * question, candidates, verdict, solution steps, missed clue, next actions), connects them to
+ * `ExerciseStore`, where all the exercise state lives, and moves the focus between them.
  */
 @Component({
   selector: 'app-exercise',
-  imports: [ExerciseNav, ExerciseBoard, ExerciseQuestion, ExerciseCandidates, ExerciseResult],
+  imports: [
+    ExerciseNav,
+    ExerciseBoard,
+    ExerciseQuestion,
+    ExerciseCandidates,
+    ExerciseVerdict,
+    ExerciseSolutionSteps,
+    ExerciseMissedClue,
+    ExerciseNextActions,
+  ],
   providers: [ExerciseStore],
   // Stacked by default (navigation, board, question). On wide landscape screens (≥ 768px and
   // wider than tall) the host becomes a grid: the board fills the height of the left column, the
@@ -33,9 +47,14 @@ export class Exercise {
 
   protected readonly store = inject(ExerciseStore);
 
+  /** Id of the question, which names the candidates group; unique if several exercises are shown. */
+  protected readonly questionId = `exercise-question-${nextId++}`;
+
   private readonly injector = inject(Injector);
   private readonly candidates = viewChild.required(ExerciseCandidates);
-  private readonly result = viewChild.required(ExerciseResult);
+  // Present only once answered.
+  private readonly verdict = viewChild(ExerciseVerdict);
+  private readonly actions = viewChild(ExerciseNextActions);
 
   constructor() {
     // Keep the store in sync with the input: a new exercise starts again from its first question.
@@ -48,7 +67,16 @@ export class Exercise {
    */
   protected choose(digit: number): void {
     this.store.choose(digit);
-    afterNextRender(() => this.result().focusAfterAnswer(), { injector: this.injector });
+    afterNextRender(() => this.focusAfterAnswer(), { injector: this.injector });
+  }
+
+  /** "Next question" if there is one; on the last question, the verdict. */
+  private focusAfterAnswer(): void {
+    if (this.store.hasNext()) {
+      this.actions()?.focusNextButton();
+      return;
+    }
+    this.verdict()?.focus();
   }
 
   /** Back to the same question; the focus returns to the first candidate. */

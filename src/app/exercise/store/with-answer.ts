@@ -7,8 +7,8 @@ import {
   withLinkedState,
   withMethods,
 } from '@ngrx/signals';
-import { Frame, candidatesOf, cellName } from '../board/board.model';
-import { ExerciseQuestionData } from './exercise.model';
+import { Frame, candidatesOf, cellName } from '../../board/board-model';
+import { ExerciseQuestionData } from '../exercise-model';
 
 /**
  * State of a candidate button:
@@ -32,7 +32,7 @@ export interface ExerciseAnswerResult {
   /** Why the candidate must be eliminated, e.g. "…, so R3C4 ≠ 7". */
   explanation: string;
   /** What should have caught the user's eye; only after a wrong answer. */
-  hint: string | null;
+  missedClue: string | null;
 }
 
 /**
@@ -54,14 +54,20 @@ export function withAnswer() {
     withComputed(({ question, answer }) => {
       const answered = computed(() => answer() !== null);
 
-      const found = computed(() => {
+      /**
+       * Solution diagram of the chosen candidate if it is accepted; null if it is not accepted or
+       * before answering. The one place that decides whether the answer is accepted.
+       */
+      const acceptedFrames = computed((): Frame[] | null => {
         const current = question();
         const chosen = answer();
         if (current === null || chosen === null) {
-          return false;
+          return null;
         }
-        return acceptedSolution(current, chosen) !== null;
+        return acceptedSolution(current, chosen);
       });
+
+      const found = computed(() => acceptedFrames() !== null);
 
       /**
        * Solution diagram to draw: the one of the chosen candidate if accepted, else the one of
@@ -69,11 +75,10 @@ export function withAnswer() {
        */
       const solution = computed((): Frame[] | null => {
         const current = question();
-        const chosen = answer();
-        if (current === null || chosen === null) {
+        if (current === null || !answered()) {
           return null;
         }
-        return acceptedSolution(current, chosen) ?? current.frames;
+        return acceptedFrames() ?? current.frames;
       });
 
       const candidates = computed((): ExerciseCandidate[] => {
@@ -86,7 +91,7 @@ export function withAnswer() {
         const digits = candidatesOf(current, current.depart);
         return digits.map((digit) => ({
           digit,
-          state: candidateState(digit, chosen, isFound, current.reponse),
+          state: candidateState(digit, { chosen, found: isFound, expected: current.reponse }),
         }));
       });
 
@@ -100,7 +105,7 @@ export function withAnswer() {
         return {
           found: isFound,
           explanation: explanationOf(current, eliminatedDigit(current, chosen, isFound)),
-          hint: isFound ? null : current.piste,
+          missedClue: isFound ? null : current.piste,
         };
       });
 
@@ -139,12 +144,18 @@ function acceptedSolution(question: ExerciseQuestionData, digit: number): Frame[
   return otherAnswer.frames;
 }
 
-function candidateState(
-  digit: number,
-  chosen: number | null,
-  found: boolean,
-  expected: number,
-): CandidateState {
+/** What the user answered, as needed to color each candidate button. */
+interface AnswerSummary {
+  /** Candidate chosen by the user; null before answering. */
+  chosen: number | null;
+  /** Whether the chosen candidate is accepted. */
+  found: boolean;
+  /** The expected answer (`reponse`). */
+  expected: number;
+}
+
+/** State of the button of `digit`, given what the user answered. */
+function candidateState(digit: number, { chosen, found, expected }: AnswerSummary): CandidateState {
   if (chosen === null) {
     return 'idle';
   }

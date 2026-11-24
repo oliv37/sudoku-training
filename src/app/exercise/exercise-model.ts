@@ -1,4 +1,4 @@
-import { Cell, CellDigit, Frame } from '../board/board.model';
+import { Cell, CellDigit, Frame } from '../board/board-model';
 
 /** One grid file: the questions of a solved grid, in order (an exercise = this sequence of questions). */
 export interface ExerciseData {

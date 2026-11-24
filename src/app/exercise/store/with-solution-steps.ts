@@ -8,20 +8,20 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Frame } from '../board/board.model';
-import { lastStep, solutionSteps } from '../board/geometry/solution-geometry';
+import { BoardSolution, Frame } from '../../board/board-model';
+import { lastStep, solutionSteps } from '../../board/geometry/solution-geometry';
 
 /** Delay between two steps of the solution animation. */
 const STEP_DELAY_MS = 600;
 
-interface SolutionAnimationState {
+interface SolutionStepsState {
   /** Last step drawn on the board (0 = hypothesis only); null = no solution shown. */
   shownStep: number | null;
   /** True while the steps appear one after the other (step buttons not clickable yet). */
   animating: boolean;
 }
 
-const initialState: SolutionAnimationState = {
+const initialState: SolutionStepsState = {
   shownStep: null,
   animating: false,
 };
@@ -38,16 +38,27 @@ export interface ExerciseSolutionStep {
 }
 
 /**
- * Part of `ExerciseStore`: once a solution is shown, draws it step by step (hypothesis first,
- * then one step every STEP_DELAY_MS), then lets the user pick the step to show.
+ * Part of `ExerciseStore`: which step of the solution is drawn on the board. Once a solution is
+ * shown, an animation draws it step by step (hypothesis first, then one step every
+ * STEP_DELAY_MS); then the user can pick the step to show with the numbered step buttons.
  */
-export function withSolutionAnimation() {
+export function withSolutionSteps() {
   return signalStoreFeature(
     { props: type<{ solution: Signal<Frame[] | null> }>() },
 
     withState(initialState),
 
     withComputed(({ solution, shownStep, animating }) => ({
+      /** The solution as the board draws it: its frames and the step reached; null = nothing drawn. */
+      drawnSolution: computed((): BoardSolution | null => {
+        const frames = solution();
+        const step = shownStep();
+        if (frames === null || step === null) {
+          return null;
+        }
+        return { frames, shownStep: step };
+      }),
+
       solutionSteps: computed((): ExerciseSolutionStep[] => {
         const frames = solution();
         if (frames === null) {
@@ -72,6 +83,8 @@ export function withSolutionAnimation() {
         patchState(store, { shownStep: step });
       },
 
+      // Members starting with `_` are private to the store (NgRx convention): only the hook below
+      // calls them, components cannot.
       _hideSolution(): void {
         patchState(store, { shownStep: null, animating: false });
       },
@@ -80,7 +93,10 @@ export function withSolutionAnimation() {
         patchState(store, { shownStep: lastStep(frames), animating: false });
       },
 
-      /** Starts with the hypothesis alone; returns the timer that adds the next steps. */
+      /**
+       * Starts with the hypothesis alone; returns the timer that adds the next steps. The timer
+       * stops itself after the last step; the hook stops it earlier if the solution changes.
+       */
       _startAnimation(frames: Frame[]): ReturnType<typeof setInterval> {
         patchState(store, { shownStep: 0, animating: true });
         const last = lastStep(frames);
@@ -111,6 +127,7 @@ export function withSolutionAnimation() {
               return;
             }
             const timer = store._startAnimation(frames);
+            // Answer reset or other question before the end: stop the steps still to come.
             onCleanup(() => clearInterval(timer));
           });
         });

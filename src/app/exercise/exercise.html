@@ -4,7 +4,7 @@
   <app-exercise-nav
     class="flex-none md:landscape:col-start-2 md:landscape:row-start-1"
     [name]="store.exerciseName()"
-    [questionNumber]="question.coup"
+    [questionNumber]="store.questionNumber()"
     [questionCount]="store.questionCount()"
     [hasPrevious]="store.hasPrevious()"
     [hasNext]="store.hasNext()"
@@ -17,32 +17,52 @@
   <app-exercise-board
     class="flex min-h-0 shrink flex-col md:landscape:col-start-1 md:landscape:row-span-full md:landscape:row-start-1 md:landscape:h-full md:landscape:w-[min(100cqh,calc(100cqw-20rem-2.5rem))] md:landscape:justify-center"
     [question]="question"
-    [solution]="store.solution()"
-    [step]="store.shownStep()"
+    [questionNumber]="store.questionNumber()"
+    [solution]="store.drawnSolution()"
   />
 
   <!-- Right column on wide landscape screens, below the navigation -->
   <div
     class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
   >
+    <!-- Hidden visually once answered, but kept for screen readers: it names the candidates group -->
     <app-exercise-question
-      id="exercise-question"
+      [id]="questionId"
+      [class.sr-only]="store.answered()"
       [question]="question"
-      [answered]="store.answered()"
     />
     <app-exercise-candidates
-      labelledBy="exercise-question"
+      [labelledBy]="questionId"
       [candidates]="store.candidates()"
       (choose)="choose($event)"
     />
-    <app-exercise-result
-      [result]="store.result()"
-      [steps]="store.solutionSteps()"
-      [animating]="store.animating()"
-      [hasNext]="store.hasNext()"
-      (showUpTo)="store.showUpTo($event)"
-      (resetAnswer)="reset()"
-      (next)="store.next()"
-    />
+    <!-- Live region: must exist before the verdict appears, so screen readers announce it.
+         Not `display: contents`: some browsers drop such elements from the accessibility tree.
+         `store.result()` is non-null exactly when `store.answered()` is true; it is tested here
+         and below (instead of `answered()`) to read the result with `as result`. -->
+    <div aria-live="polite" class="block">
+      @if (store.result(); as result) {
+        <app-exercise-verdict [result]="result" />
+      }
+    </div>
+
+    @if (store.result(); as result) {
+      @if (store.solutionSteps().length > 0) {
+        <app-exercise-solution-steps
+          [steps]="store.solutionSteps()"
+          [animating]="store.animating()"
+          (showUpTo)="store.showUpTo($event)"
+        />
+      }
+      <!-- Only after a wrong answer -->
+      @if (result.missedClue; as missedClue) {
+        <app-exercise-missed-clue [clue]="missedClue" />
+      }
+      <app-exercise-next-actions
+        [hasNext]="store.hasNext()"
+        (resetAnswer)="reset()"
+        (next)="store.next()"
+      />
+    }
   </div>
 }

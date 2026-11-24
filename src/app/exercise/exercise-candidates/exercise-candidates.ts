@@ -1,5 +1,5 @@
-import { Component, ElementRef, input, output, viewChildren } from '@angular/core';
-import { CandidateState, ExerciseCandidate } from '../exercise-answer.feature';
+import { Component, ElementRef, computed, input, output, viewChildren } from '@angular/core';
+import { CandidateState, ExerciseCandidate } from '../store/with-answer';
 
 /** Classes shared by every candidate button (size, font, focus ring). */
 const BUTTON_BASE_CLASSES =
@@ -35,16 +35,16 @@ const STATE_LABELS: Record<CandidateState, string> = {
     class: 'flex flex-wrap justify-center gap-2 md:landscape:gap-3',
   },
   template: `
-    @for (candidate of candidates(); track candidate.digit) {
+    @for (button of buttons(); track button.digit) {
       <button
         #candidateButton
         type="button"
-        [class]="buttonClasses(candidate.state)"
-        [attr.aria-label]="buttonLabel(candidate)"
-        [disabled]="candidate.state !== 'idle'"
-        (click)="choose.emit(candidate.digit)"
+        [class]="button.classes"
+        [attr.aria-label]="button.label"
+        [disabled]="button.disabled"
+        (click)="choose.emit(button.digit)"
       >
-        {{ candidate.digit }}
+        {{ button.digit }}
       </button>
     }
   `,
@@ -55,6 +55,9 @@ export class ExerciseCandidates {
   readonly labelledBy = input.required<string>();
   readonly choose = output<number>();
 
+  /** What the template needs for each button. */
+  protected readonly buttons = computed(() => this.candidates().map(toCandidateButton));
+
   private readonly candidateButtons =
     viewChildren<ElementRef<HTMLButtonElement>>('candidateButton');
 
@@ -63,12 +66,14 @@ export class ExerciseCandidates {
     const firstButton = this.candidateButtons()[0];
     firstButton?.nativeElement.focus();
   }
+}
 
-  protected buttonClasses(state: CandidateState): string {
-    return `${BUTTON_BASE_CLASSES} ${BUTTON_STATE_CLASSES[state]}`;
-  }
-
-  protected buttonLabel(candidate: ExerciseCandidate): string {
-    return `${STATE_LABELS[candidate.state]} ${candidate.digit}`;
-  }
+/** Only unanswered candidates can be clicked; once answered, the buttons show the result. */
+function toCandidateButton(candidate: ExerciseCandidate) {
+  return {
+    digit: candidate.digit,
+    disabled: candidate.state !== 'idle',
+    classes: `${BUTTON_BASE_CLASSES} ${BUTTON_STATE_CLASSES[candidate.state]}`,
+    label: `${STATE_LABELS[candidate.state]} ${candidate.digit}`,
+  };
 }

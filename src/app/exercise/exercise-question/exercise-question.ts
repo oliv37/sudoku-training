@@ -1,18 +1,16 @@
 import { Component, computed, input } from '@angular/core';
-import { cellName } from '../../board/board.model';
-import { ExerciseQuestionData } from '../exercise.model';
+import { cellName } from '../../board/board-model';
+import { ExerciseQuestionData } from '../exercise-model';
 
 /**
  * What is asked: which candidate of the green start cell must be eliminated to empty the red
  * zone, and the length of the chain. Only the statement: the answer and the solution are shown
- * by other components. Hidden once answered, but still read by screen readers (it labels the
- * candidate buttons).
+ * by other components.
  */
 @Component({
   selector: 'app-exercise-question',
   host: {
     class: 'flex flex-col gap-2 md:landscape:gap-3',
-    '[class.sr-only]': 'answered()',
   },
   template: `
     <h2
@@ -46,7 +44,6 @@ import { ExerciseQuestionData } from '../exercise.model';
 })
 export class ExerciseQuestion {
   readonly question = input.required<ExerciseQuestionData>();
-  readonly answered = input(false);
 
   protected readonly startCell = computed(() => cellName(this.question().depart));
 }

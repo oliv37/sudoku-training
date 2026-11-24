@@ -3,7 +3,7 @@
  * in docs/sudoku-training-modele.html. Same constants and same arrow-routing algorithm,
  * with the grid origin at (0, 0) instead of (GX, GY).
  */
-import { BoardData, Cell, CellDigit, Frame, candidatesOf } from '../board.model';
+import { BoardData, Cell, CellDigit, Frame, candidatesOf } from '../board-model';
 import { CS, GRID_SIZE, P } from './board-geometry';
 
 /** One color per branch of the chain (THEMES.sky.branches). */
@@ -328,11 +328,10 @@ export function solutionSteps(frames: Frame[]): { step: number; color: string }[
 }
 
 /**
- * The scene limited to the hypothesis and steps 1..`step` (null: everything).
+ * The scene limited to the hypothesis and steps 1..`step`.
  * Positions are those of the full diagram, so nothing moves while steps appear.
  */
-export function solutionUpTo(scene: SolutionScene, step: number | null): SolutionScene {
-  if (step === null) return scene;
+export function solutionUpTo(scene: SolutionScene, step: number): SolutionScene {
   const upTo = <T extends { frame: number }>(items: T[]) => items.filter((it) => it.frame <= step);
   return {
     touched: scene.touched,

@@ -52,7 +52,17 @@ export interface Highlights {
    */
   redZone?: { type: 'unit' | 'cell'; cases: Cell[]; digit?: number | null };
   /** Solution diagram to draw (circles, struck candidates, arrows); cells not involved are greyed. */
-  solution?: Frame[];
+  solution?: BoardSolution;
+}
+
+/** A solution diagram and how much of it is drawn. */
+export interface BoardSolution {
+  frames: Frame[];
+  /**
+   * Drawn up to this step (frame index; 0 = hypothesis only). To draw everything, pass the last
+   * step (`lastStep(frames)`). Grey cells stay those of the whole solution.
+   */
+  shownStep: number;
 }
 
 /** "R2C6" from internal [1, 5]. */

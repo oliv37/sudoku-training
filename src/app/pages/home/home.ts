@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Exercise } from '../../exercise/exercise';
-import { ExerciseData } from '../../exercise/exercise.model';
+import { ExerciseData } from '../../exercise/exercise-model';
 
 /** For now: a single hard-coded exercise (the November 14 grid). */
 const EXERCISE_URL = '/data/exercices-2026-11-14.json';

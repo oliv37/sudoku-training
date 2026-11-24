@@ -23,8 +23,11 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 Revue composant par composant, avec l'utilisateur, pour rendre le code explicite et déplacer l'état dans des Signal Stores locaux.
 
 - Fait : `App`, `Home`, `Exercise` (+ `ExerciseStore`).
-- 2026-11-24 : « move » renommé « question » partout (code et interface : « Next question → », « Question 3 of 20 »). Tous les fichiers, classes et sélecteurs du domaine exercice commencent par `exercise`. `Move` découpé en composants de présentation (`ExerciseNav`, `ExerciseBoard`, `ExerciseQuestion`, `ExerciseCandidates`, `ExerciseResult`) assemblés dans `exercise.html` ; état de la réponse et de l'animation dans `ExerciseStore`, découpé en trois features (navigation, réponse, animation) ; ternaires imbriqués supprimés.
-- À faire, dans l'ordre : `Board`, la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
+- 2026-11-24 : « move » renommé « question » partout (code et interface : « Next question → », « Question 3 of 20 »). Tous les fichiers, classes et sélecteurs du domaine exercice commencent par `exercise`. `Move` découpé en composants de présentation (`ExerciseNav`, `ExerciseBoard`, `ExerciseQuestion`, `ExerciseCandidates`, `ExerciseVerdict`, `ExerciseSolutionSteps`, `ExerciseMissedClue`, `ExerciseNextActions`) assemblés dans `exercise.html`, qui porte toutes les conditions d'affichage ; état de la réponse et de l'animation dans `ExerciseStore`, découpé en trois features (navigation, réponse, étapes de la solution) ; ternaires imbriqués supprimés.
+- 2026-11-24 : noms de fichiers en kebab-case sans suffixe à point, comme dans la documentation NgRx : `store/exercise-store.ts`, features `with-navigation.ts` / `with-answer.ts` / `with-solution-steps.ts`, modèles `exercise-model.ts` et `board/board-model.ts`.
+- 2026-11-24, revue de la partie exercice (lisibilité) : le numéro de question vient du store (`questionNumber` = index + 1) pour la navigation et le label de la grille, plus de `coup` ; id de la question généré une fois dans `Exercise` ; boutons des candidats et des étapes calculés par des `computed` ; zone `aria-live` du verdict en `block` (et non `contents`) ; ombre de la grille avec le token `navy` ; `with-answer.ts` : un seul `acceptedFrames` décide si la réponse est acceptée.
+- 2026-11-24 : l'étape affichée fait partie de la solution : `Highlights.solution` est un `BoardSolution` (`frames` + `shownStep`, toujours un nombre ; dernière étape pour tout afficher). L'input `step` de `Board` et le cas `null` de `solutionUpTo()` ont disparu ; le store expose `drawnSolution`.
+- À faire, dans l'ordre : `Board` (déjà modifié pour `BoardSolution` ; la scène de la solution est recalculée à chaque étape de l'animation, à regarder), la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 
@@ -37,7 +40,7 @@ Revue composant par composant, avec l'utilisateur, pour rendre le code explicite
 - `docs/sudoku-training-modele.html` : gardé pour l'instant ; à supprimer plus tard (tout ce qui servait est porté), en mettant à jour la SPEC et `CLAUDE.md`.
 - Schéma de solution vérifié à l'œil seulement (pas de comparaison automatique avec le rendu de référence).
 - `autresReponses` : géré dans le code mais jamais testé (la grille du 14 novembre n'en a aucune).
-- Aucun audit AXE lancé pour l'instant ; pas de tests unitaires (choix de la première étape).
+- Aucun audit AXE lancé pour l'instant, ni test avec un vrai lecteur d'écran (VoiceOver, NVDA), notamment l'annonce du verdict (zone `aria-live`) ; pas de tests unitaires (choix de la première étape).
 - Contraste : texte blanc sur les couleurs des 3e et 4e branches (orange `#e07800`, turquoise `#0f9aa0`) sous le seuil WCAG AA (ronds numérotés et pastilles de la grille) ; à décider (assombrir ces couleurs ou non).
 - À tester sur un vrai téléphone (lisibilité du texte et de la grille).
 - Numéro du coup dans l'URL : non pour l'instant ; à envisager sur `/grid/:nom`.
