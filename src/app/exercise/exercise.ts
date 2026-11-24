@@ -5,8 +5,8 @@ import { Move } from './move/move';
 import { ExerciseNav } from './exercise-nav/exercise-nav';
 
 /**
- * An exercise: the sequence of moves of one grid. Lays out the move navigation (`ExerciseNav`) and
- * the current move (`Move`), and connects them to `ExerciseStore`, where all the exercise state lives.
+ * An exercise: the sequence of questions of one grid. Lays out the navigation (`ExerciseNav`) and
+ * the current question (`Move`), and connects them to `ExerciseStore`, where all the exercise state lives.
  */
 @Component({
   selector: 'app-exercise',
@@ -31,7 +31,7 @@ export class Exercise {
   protected readonly store = inject(ExerciseStore);
 
   constructor() {
-    // Keep the store in sync with the input: a new exercise starts again from its first move.
+    // Keep the store in sync with the input: a new exercise starts again from its first question.
     this.store.setExercise(this.exercise);
   }
 }

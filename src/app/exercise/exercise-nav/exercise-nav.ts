@@ -1,8 +1,8 @@
 import { Component, computed, input, output } from '@angular/core';
 
 /**
- * Navigation between the moves of an exercise: ‹ › buttons, the "name · k / N" line, and the
- * ← → keys. It only shows what it receives and asks the parent to change the move through the
+ * Navigation between the questions of an exercise: ‹ › buttons, the "name · k / N" line, and the
+ * ← → keys. It only shows what it receives and asks the parent to change the question through the
  * `previous` / `next` outputs.
  */
 @Component({
@@ -15,19 +15,19 @@ import { Component, computed, input, output } from '@angular/core';
 export class ExerciseNav {
   /** Name of the exercise (its grid date). */
   readonly name = input.required<string>();
-  /** Number of the current move, as shown to the user (1 = first move). */
-  readonly moveNumber = input.required<number>();
-  readonly moveCount = input.required<number>();
+  /** Number of the current question, as shown to the user (1 = first question). */
+  readonly questionNumber = input.required<number>();
+  readonly questionCount = input.required<number>();
   readonly hasPrevious = input.required<boolean>();
   readonly hasNext = input.required<boolean>();
 
   readonly previous = output();
   readonly next = output();
 
-  /** Width reserved for the move number, so "9 / 20" → "10 / 20" does not shift the line. */
-  protected readonly moveNumberWidth = computed(() => String(this.moveCount()).length);
+  /** Width reserved for the question number, so "9 / 20" → "10 / 20" does not shift the line. */
+  protected readonly questionNumberWidth = computed(() => String(this.questionCount()).length);
 
-  /** ← / → go to the previous / next move. */
+  /** ← / → go to the previous / next question. */
   protected onKeydown(event: KeyboardEvent): void {
     if (this.shouldIgnoreKey(event)) {
       return;
@@ -45,7 +45,7 @@ export class ExerciseNav {
     }
   }
 
-  /** Keys that belong to someone else and must not change the move. */
+  /** Keys that belong to someone else and must not change the question. */
   private shouldIgnoreKey(event: KeyboardEvent): boolean {
     // Already handled by another element of the page.
     if (event.defaultPrevented) {

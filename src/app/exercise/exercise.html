@@ -1,16 +1,16 @@
 <!-- The store gets the exercise from the input before the first render: this @if only narrows the type. -->
-@if (store.move(); as move) {
+@if (store.question(); as question) {
   <!-- Above the board on phones, top of the right column on wide landscape screens -->
   <app-exercise-nav
     class="flex-none md:landscape:col-start-2 md:landscape:row-start-1"
     [name]="store.exerciseName()"
-    [moveNumber]="move.coup"
-    [moveCount]="store.moveCount()"
+    [questionNumber]="question.coup"
+    [questionCount]="store.questionCount()"
     [hasPrevious]="store.hasPrevious()"
     [hasNext]="store.hasNext()"
     (previous)="store.previous()"
     (next)="store.next()"
   />
 
-  <app-move [move]="move" [hasNext]="store.hasNext()" (next)="store.next()" />
+  <app-move />
 }

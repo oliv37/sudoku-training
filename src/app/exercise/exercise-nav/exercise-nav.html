@@ -1,11 +1,11 @@
 <nav
-  aria-label="Moves"
+  aria-label="Questions"
   class="flex items-center justify-center gap-3 font-mono text-xs tracking-wider text-muted uppercase md:landscape:text-sm"
 >
   <button
     type="button"
     class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-navy transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-chain disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
-    aria-label="Previous move"
+    aria-label="Previous question"
     [disabled]="!hasPrevious()"
     (click)="previous.emit()"
   >
@@ -25,17 +25,17 @@
 
   <p class="tabular-nums" aria-hidden="true">
     {{ name() }} ·
-    <span class="inline-block text-right" [style.width.ch]="moveNumberWidth()">{{
-      moveNumber()
+    <span class="inline-block text-right" [style.width.ch]="questionNumberWidth()">{{
+      questionNumber()
     }}</span>
-    / {{ moveCount() }}
+    / {{ questionCount() }}
   </p>
-  <p class="sr-only" aria-live="polite">Move {{ moveNumber() }} of {{ moveCount() }}</p>
+  <p class="sr-only" aria-live="polite">Question {{ questionNumber() }} of {{ questionCount() }}</p>
 
   <button
     type="button"
     class="flex size-10 cursor-pointer items-center justify-center rounded-lg text-navy transition-colors hover:bg-line/40 focus-visible:outline-2 focus-visible:outline-chain disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
-    aria-label="Next move"
+    aria-label="Next question"
     [disabled]="!hasNext()"
     (click)="next.emit()"
   >
