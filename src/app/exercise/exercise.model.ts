@@ -1,4 +1,4 @@
-import { Cell, CellDigit, Frame, Highlights } from '../board/board.model';
+import { Cell, CellDigit, Frame } from '../board/board.model';
 
 /** One grid file: the questions of a solved grid, in order (an exercise = this sequence of questions). */
 export interface ExerciseData {
@@ -45,10 +45,4 @@ export interface Arrival {
   nom: string;
   chiffre: number | null;
   cases: Cell[];
-}
-
-/** Marks of the question on the board: green start cell and red zone. */
-export function questionHighlights(question: ExerciseQuestionData): Highlights {
-  const { type, cases, chiffre } = question.arrivee;
-  return { start: question.depart, redZone: { type, cases, digit: chiffre } };
 }

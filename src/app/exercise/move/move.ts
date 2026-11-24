@@ -8,10 +8,8 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { Board } from '../../board/board';
 import { cellName } from '../../board/board.model';
 import { CandidateState } from '../exercise-answer.feature';
-import { questionHighlights } from '../exercise.model';
 import { ExerciseStore } from '../exercise.store';
 /** Classes shared by every candidate button (size, font, focus ring). */
 const CANDIDATE_BASE_CLASSES =
@@ -44,7 +42,6 @@ const CANDIDATE_LABELS: Record<CandidateState, string> = {
 /** One move: the board, the question, one button per candidate of the start cell, then the result. */
 @Component({
   selector: 'app-move',
-  imports: [Board],
   // `display: contents`: the board column and the question panel are laid out directly by the
   // parent `Exercise` grid (see its host classes), next to the move navigation.
   host: { class: 'contents' },
@@ -69,25 +66,6 @@ export class Move {
         (s.reached ? ' text-white' : ' bg-line text-navy') +
         (animating ? ' cursor-default' : ' cursor-pointer hover:opacity-80'),
     }));
-  });
-
-  protected readonly highlights = computed(() => {
-    const question = this.store.question();
-    if (question === null) {
-      return {};
-    }
-    const base = questionHighlights(question);
-    const frames = this.store.solution();
-    return frames ? { ...base, solution: frames } : base;
-  });
-
-  protected readonly boardLabel = computed(() => {
-    const e = this.store.question();
-    if (e === null) {
-      return '';
-    }
-    const label = `Sudoku grid, question ${e.coup}. Green start cell ${cellName(e.depart)}, red zone ${e.arrivee.nom}.`;
-    return this.store.answered() ? `${label} Solution diagram shown.` : label;
   });
 
   protected readonly startName = computed(() => {

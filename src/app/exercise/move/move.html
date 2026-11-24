@@ -1,21 +1,5 @@
 @if (store.question(); as question) {
   <div
-    class="flex min-h-0 shrink flex-col md:landscape:col-start-1 md:landscape:row-span-full md:landscape:row-start-1 md:landscape:h-full md:landscape:w-[min(100cqh,calc(100cqw-20rem-2.5rem))] md:landscape:justify-center"
-  >
-    <!-- Square by default (height = width), shrinks when the height runs out;
-       the grid is the largest square fitting this box. -->
-    <div class="aspect-square min-h-0 w-full shrink @container-size">
-      <app-board
-        [board]="question"
-        [highlights]="highlights()"
-        [label]="boardLabel()"
-        [step]="store.shownStep()"
-        class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_rgba(18,58,102,0.12)]"
-      />
-    </div>
-  </div>
-
-  <div
     class="flex flex-none flex-col gap-4 md:landscape:col-start-2 md:landscape:row-start-2 md:landscape:gap-6"
   >
     <h2

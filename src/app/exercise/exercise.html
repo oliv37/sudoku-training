@@ -12,5 +12,14 @@
     (next)="store.next()"
   />
 
+  <!-- Left column on wide landscape screens: as wide as the height allows, minus room for the
+       right column (20rem) and the gap -->
+  <app-exercise-board
+    class="flex min-h-0 shrink flex-col md:landscape:col-start-1 md:landscape:row-span-full md:landscape:row-start-1 md:landscape:h-full md:landscape:w-[min(100cqh,calc(100cqw-20rem-2.5rem))] md:landscape:justify-center"
+    [question]="question"
+    [solution]="store.solution()"
+    [step]="store.shownStep()"
+  />
+
   <app-move />
 }
