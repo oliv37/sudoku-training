@@ -5,7 +5,7 @@ Web app for anyone who wants to train and improve at sudoku. It offers exercises
 Today's exercise type: find which candidate of the green start cell must be eliminated to empty the red zone. The exercises come as JSON files, one per grid (format in `docs/SPEC.md`); the tool that produces them is outside this project.
 
 - Specification: `docs/SPEC.md` (in French). Read it before working on a feature; it says what is in scope now and what is deliberately postponed ("Plus tard").
-- Progress: the "État d'avancement" section at the top of `docs/SPEC.md` lists what is done, the next steps and the open points. Read it at the start of a session, and update it at the end of each feature (with the date).
+- Progress: the "État d'avancement" section at the top of `docs/SPEC.md` lists what is done, the next steps and the open points. Read it at the start of a session, and update it at the end of each feature. Keep it short: the current state only, no dated log of changes (that is the git history).
 - Visual/computation reference: `docs/sudoku-training-modele.html` (`renderCard`). It is a reference to port, not code to call.
 
 ## Working agreement
@@ -39,22 +39,15 @@ The code must be easy to understand for a human reading it. Prefer more lines of
 ## Architecture
 
 - Static site generation: `outputMode: "static"`, every route is prerendered (`app.routes.server.ts`). No Node server in production; `main.server.ts` / `app.config.server.ts` are only used at build time.
-- Organized by pages and domains, no type-based folders, no `shared/` unless really needed. File names in kebab-case, without a dotted type suffix: `home.ts`, `board.ts` (no `.component`), `board-model.ts`, `exercise-store.ts`. Only the Angular CLI files keep their usual names (`app.config.ts`, `app.routes.ts`, `main.server.ts`…).
-  - `src/app/pages/<page>/` — components loaded by a route. Every route is lazy-loaded with `loadComponent` (the prerendered HTML preloads the chunk of the current page).
-  - `src/app/exercise/` — exercise domain. An exercise is the sequence of questions of one grid (`ExerciseData`, one `ExerciseQuestionData` per question, in `exercise-model.ts`). `Exercise` component: input `exercise`; it lays out the screen (CSS grid), connects its children to the store through inputs/outputs (all visible in `exercise.html`), and moves the focus between them (after an answer, after Reset).
-    - `store/` — `ExerciseStore` (`store/exercise-store.ts`) holds all the exercise state, split into `signalStoreFeature`s, one file each in the same folder: `withNavigation()` (`with-navigation.ts`: exercise, current question, previous / next), `withAnswer()` (`with-answer.ts`: chosen candidate, found, candidate states, result, solution to draw; the answer resets on every new question), `withSolutionSteps()` (`with-solution-steps.ts`: which step of the solution is drawn, the step-by-step animation, the step buttons and the user's choice).
-    - Child components are presentational: inputs/outputs only, none of them injects `ExerciseStore` (see "Components" below). Each in its own subfolder: `exercise-nav/` (‹ › buttons, "name · k / N" line, ← → keys), `exercise-board/` (the `Board` with the question marks and the solution; the parent places the host in the grid), `exercise-question/` (the statement only: start cell, red zone, chain length; once answered `exercise.html` hides it visually with `sr-only`, but keeps it because it names the candidates group), `exercise-candidates/` (one button per candidate, role group labelled by the question), then, once answered: `exercise-verdict/` (Found! / Lost and the explanation, inside an `aria-live` region declared in `exercise.html` that exists before the verdict appears), `exercise-solution-steps/` (numbered step buttons), `exercise-missed-clue/` (what should have caught the eye, after a wrong answer), `exercise-next-actions/` (Reset / Next question). Every condition that shows or hides a part is written in `exercise.html`, so the template tells what is displayed when.
-    - Naming: every file, class and selector of the exercise domain starts with `exercise` (`exercise-nav/exercise-nav.ts`, `ExerciseNav`, `app-exercise-nav`), so a search for "exercise" lists the whole domain. A component subfolder has the same name as its files. Exception: the store files go in `store/`, and its feature files are named after their function (`with-answer.ts`). Vocabulary: a "question" is one item of the exercise (board, statement, answer, solution); "step" is reserved for the steps of a solution chain.
-  - Pages only load data: `Home` loads an exercise (one grid file) and renders `<app-exercise [exercise]>`.
-  - `src/app/board/` — reusable SVG sudoku board, knows nothing about exercises: `Board` component (`board` input, optional `highlights` input: the question marks, start cell and red zone, fixed for a question; optional `solution` input: solution frames with the step drawn, kept apart so the steps of the animation only recompute the cheap step filter, not the arrows), grid and question-mark models in `board-model.ts` (`BoardData`, `Cell`, `Highlights`…), reading the cells in `board-cells.ts` (`cellName`, `cellKey`, `candidateKey`, `cellValueOf`, `candidatesOf`, `allCellKeys`), boards and chains written by hand for the tests in `board-test-data.ts` (the board tests read the grid file without the exercise types), colors in `board-theme.ts` (`THEME`, branch colors), pure geometry of the grid in `geometry/`: `board-coordinates.ts` (where cells, units and candidates are, in SVG units: `CELL_SIZE`, `candidateCenter`…; shared with the solution) and `board-scene.ts` (builds the grid scene: lines, digits, candidates, question marks).
-    - Organized by subject, then by nature: everything about the solution is in `board-solution/`: `board-solution-model.ts` (`Frame` and its kinds, `BoardSolution`), `board-solution.ts` (what a solution chain says independently of drawing: steps, branches, cells involved; also used by the exercise store), `geometry/board-solution-scene.ts` (circles, strikes, arrows and badges), `geometry/board-solution-arrows.ts` (arrow placement: curves that avoid obstacles, badge position) and its layer `board-solution-diagram/`.
-    - Naming: as in the exercise domain, every file and folder of the board domain starts with `board` (a subfolder has the same name as its files, a sub-subject folder like `board-solution/` prefixes its files with its own name), so a search for "board" lists the whole domain; names inside the code (`solutionSceneOf`, `SolutionScene`…) are not prefixed. The geometry is a port of `renderCard`: keep the algorithm as is (same constants, same operations in the same order).
-    - A `-model.ts` file holds only types, no functions; every type goes in a `-model.ts` file, internal types included, never in a computation file: `x.ts` has its types in `x-model.ts` next to it (`board-coordinates-model.ts`: `Point`, `Rect`; `board-scene-model.ts`; `board-solution-scene-model.ts`; `board-solution-arrows-model.ts`), and `board-solution.ts` uses the types of `board-solution-model.ts`.
-    - `Board` has no store: it holds no state (inputs in, scene out through `computed`); the state that changes (step drawn, animation) lives in `ExerciseStore`.
-    - `board.html` lists the SVG layers in drawing order (in SVG, later elements are painted on top), one presentational child component per layer, each in its own subfolder named `board-…`: `BoardGridLines`, `BoardRedZone` and `BoardStartCell` (background then outline of each question mark), `BoardValues`, `BoardCandidates`, `BoardSolutionDiagram` (everything that depends on the step drawn: red squares around the last candidates of the red zone, strikes, circles, arrows, badges; the squares use `mix-blend-multiply` so the digit under them stays readable). SVG has no `z-index`. A colored background drawn over something that must stay visible (grid lines, a digit) uses `mix-blend-multiply`: its colors are multiplied with what lies under it, so dark lines and digits stay dark; this keeps each shape in one component instead of splitting it across layers.
-    - A custom element is not drawn inside an `<svg>`, so a layer is an attribute selector on a `<g>` (`g[appBoardGridLines]`; ESLint allows attribute selectors for components in `src/app/board/` only). Its template has no `<svg>` ancestor: prefix its top-level elements with `svg:` (`<svg:line>`), otherwise Angular creates HTML elements that are silently not drawn. Layers import `THEME` directly.
+- Organized by domain, then by subject, then by nature; no type-based folders, no `shared/` unless really needed. File names in kebab-case, without a dotted type suffix (`board.ts`, `board-model.ts`, `exercise-store.ts`); only the Angular CLI files keep their usual names (`app.config.ts`, `main.server.ts`…).
+- Naming: every file, folder, class and selector of a domain starts with its name (`exercise…`, `board…`), so a search for it lists the whole domain. A component subfolder has the same name as its files; a sub-subject folder (`board-solution/`) prefixes its files with its own name. Names inside the code (`solutionSceneOf`…) are not prefixed. Exception: the store files go in `store/`, its features named after their function (`with-answer.ts`).
+- Types: a `-model.ts` file holds only types, no functions. Every type, internal ones included, goes in the `-model.ts` next to the file that uses it (`x.ts` → `x-model.ts`), never in a computation file.
+- `src/app/pages/<page>/` — components loaded by a route, each lazy-loaded with `loadComponent`. Pages only load data: `Home` loads one grid file and renders `<app-exercise [exercise]>`.
+- `src/app/exercise/` — an exercise is the sequence of questions of one grid. `Exercise` lays out the screen (CSS grid on its host), connects its presentational children to `ExerciseStore` (`store/`, one `signalStoreFeature` per concern) and moves the focus; `exercise.html` holds every condition that shows or hides a part. Vocabulary: a "question" is one item of the exercise; "step" is reserved for the steps of a solution chain.
+- `src/app/board/` — reusable SVG board, knows nothing about exercises (its tests neither: they read the grid file without the exercise types). Inputs: `board`, `highlights` (question marks, fixed for a question), `solution` (frames + step drawn, kept apart so the animation only recomputes the step filter). `Board` has no store: it holds no state. Everything about the solution is in `board-solution/`.
+  - Geometry: pure functions (`geometry/`, `board-solution/geometry/`) compute the scene, the templates render it with `@for` / `@if`; no `ElementRef`, no imperative DOM. It is a port of `renderCard`: keep the algorithm as is (same constants, same operations in the same order). The arrows snapshot (`board-solution-arrows.spec.ts`) proves it: never regenerate it to make a test pass.
+  - SVG layers: `board.html` lists them in drawing order (later elements are painted on top), one presentational component per layer. SVG has no `z-index`: a background drawn over lines or digits uses `mix-blend-multiply`, so one shape stays in one component. A custom element is not drawn inside an `<svg>`, so a layer is an attribute selector on a `<g>` (`g[appBoardGridLines]`, allowed by ESLint in `src/app/board/` only), and its template prefixes its top-level elements with `svg:` (otherwise Angular creates HTML elements, silently not drawn).
 - Vocabulary: "grid" means a magazine puzzle (a JSON file with its questions, route `/grid/:nom`); "board" means the 9×9 drawing.
-- Board rendering is declarative: pure functions compute the scene, the template renders it with `@for` / `@if`. No `ElementRef`, no imperative DOM creation.
 
 ## Data
 
@@ -72,81 +65,51 @@ The code must be easy to understand for a human reading it. Prefer more lines of
 
 # Angular guidelines
 
-You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
+Project choices on top of current Angular practice (Angular 22, signals, standalone components, native control flow, `inject()`, strict TypeScript without `any`).
 
-## TypeScript Best Practices
+## Angular
 
-- Use strict type checking
-- Prefer type inference when the type is obvious
-- Avoid the `any` type; use `unknown` when type is uncertain
+- Do NOT set `standalone: true` nor `changeDetection: ChangeDetectionStrategy.OnPush`: both are the default.
+- Lazy-load every route, including the home page (`loadComponent`).
+- Host bindings in the `host` object of the decorator, not `@HostBinding` / `@HostListener`.
+- `input()`, `output()`, `model()` (for `[(prop)]`), `computed()`; no decorators for inputs/outputs.
+- `class` / `style` bindings, not `ngClass` / `ngStyle`; never import `CommonModule`.
+- `NgOptimizedImage` for static images (not for inline base64).
+- Services: each designed around a single responsibility; new singleton services use `@Service`, not `@Injectable({ providedIn: 'root' })`.
+- Async data with `httpResource` and signals; an unavoidable Observable goes through `toSignal()`.
 
-## Angular Best Practices
+## Accessibility
 
-- Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default in Angular v20+.
-- Do NOT set `changeDetection: ChangeDetectionStrategy.OnPush` explicitly. `OnPush` is the default in Angular v22+.
-- Use signals for state management
-- Lazy-load every route, including the home page (`loadComponent`)
-- Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
-- Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
-
-## Accessibility Requirements
-
-- It MUST pass all AXE checks.
-- It MUST follow all WCAG AA minimums, including focus management, color contrast, and ARIA attributes.
+- It MUST pass all AXE checks and follow all WCAG AA minimums (focus management, color contrast, ARIA).
 - Never put ARIA attributes or roles on an element with `display: contents` (some browsers drop it from the accessibility tree).
 - Ids used by `aria-labelledby` (or other ARIA references) are generated once in the component (`exercise-question-0`), not written as strings in two places.
 
 ## Components
 
-- Keep components small and focused on a single responsibility
-- A parent template reads like the outline of the screen: one small, well-named child component per visible block, so the parent shows at a glance what is displayed, and you open a child only for the detail (e.g. `exercise.html`). Avoid big template blocks inside one component.
-  - Every condition that shows or hides a block (`@if`, visual hiding with `sr-only`, an `aria-live` region that must exist beforehand) is written in the parent template, with a short comment when the reason is not obvious (accessibility…). A child must not hide itself or render nothing depending on an input: reading the parent would suggest it is always displayed.
-  - Child components are presentational by default: inputs/outputs only; the parent connects them to its store. Injecting the parent's store in a child is acceptable only when passing values through several levels would become heavy; ask the user first.
-  - The name says what the block is in its context (`ExerciseMissedClue`, not `ExerciseHint`, which suggests help before answering). Propose the split and the names to the user before coding.
-  - When a feature adds a new visible block to a component, create a child component for it instead of growing the template. A template with several distinct blocks, or over ~30 lines, is the signal to propose a split.
+- Keep components small, each focused on a single responsibility.
+- A parent template reads like the outline of the screen: one small, well-named child component per visible block (e.g. `exercise.html`). A template with several distinct blocks, or over ~30 lines, is the signal to propose a split; a new visible block gets its own child component. Propose the split and the names to the user before coding.
+  - Every condition that shows or hides a block (`@if`, `sr-only`, an `aria-live` region that must exist beforehand) is written in the parent template, with a short comment when the reason is not obvious. A child must not hide itself or render nothing depending on an input.
+  - Children are presentational: inputs/outputs only; the parent connects them to its store. Injecting the parent's store in a child is acceptable only when passing values through several levels would become heavy; ask first.
+  - The name says what the block is in its context (`ExerciseMissedClue`, not `ExerciseHint`, which suggests help before answering).
   - Data a template needs for a list (classes, labels, disabled…) is built in a `computed` that maps each item (e.g. `toCandidateButton`), not by methods called from the template.
-- Use `input()` and `output()` functions instead of decorators
-- Use `model()` for two-way bound properties with `[(prop)]` syntax instead of pairing `input()` with `output()`
-- Use `computed()` for derived state
-- Use `linkedSignal()` for state derived from multiple reactive sources that must stay synchronized
-- Prefer inline templates for small components (up to ~30 lines); beyond that, use a separate `.html` file next to the component
-- Do NOT use `ngClass`, use `class` bindings instead
-- Do NOT use `ngStyle`, use `style` bindings instead
-- Do NOT import `CommonModule`, import only the directives and pipes the template uses, such as `AsyncPipe` or `DatePipe`
-- When using external templates/styles, use paths relative to the component TS file.
+- Keep templates simple and avoid complex logic: what a template needs is computed beforehand (store, `computed`, pure functions).
+- Inline templates up to ~30 lines; beyond that, a `.html` file next to the component (paths relative to the TS file).
 
 ## State Management
 
-- As soon as a component has state to manage (values that change over time and the rules to change them), move that state out of the component into an NgRx Signal Store (`@ngrx/signals`), provided locally by the component (`providers: [XxxStore]`, one store per component instance) unless it must be shared. The component keeps only UI concerns (template bindings, DOM events, focus) and calls the store.
-- Store file next to the component: `<name>-store.ts` (kebab-case, as in the NgRx docs: `books-store.ts`); once the store is split into features (`signalStoreFeature`, one file each, named after its function as in the NgRx docs: `withAnswer()` in `with-answer.ts`), the store and its features go in a `store/` subfolder next to the component. The store file exports `XxxStore = signalStore(withState(...), withComputed(...), withMethods(...))`. Change state only with `patchState` inside store methods; keep methods short and explicit like any other code.
-- Put all the state of the component in the store, including data that arrives through an input, so there is one place to look. Feed inputs with a `signalMethod` of the store, called with the input signal in the component constructor (e.g. `this.store.setExercise(this.exercise)`).
-- Such input-fed state starts as `null` (the store is created before Angular sets the inputs). Handle the null inside the store's computed values, and in the template narrow it once with a single `@if (store.x(); as x)` at the top, rather than scattering checks.
-- When a store holds several concerns (e.g. navigation, answer, animation), split it into one `signalStoreFeature` per concern. Members starting with `_` are private to the store (NgRx convention); say so in a comment where they are defined.
-- `patchState` with an updater `(state) => ({ … })` when the new value depends on the previous one; a plain object otherwise.
-- Plain signals in a component only for purely visual details that are not state to manage (e.g. a hover flag); everything else goes to the store.
-- Keep state transformations pure and predictable
-- Use `set` or `update` to change a signal
-
-## Templates
-
-- Keep templates simple and avoid complex logic
-- Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Prefer `httpResource` and signals for async data; if an Observable is unavoidable, convert it with `toSignal()`
+- As soon as a component has state to manage (values that change over time and the rules to change them), move it into an NgRx Signal Store (`@ngrx/signals`) provided by the component (`providers: [XxxStore]`, one per instance) unless it must be shared. The component keeps only UI concerns (bindings, DOM events, focus).
+- Store file next to the component: `<name>-store.ts`, exporting `XxxStore = signalStore(withState(...), withComputed(...), withMethods(...))`. Several concerns: one `signalStoreFeature` per concern, one file each named after its function (`withAnswer()` in `with-answer.ts`), all in a `store/` subfolder.
+- All the state lives in the store, including input data: a `signalMethod` of the store is called with the input signal in the component constructor (`this.store.setExercise(this.exercise)`). Such state starts as `null`: handle it in the store's computed values, and narrow it once in the template with `@if (store.x(); as x)`.
+- Change state only with `patchState` in short store methods; an updater `(state) => ({ … })` when the new value depends on the previous one. Members starting with `_` are private to the store (say so in a comment).
+- Keep state transformations pure and predictable.
+- Plain signals in a component only for purely visual details (e.g. a hover flag).
 
 ## Prerendering (SSG)
 
-- Every page is rendered at build time, without a browser: `window`, `document` and `localStorage` do not exist there, and `new Date()` would return the build date, not the visitor's.
-- Access browser APIs only in `afterNextRender()` or behind an `isPlatformBrowser()` check, and render something sensible without them.
+- Every page is rendered at build time, without a browser: `window`, `document` and `localStorage` do not exist there, and `new Date()` would return the build date.
+- Access browser APIs only in `afterNextRender()` or behind `isPlatformBrowser()`, and render something sensible without them.
 
 ## Styling
 
-- Style with Tailwind utility classes in templates; no per-component CSS files.
-- Use the theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values in templates. The SVG board keeps its colors in `THEME` (`board/board-theme.ts`).
-
-## Services
-
-- Design services around a single responsibility
-- Prefer the `@Service` decorator over `@Injectable({providedIn: 'root'})` for new singleton services (Angular v22+)
-- Use the `inject()` function instead of constructor injection
+- Tailwind utility classes in templates; no per-component CSS files.
+- Theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values; the SVG board keeps its colors in `THEME` (`board/board-theme.ts`).
