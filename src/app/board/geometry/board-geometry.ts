@@ -25,6 +25,10 @@ export const THEME = {
   bad: '#e0342a',
   badBg: '#fbd8d3',
   underline: '#111111',
+  /** Background of the whole grid. */
+  background: '#ffffff',
+  /** Step number inside the colored badges of the solution. */
+  badgeText: '#ffffff',
 } as const;
 
 export interface Rect {
@@ -67,11 +71,17 @@ export interface RedZone {
   outline: Rect;
 }
 
+/** Green start cell: background and outline. */
+export interface StartCell {
+  fill: Rect;
+  outline: Rect;
+}
+
 export interface BoardScene {
   lines: GridLine[];
   values: ValueText[];
   candidates: CandidateText[];
-  start: { fill: Rect; outline: Rect } | null;
+  start: StartCell | null;
   redZone: RedZone | null;
 }
 
@@ -172,7 +182,7 @@ export function candidateTexts(
  * Everything needed to draw a board and its (optional) start cell and red zone.
  * `touched`: cells involved in the solution (others are greyed), null when no solution is shown.
  */
-export function boardScene(
+export function boardSceneOf(
   board: BoardData,
   highlights: Highlights = {},
   touched: Set<string> | null = null,

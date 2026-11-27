@@ -1,0 +1,58 @@
+<!-- Elements prefixed with `svg:`: this template has no <svg> ancestor, so without the prefix
+     Angular would create HTML elements, which the browser does not draw. -->
+
+<!-- Red square around the last candidates of the red zone. This layer is drawn over the
+     candidates: `mix-blend-multiply` multiplies the square's colors with what lies under it, so
+     the digit stays dark and readable instead of being hidden by the square. -->
+@for (lastCandidate of scene().lastCandidates; track lastCandidate.key) {
+  <svg:rect
+    [attr.x]="lastCandidate.square.x"
+    [attr.y]="lastCandidate.square.y"
+    [attr.width]="lastCandidate.square.size"
+    [attr.height]="lastCandidate.square.size"
+    rx="5"
+    [attr.fill]="theme.badBg"
+    [attr.stroke]="theme.bad"
+    stroke-width="1.5"
+    class="mix-blend-multiply"
+  />
+}
+@for (strike of scene().strikes; track strike.key) {
+  <svg:line
+    [attr.x1]="strike.x1"
+    [attr.y1]="strike.y1"
+    [attr.x2]="strike.x2"
+    [attr.y2]="strike.y2"
+    [attr.stroke]="strike.off ? theme.candOff : theme.bad"
+    [attr.stroke-width]="strike.off ? 2 : 3"
+    stroke-linecap="round"
+  />
+}
+@for (circle of scene().circles; track circle.key) {
+  <svg:circle
+    [attr.cx]="circle.cx"
+    [attr.cy]="circle.cy"
+    r="14"
+    fill="none"
+    [attr.stroke]="circle.color"
+    [attr.stroke-width]="circle.hyp ? 3.6 : 3"
+  />
+}
+@for (arrow of scene().arrows; track arrow.key) {
+  <svg:path [attr.d]="arrow.path" fill="none" [attr.stroke]="arrow.color" stroke-width="3.2" />
+  <svg:path [attr.d]="arrow.head" [attr.fill]="arrow.color" />
+}
+@for (badge of scene().badges; track badge.key) {
+  <svg:circle [attr.cx]="badge.x" [attr.cy]="badge.y" r="13" [attr.fill]="badge.color" />
+  <svg:text
+    [attr.x]="badge.x"
+    [attr.y]="badge.y + 6"
+    text-anchor="middle"
+    [attr.fill]="theme.badgeText"
+    font-family="Barlow"
+    font-weight="700"
+    font-size="17"
+  >
+    {{ badge.step }}
+  </svg:text>
+}

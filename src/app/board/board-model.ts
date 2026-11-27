@@ -42,7 +42,7 @@ export interface BadFrame {
 
 export type Frame = HypFrame | DomFrame | BadFrame;
 
-/** Optional marks drawn on top of a board. */
+/** Optional marks of the question drawn on the board (fixed for a given question). */
 export interface Highlights {
   /** Green start cell. */
   start?: Cell;
@@ -51,11 +51,12 @@ export interface Highlights {
    * `digit`: the digit that disappears from a unit (null for a cell: all its candidates disappear).
    */
   redZone?: { type: 'unit' | 'cell'; cases: Cell[]; digit?: number | null };
-  /** Solution diagram to draw (circles, struck candidates, arrows); cells not involved are greyed. */
-  solution?: BoardSolution;
 }
 
-/** A solution diagram and how much of it is drawn. */
+/**
+ * A solution diagram (circles, struck candidates, arrows; cells not involved are greyed) and how
+ * much of it is drawn.
+ */
 export interface BoardSolution {
   frames: Frame[];
   /**

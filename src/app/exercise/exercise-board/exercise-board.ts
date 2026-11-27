@@ -17,6 +17,7 @@ import { ExerciseQuestionData } from '../exercise-model';
       <app-board
         [board]="question()"
         [highlights]="highlights()"
+        [solution]="solution()"
         [label]="label()"
         class="mx-auto aspect-square w-[min(100cqw,100cqh)] overflow-hidden rounded-lg shadow-[0_1px_0_var(--color-line),0_6px_18px_color-mix(in_srgb,var(--color-navy)_12%,transparent)]"
       />
@@ -30,14 +31,8 @@ export class ExerciseBoard {
   /** Solution diagram and the step drawn; null before the user answers. */
   readonly solution = input<BoardSolution | null>(null);
 
-  protected readonly highlights = computed((): Highlights => {
-    const questionHighlights = highlightsOf(this.question());
-    const solution = this.solution();
-    if (solution === null) {
-      return questionHighlights;
-    }
-    return { ...questionHighlights, solution };
-  });
+  /** Marks of the question: the same object for the whole question, steps of the solution included. */
+  protected readonly highlights = computed(() => highlightsOf(this.question()));
 
   /** Description of the board for screen readers. */
   protected readonly label = computed(() => {

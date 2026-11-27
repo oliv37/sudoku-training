@@ -1,4 +1,4 @@
-@let s = scene();
+<!-- Layers in drawing order: in SVG, what comes later is painted on top. -->
 <svg [attr.viewBox]="viewBox" class="block h-auto w-full" role="img" [attr.aria-label]="label()">
   <defs>
     <pattern
@@ -8,168 +8,38 @@
       patternUnits="userSpaceOnUse"
       patternTransform="rotate(45)"
     >
-      <rect width="14" height="14" [attr.fill]="T.badBg" opacity="0.55" />
-      <line x1="0" y1="0" x2="0" y2="14" [attr.stroke]="T.bad" stroke-width="2.2" opacity="0.55" />
+      <rect width="14" height="14" [attr.fill]="theme.badBg" opacity="0.55" />
+      <line
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="14"
+        [attr.stroke]="theme.bad"
+        stroke-width="2.2"
+        opacity="0.55"
+      />
     </pattern>
   </defs>
 
-  <rect x="0" y="0" width="864" height="864" fill="#ffffff" />
+  <rect
+    x="0"
+    y="0"
+    [attr.width]="gridSize"
+    [attr.height]="gridSize"
+    [attr.fill]="theme.background"
+  />
 
-  <!-- Red zone (hatched) and green start cell backgrounds -->
-  @if (s.redZone; as z) {
-    <rect
-      [attr.x]="z.fill.x"
-      [attr.y]="z.fill.y"
-      [attr.width]="z.fill.width"
-      [attr.height]="z.fill.height"
-      [attr.fill]="hatchUrl"
-    />
+  <g appBoardGridLines [lines]="boardScene().lines"></g>
+  <!-- Question marks, drawn over the grid lines (their backgrounds keep the lines visible) -->
+  @if (boardScene().redZone; as redZone) {
+    <g appBoardRedZone [redZone]="redZone" [hatchUrl]="hatchUrl"></g>
   }
-  @if (s.start; as st) {
-    <rect
-      [attr.x]="st.fill.x"
-      [attr.y]="st.fill.y"
-      [attr.width]="st.fill.width"
-      [attr.height]="st.fill.height"
-      [attr.fill]="T.hypBg"
-    />
+  @if (boardScene().start; as start) {
+    <g appBoardStartCell [start]="start"></g>
   }
-
-  <!-- Grid lines -->
-  @for (l of s.lines; track $index) {
-    <line
-      [attr.x1]="l.x1"
-      [attr.y1]="l.y1"
-      [attr.x2]="l.x2"
-      [attr.y2]="l.y2"
-      [attr.stroke]="l.thick ? T.thick : T.thin"
-      [attr.stroke-width]="l.thick ? 7 : 1.8"
-      stroke-linecap="square"
-    />
-  }
-
-  <!-- Outlines: red zone, then start cell -->
-  @if (s.redZone; as z) {
-    <rect
-      [attr.x]="z.outline.x"
-      [attr.y]="z.outline.y"
-      [attr.width]="z.outline.width"
-      [attr.height]="z.outline.height"
-      fill="none"
-      [attr.stroke]="T.bad"
-      [attr.stroke-width]="z.kind === 'unit' ? 4 : 5"
-      [attr.stroke-dasharray]="z.kind === 'unit' ? '12 7' : null"
-    />
-  }
-  @if (s.start; as st) {
-    <rect
-      [attr.x]="st.outline.x"
-      [attr.y]="st.outline.y"
-      [attr.width]="st.outline.width"
-      [attr.height]="st.outline.height"
-      fill="none"
-      [attr.stroke]="T.hyp"
-      stroke-width="5"
-    />
-  }
-
-  <!-- Placed digits -->
-  @for (v of s.values; track v.key) {
-    <text
-      [attr.x]="v.x"
-      [attr.y]="v.y"
-      text-anchor="middle"
-      [attr.fill]="T.given"
-      font-family="Barlow"
-      font-weight="700"
-      font-size="58"
-    >
-      {{ v.value }}
-    </text>
-  }
-
-  <!-- Last candidates of the red zone: red square around the digit (drawn before the candidates) -->
-  @if (shownSolution(); as sol) {
-    @for (l of sol.lastCandidates; track l.key) {
-      <rect
-        [attr.x]="l.square.x"
-        [attr.y]="l.square.y"
-        [attr.width]="l.square.size"
-        [attr.height]="l.square.size"
-        rx="5"
-        [attr.fill]="T.badBg"
-        [attr.stroke]="T.bad"
-        stroke-width="1.5"
-      />
-    }
-  }
-
-  <!-- Candidates and underlines -->
-  @for (c of s.candidates; track c.key) {
-    <text
-      [attr.x]="c.x"
-      [attr.y]="c.y + 8"
-      text-anchor="middle"
-      [attr.fill]="c.off ? T.candOff : T.cand"
-      font-family="Barlow"
-      font-weight="600"
-      font-size="23"
-    >
-      {{ c.digit }}
-    </text>
-    @if (c.underlined) {
-      <line
-        [attr.x1]="c.x - 8"
-        [attr.y1]="c.y + 13"
-        [attr.x2]="c.x + 8"
-        [attr.y2]="c.y + 13"
-        [attr.stroke]="c.off ? T.candOff : T.underline"
-        stroke-width="2.4"
-        stroke-linecap="round"
-      />
-    }
-  }
-
-  <!-- Solution diagram: struck candidates, circles, arrows, then numbered badges on top -->
-  @if (shownSolution(); as sol) {
-    @for (s of sol.strikes; track s.key) {
-      <line
-        [attr.x1]="s.x1"
-        [attr.y1]="s.y1"
-        [attr.x2]="s.x2"
-        [attr.y2]="s.y2"
-        [attr.stroke]="s.off ? T.candOff : T.bad"
-        [attr.stroke-width]="s.off ? 2 : 3"
-        stroke-linecap="round"
-      />
-    }
-    @for (c of sol.circles; track c.key) {
-      <circle
-        [attr.cx]="c.cx"
-        [attr.cy]="c.cy"
-        r="14"
-        fill="none"
-        [attr.stroke]="c.color"
-        [attr.stroke-width]="c.hyp ? 3.6 : 3"
-      />
-    }
-    @for (a of sol.arrows; track a.key) {
-      <path [attr.d]="a.path" fill="none" [attr.stroke]="a.color" stroke-width="3.2" />
-      <path [attr.d]="a.head" [attr.fill]="a.color" />
-    }
-    @for (b of sol.badges; track b.key) {
-      <circle [attr.cx]="b.x" [attr.cy]="b.y" r="13" [attr.fill]="b.color" />
-      <text
-        [attr.x]="b.x"
-        [attr.y]="b.y + 6"
-        text-anchor="middle"
-        fill="#ffffff"
-        font-family="Barlow"
-        font-weight="700"
-        font-size="17"
-      >
-        {{ b.step }}
-      </text>
-    }
+  <g appBoardValues [values]="boardScene().values"></g>
+  <g appBoardCandidates [candidates]="boardScene().candidates"></g>
+  @if (shownSolutionScene(); as scene) {
+    <g appBoardSolutionDiagram [scene]="scene"></g>
   }
 </svg>

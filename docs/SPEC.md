@@ -5,7 +5,7 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 ## État d'avancement
 
-> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-24.
+> À tenir à jour à la fin de chaque fonctionnalité. Dernière mise à jour : 2026-11-27.
 
 ### Fait
 
@@ -27,7 +27,9 @@ Revue composant par composant, avec l'utilisateur, pour rendre le code explicite
 - 2026-11-24 : noms de fichiers en kebab-case sans suffixe à point, comme dans la documentation NgRx : `store/exercise-store.ts`, features `with-navigation.ts` / `with-answer.ts` / `with-solution-steps.ts`, modèles `exercise-model.ts` et `board/board-model.ts`.
 - 2026-11-24, revue de la partie exercice (lisibilité) : le numéro de question vient du store (`questionNumber` = index + 1) pour la navigation et le label de la grille, plus de `coup` ; id de la question généré une fois dans `Exercise` ; boutons des candidats et des étapes calculés par des `computed` ; zone `aria-live` du verdict en `block` (et non `contents`) ; ombre de la grille avec le token `navy` ; `with-answer.ts` : un seul `acceptedFrames` décide si la réponse est acceptée.
 - 2026-11-24 : l'étape affichée fait partie de la solution : `Highlights.solution` est un `BoardSolution` (`frames` + `shownStep`, toujours un nombre ; dernière étape pour tout afficher). L'input `step` de `Board` et le cas `null` de `solutionUpTo()` ont disparu ; le store expose `drawnSolution`.
-- À faire, dans l'ordre : `Board` (déjà modifié pour `BoardSolution` ; la scène de la solution est recalculée à chaque étape de l'animation, à regarder), la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
+- 2026-11-27 : `Board` reste sans store (aucun état, seulement des valeurs calculées à partir des inputs). Son template est découpé en calques SVG, un composant de présentation par calque dans l'ordre de dessin (`BoardGridLines`, `BoardRedZone`, `BoardStartCell`, `BoardValues`, `BoardCandidates`, `BoardSolutionDiagram`), sélecteurs d'attribut sur `<g>` (autorisés dans la règle ESLint `component-selector`) et éléments préfixés `svg:`. La zone rouge et la case de départ sont dessinées d'un bloc (fond puis contour) après les lignes de la grille, leurs fonds en `mix-blend-multiply` pour que les lignes restent visibles (type `StartCell` ajouté dans `board-geometry.ts`). Tout ce qui dépend de l'étape affichée est dessiné par `BoardSolutionDiagram`, y compris les carrés rouges des derniers candidats de la zone rouge, passés au-dessus des candidats avec `mix-blend-multiply` (le chiffre reste lisible ; seule différence visible : les hachures se voient légèrement à travers le carré). Rendu vérifié dans le navigateur.
+- 2026-11-27 : la solution n'est plus dans `Highlights` (qui ne garde que les marques de la question : case de départ, zone rouge) : `Board` a un input `solution` (`BoardSolution | null`). `ExerciseBoard.highlights` ne dépend plus que de la question, et `Board` extrait les frames dans un `computed` : pendant l'animation, seul le filtrage par étape (`solutionSceneUpTo`) est recalculé, plus le placement des flèches ni la grille (vérifié avec des compteurs temporaires). Noms dans `Board` : `boardScene`, `solutionScene` (privé), `shownSolutionScene` ; fonctions `boardSceneOf`, `solutionSceneOf`, `solutionSceneUpTo`.
+- À faire, dans l'ordre : la géométrie (`board-geometry.ts`, `solution-geometry.ts`), les modèles.
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 

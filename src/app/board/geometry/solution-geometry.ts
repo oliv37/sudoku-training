@@ -204,7 +204,7 @@ function routeArrow(
  * `target` / `targetDigit`: the red zone and what disappears from it: one digit (unit),
  * 'all' (single cell: all its candidates), or null (unknown: no special highlight).
  */
-export function solutionScene(
+export function solutionSceneOf(
   board: BoardData,
   frames: Frame[],
   target: Cell[],
@@ -331,7 +331,7 @@ export function solutionSteps(frames: Frame[]): { step: number; color: string }[
  * The scene limited to the hypothesis and steps 1..`step`.
  * Positions are those of the full diagram, so nothing moves while steps appear.
  */
-export function solutionUpTo(scene: SolutionScene, step: number): SolutionScene {
+export function solutionSceneUpTo(scene: SolutionScene, step: number): SolutionScene {
   const upTo = <T extends { frame: number }>(items: T[]) => items.filter((it) => it.frame <= step);
   return {
     touched: scene.touched,
