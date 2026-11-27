@@ -1,0 +1,136 @@
+/**
+ * What a solution chain says, independently of how it is drawn: its numbered steps, its branches,
+ * and the cells it involves. Used by the board (solution diagram) and by the exercise (step buttons).
+ */
+import { BoardData, Cell } from '../board-model';
+import { cellKey, candidatesOf } from '../board-cells';
+import { Frame, Unit } from './board-solution-model';
+import { branchColor } from '../board-theme';
+
+/** Number of the last step (index of the last forced placement); 0 if there is none. */
+export function lastStep(frames: Frame[]): number {
+  let last = 0;
+  frames.forEach((frame, index) => {
+    if (frame.kind === 'dom') {
+      last = index;
+    }
+  });
+  return last;
+}
+
+/**
+ * Branch of each forced placement, indexed like `frames` (no entry for the hypothesis and the
+ * final contradiction). Each direct consequence of the hypothesis starts a new branch; any other
+ * placement belongs to the branch of the placement that caused it.
+ */
+export function branchesOf(frames: Frame[]): number[] {
+  const branches: number[] = [];
+  let nextBranch = 0;
+  frames.forEach((frame, index) => {
+    if (frame.kind !== 'dom') {
+      return;
+    }
+    if (frame.cause === 0) {
+      branches[index] = nextBranch;
+      nextBranch++;
+    } else {
+      branches[index] = branches[frame.cause];
+    }
+  });
+  return branches;
+}
+
+/** The numbered steps of a solution with their branch color, as on the board badges. */
+export function solutionSteps(frames: Frame[]): { step: number; color: string }[] {
+  const branches = branchesOf(frames);
+  const steps: { step: number; color: string }[] = [];
+  frames.forEach((frame, index) => {
+    if (frame.kind === 'dom') {
+      steps.push({ step: index, color: branchColor(branches[index]) });
+    }
+  });
+  return steps;
+}
+
+/**
+ * Cells that matter in the solution (the other cells are greyed out), as `cellKey` strings:
+ * the red zone, the cells of the chain, and the cells that justify a hidden single.
+ */
+export function involvedCellsOf(
+  board: BoardData,
+  frames: Frame[],
+  redZoneCells: Cell[],
+): Set<string> {
+  const involvedCells = new Set<string>();
+  for (const [r, c] of redZoneCells) {
+    involvedCells.add(cellKey(r, c));
+  }
+  for (const frame of frames) {
+    if (frame.kind === 'bad') {
+      continue;
+    }
+    const [r, c, digit] = frame.circle;
+    involvedCells.add(cellKey(r, c));
+    for (const [unitRow, unitColumn] of cellsJustifyingHiddenSingle(board, frame, digit)) {
+      involvedCells.add(cellKey(unitRow, unitColumn));
+    }
+  }
+  return involvedCells;
+}
+
+/**
+ * A hidden single is justified by its unit: every cell of that unit that still holds the digit
+ * shows that the digit has no other place. None for a naked single or the hypothesis.
+ */
+function cellsJustifyingHiddenSingle(board: BoardData, frame: Frame, digit: number): Cell[] {
+  const unit = hiddenSingleUnitOf(frame);
+  if (unit === null) {
+    return [];
+  }
+  return allCells().filter(
+    (cell) => isInUnit(cell, unit) && candidatesOf(board, cell).includes(digit),
+  );
+}
+
+/** The unit of a hidden single, read from its reason ("caché colonne 2"); null otherwise. */
+function hiddenSingleUnitOf(frame: Frame): Unit | null {
+  if (frame.kind !== 'dom') {
+    return null;
+  }
+  const match = /^caché (ligne|colonne|bloc) (\d)$/.exec(frame.why);
+  if (match === null) {
+    return null;
+  }
+  const kind = match[1] as Unit['kind'];
+  const index = Number(match[2]) - 1;
+  return { kind, index };
+}
+
+function isInUnit([r, c]: Cell, unit: Unit): boolean {
+  switch (unit.kind) {
+    case 'ligne':
+      return r === unit.index;
+    case 'colonne':
+      return c === unit.index;
+    case 'bloc':
+      return boxOf([r, c]) === unit.index;
+  }
+}
+
+/** Box of a cell, 0..8, numbered row by row like the cells. */
+function boxOf([r, c]: Cell): number {
+  const boxRow = Math.floor(r / 3);
+  const boxColumn = Math.floor(c / 3);
+  return boxRow * 3 + boxColumn;
+}
+
+/** The 81 cells, row by row. */
+function allCells(): Cell[] {
+  const cells: Cell[] = [];
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      cells.push([r, c]);
+    }
+  }
+  return cells;
+}

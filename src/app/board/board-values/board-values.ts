@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { THEME, ValueText } from '../geometry/board-geometry';
+import { ValueText } from '../geometry/board-scene-model';
+import { THEME } from '../board-theme';
 
 /** Placed digits (large digits of the filled cells). */
 @Component({
@@ -12,7 +13,7 @@ import { THEME, ValueText } from '../geometry/board-geometry';
         [attr.x]="value.x"
         [attr.y]="value.y"
         text-anchor="middle"
-        [attr.fill]="theme.given"
+        [attr.fill]="theme.placedDigit"
         font-family="Barlow"
         font-weight="700"
         font-size="58"

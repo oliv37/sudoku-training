@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { StartCell, THEME } from '../geometry/board-geometry';
+import { StartCellShape } from '../geometry/board-scene-model';
+import { THEME } from '../board-theme';
 
 /** Green start cell of the question: light green background, then its outline. Drawn over the grid lines. */
 @Component({
@@ -29,7 +30,7 @@ import { StartCell, THEME } from '../geometry/board-geometry';
   `,
 })
 export class BoardStartCell {
-  readonly start = input.required<StartCell>();
+  readonly start = input.required<StartCellShape>();
 
   protected readonly theme = THEME;
 }

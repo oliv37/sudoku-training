@@ -8,8 +8,8 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { BoardSolution, Frame } from '../../board/board-model';
-import { lastStep, solutionSteps } from '../../board/geometry/solution-geometry';
+import { BoardSolution, Frame } from '../../board/board-solution/board-solution-model';
+import { lastStep, solutionSteps } from '../../board/board-solution/board-solution';
 
 /** Delay between two steps of the solution animation. */
 const STEP_DELAY_MS = 600;

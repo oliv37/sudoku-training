@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { GridLine, THEME } from '../geometry/board-geometry';
+import { GridLine } from '../geometry/board-scene-model';
+import { THEME } from '../board-theme';
 
 /** Thin cell lines and thick box lines of the grid. */
 @Component({
@@ -13,7 +14,7 @@ import { GridLine, THEME } from '../geometry/board-geometry';
         [attr.y1]="line.y1"
         [attr.x2]="line.x2"
         [attr.y2]="line.y2"
-        [attr.stroke]="line.thick ? theme.thick : theme.thin"
+        [attr.stroke]="line.thick ? theme.thickLine : theme.thinLine"
         [attr.stroke-width]="line.thick ? 7 : 1.8"
         stroke-linecap="square"
       />

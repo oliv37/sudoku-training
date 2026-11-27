@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { CandidateText, THEME } from '../geometry/board-geometry';
+import { CandidateText } from '../geometry/board-scene-model';
+import { THEME } from '../board-theme';
 
 /** Candidates (small digits) of the empty cells, with their underline. */
 @Component({
@@ -10,9 +11,9 @@ import { CandidateText, THEME } from '../geometry/board-geometry';
     @for (candidate of candidates(); track candidate.key) {
       <svg:text
         [attr.x]="candidate.x"
-        [attr.y]="candidate.y + 8"
+        [attr.y]="candidate.textY"
         text-anchor="middle"
-        [attr.fill]="candidate.off ? theme.candOff : theme.cand"
+        [attr.fill]="candidate.greyed ? theme.greyedCandidate : theme.candidate"
         font-family="Barlow"
         font-weight="600"
         font-size="23"
@@ -21,11 +22,11 @@ import { CandidateText, THEME } from '../geometry/board-geometry';
       </svg:text>
       @if (candidate.underlined) {
         <svg:line
-          [attr.x1]="candidate.x - 8"
-          [attr.y1]="candidate.y + 13"
-          [attr.x2]="candidate.x + 8"
-          [attr.y2]="candidate.y + 13"
-          [attr.stroke]="candidate.off ? theme.candOff : theme.underline"
+          [attr.x1]="candidate.underline.x1"
+          [attr.y1]="candidate.underline.y1"
+          [attr.x2]="candidate.underline.x2"
+          [attr.y2]="candidate.underline.y2"
+          [attr.stroke]="candidate.greyed ? theme.greyedCandidate : theme.underline"
           stroke-width="2.4"
           stroke-linecap="round"
         />

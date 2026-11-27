@@ -1,6 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 import { Board } from '../../board/board';
-import { BoardSolution, Highlights, cellName } from '../../board/board-model';
+import { Highlights } from '../../board/board-model';
+import { cellName } from '../../board/board-cells';
+import { BoardSolution } from '../../board/board-solution/board-solution-model';
 import { ExerciseQuestionData } from '../exercise-model';
 
 /**

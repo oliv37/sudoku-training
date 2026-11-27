@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { RedZone, THEME } from '../geometry/board-geometry';
+import { RedZoneShape } from '../geometry/board-scene-model';
+import { THEME } from '../board-theme';
 
 /**
  * Red zone of the question: hatched background, then its outline (dashed for a unit, plain for a
@@ -33,7 +34,7 @@ import { RedZone, THEME } from '../geometry/board-geometry';
   `,
 })
 export class BoardRedZone {
-  readonly redZone = input.required<RedZone>();
+  readonly redZone = input.required<RedZoneShape>();
   /** `url(#…)` of the hatch pattern defined by the board. */
   readonly hatchUrl = input.required<string>();
 

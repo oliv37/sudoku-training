@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { cellName } from '../../board/board-model';
+import { cellName } from '../../board/board-cells';
 import { ExerciseQuestionData } from '../exercise-model';
 
 /**

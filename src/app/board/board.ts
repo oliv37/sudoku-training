@@ -1,13 +1,17 @@
 import { Component, computed, input } from '@angular/core';
-import { GRID_SIZE, THEME, VIEW_BOX, boardSceneOf } from './geometry/board-geometry';
-import { BoardData, BoardSolution, Highlights } from './board-model';
-import { solutionSceneOf, solutionSceneUpTo } from './geometry/solution-geometry';
+import { GRID_SIZE, VIEW_BOX } from './geometry/board-coordinates';
+import { boardSceneOf } from './geometry/board-scene';
+import { allCellKeys } from './board-cells';
+import { THEME } from './board-theme';
+import { BoardData, Highlights } from './board-model';
+import { BoardSolution } from './board-solution/board-solution-model';
+import { solutionSceneOf, solutionSceneUpTo } from './board-solution/geometry/board-solution-scene';
 import { BoardGridLines } from './board-grid-lines/board-grid-lines';
 import { BoardRedZone } from './board-red-zone/board-red-zone';
 import { BoardStartCell } from './board-start-cell/board-start-cell';
 import { BoardValues } from './board-values/board-values';
 import { BoardCandidates } from './board-candidates/board-candidates';
-import { BoardSolutionDiagram } from './board-solution-diagram/board-solution-diagram';
+import { BoardSolutionDiagram } from './board-solution/board-solution-diagram/board-solution-diagram';
 
 let nextId = 0;
 
@@ -55,10 +59,8 @@ export class Board {
     if (frames === null) {
       return null;
     }
-    const { redZone } = this.highlights();
-    // What disappears from the red zone: every candidate of a cell, or one digit of a unit.
-    const lastDigit = redZone?.type === 'cell' ? 'all' : (redZone?.digit ?? null);
-    return solutionSceneOf(this.board(), frames, redZone?.cases ?? [], lastDigit, THEME.hyp);
+    const redZone = this.highlights().redZone ?? null;
+    return solutionSceneOf(this.board(), frames, redZone);
   });
 
   /** The solution diagram limited to the steps drawn so far. */
@@ -72,7 +74,9 @@ export class Board {
   });
 
   /** Grid, digits, candidates and question marks. */
-  protected readonly boardScene = computed(() =>
-    boardSceneOf(this.board(), this.highlights(), this.solutionScene()?.touched ?? null),
-  );
+  protected readonly boardScene = computed(() => {
+    // Without a solution, every cell is involved: nothing is greyed.
+    const involvedCells = this.solutionScene()?.involvedCells ?? allCellKeys();
+    return boardSceneOf(this.board(), this.highlights(), involvedCells);
+  });
 }

@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import { THEME } from '../geometry/board-geometry';
-import { SolutionScene } from '../geometry/solution-geometry';
+import { THEME } from '../../board-theme';
+import { SolutionScene } from '../geometry/board-solution-scene-model';
 
 /**
  * Solution diagram, over the candidates: red squares around the last candidates of the red zone,

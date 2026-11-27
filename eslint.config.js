@@ -31,14 +31,9 @@ module.exports = defineConfig([
           style: 'camelCase',
         },
       ],
-      // Components are elements (app-board), except the board layers: inside an <svg>, a custom
-      // element is not drawn, so a layer is an attribute on a <g> (g[appBoardGridLines]).
       '@angular-eslint/component-selector': [
         'error',
-        [
-          { type: 'element', prefix: 'app', style: 'kebab-case' },
-          { type: 'attribute', prefix: 'app', style: 'camelCase' },
-        ],
+        { type: 'element', prefix: 'app', style: 'kebab-case' },
       ],
       // Project conventions (CLAUDE.md), not enabled by the recommended presets:
       // signals for state, `input()`/`output()`/`model()`, readonly outputs.
@@ -52,6 +47,20 @@ module.exports = defineConfig([
       '@angular-eslint/prefer-service-decorator': 'error',
       // Prerendering: no direct `document` access (does not exist at build time).
       '@angular-eslint/no-global-document': 'error',
+    },
+  },
+  {
+    // The board layers: inside an <svg>, a custom element is not drawn, so a layer is an
+    // attribute on a <g> (g[appBoardGridLines]). Everywhere else, components are elements.
+    files: ['src/app/board/**/*.ts'],
+    rules: {
+      '@angular-eslint/component-selector': [
+        'error',
+        [
+          { type: 'element', prefix: 'app', style: 'kebab-case' },
+          { type: 'attribute', prefix: 'app', style: 'camelCase' },
+        ],
+      ],
     },
   },
   {

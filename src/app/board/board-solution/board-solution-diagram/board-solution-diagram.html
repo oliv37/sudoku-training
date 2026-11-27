@@ -23,19 +23,19 @@
     [attr.y1]="strike.y1"
     [attr.x2]="strike.x2"
     [attr.y2]="strike.y2"
-    [attr.stroke]="strike.off ? theme.candOff : theme.bad"
-    [attr.stroke-width]="strike.off ? 2 : 3"
+    [attr.stroke]="strike.greyed ? theme.greyedCandidate : theme.bad"
+    [attr.stroke-width]="strike.greyed ? 2 : 3"
     stroke-linecap="round"
   />
 }
 @for (circle of scene().circles; track circle.key) {
   <svg:circle
-    [attr.cx]="circle.cx"
-    [attr.cy]="circle.cy"
+    [attr.cx]="circle.x"
+    [attr.cy]="circle.y"
     r="14"
     fill="none"
     [attr.stroke]="circle.color"
-    [attr.stroke-width]="circle.hyp ? 3.6 : 3"
+    [attr.stroke-width]="circle.isHypothesis ? 3.6 : 3"
   />
 }
 @for (arrow of scene().arrows; track arrow.key) {
@@ -46,7 +46,7 @@
   <svg:circle [attr.cx]="badge.x" [attr.cy]="badge.y" r="13" [attr.fill]="badge.color" />
   <svg:text
     [attr.x]="badge.x"
-    [attr.y]="badge.y + 6"
+    [attr.y]="badge.textY"
     text-anchor="middle"
     [attr.fill]="theme.badgeText"
     font-family="Barlow"
