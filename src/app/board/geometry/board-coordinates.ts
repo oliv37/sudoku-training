@@ -1,7 +1,7 @@
 /**
  * Where things are on the drawn grid, in SVG user units: cells, units, candidates.
  * Same measures as `renderCard` (docs/sudoku-training-modele.html), with the grid origin at (0, 0)
- * instead of (GX, GY). The arrow tuning constants of the solution diagram depend on these measures.
+ * instead of (GX, GY). The tuning constants of the arrows depend on these measures.
  */
 import { Cell, CellDigit } from '../board-model';
 import { Point, Rect } from './board-coordinates-model';

@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { GridLine } from '../geometry/board-scene-model';
+import { GridLineShape } from '../geometry/board-scene-model';
 import { THEME } from '../board-theme';
 
 /** Thin cell lines and thick box lines of the grid. */
@@ -22,7 +22,7 @@ import { THEME } from '../board-theme';
   `,
 })
 export class BoardGridLines {
-  readonly lines = input.required<GridLine[]>();
+  readonly lines = input.required<GridLineShape[]>();
 
   protected readonly theme = THEME;
 }

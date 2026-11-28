@@ -1,9 +1,9 @@
 /**
  * The solution of a question, as exported by the Python script: a chain of deductions from a
  * hypothesis to a contradiction. What it means (steps, branches, cells involved) is read in
- * board-solution.ts.
+ * exercise-solution.ts.
  */
-import { Cell, CellDigit } from '../board-model';
+import { Cell, CellDigit } from '../../board/board-model';
 
 /** Frame 0: the hypothesis, a candidate supposed placed (green circle). */
 export interface HypFrame {
@@ -44,11 +44,8 @@ export interface BadFrame {
  */
 export type Frame = HypFrame | DomFrame | BadFrame;
 
-/**
- * A solution diagram (circles, struck candidates, arrows; cells not involved are greyed) and how
- * much of it is drawn.
- */
-export interface BoardSolution {
+/** A solution shown on the board, and how much of it is drawn. */
+export interface ShownSolution {
   frames: Frame[];
   /**
    * Drawn up to this step (frame index; 0 = hypothesis only). To draw everything, pass the last

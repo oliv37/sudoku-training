@@ -1,11 +1,13 @@
 /**
  * What a solution chain says, independently of how it is drawn: its numbered steps, its branches,
- * and the cells it involves. Used by the board (solution diagram) and by the exercise (step buttons).
+ * and the cells it involves. Used by the board drawing of a question and by the step buttons.
  */
-import { BoardData, Cell } from '../board-model';
-import { cellKey, candidatesOf } from '../board-cells';
-import { Frame, Unit } from './board-solution-model';
-import { branchColor } from '../board-theme';
+import { Cell, Tone } from '../../board/board-model';
+import { cellKey } from '../../board/board-cells';
+import { toneColor } from '../../board/board-theme';
+import { candidatesOf } from '../exercise-cells';
+import { ExerciseQuestionData } from '../exercise-model';
+import { Frame, Unit } from './exercise-solution-model';
 
 /** Number of the last step (index of the last forced placement); 0 if there is none. */
 export function lastStep(frames: Frame[]): number {
@@ -40,13 +42,21 @@ export function branchesOf(frames: Frame[]): number[] {
   return branches;
 }
 
+/** One tone per branch of the chain (the branch colors of the reference renderer), used in turn. */
+const BRANCH_TONES: Tone[] = ['blue', 'violet', 'orange', 'teal'];
+
+/** Tone of a branch of the chain (0 = first branch). */
+export function branchTone(branch: number): Tone {
+  return BRANCH_TONES[branch % BRANCH_TONES.length];
+}
+
 /** The numbered steps of a solution with their branch color, as on the board badges. */
 export function solutionSteps(frames: Frame[]): { step: number; color: string }[] {
   const branches = branchesOf(frames);
   const steps: { step: number; color: string }[] = [];
   frames.forEach((frame, index) => {
     if (frame.kind === 'dom') {
-      steps.push({ step: index, color: branchColor(branches[index]) });
+      steps.push({ step: index, color: toneColor(branchTone(branches[index])) });
     }
   });
   return steps;
@@ -57,7 +67,7 @@ export function solutionSteps(frames: Frame[]): { step: number; color: string }[
  * the red zone, the cells of the chain, and the cells that justify a hidden single.
  */
 export function involvedCellsOf(
-  board: BoardData,
+  question: ExerciseQuestionData,
   frames: Frame[],
   redZoneCells: Cell[],
 ): Set<string> {
@@ -71,7 +81,7 @@ export function involvedCellsOf(
     }
     const [r, c, digit] = frame.circle;
     involvedCells.add(cellKey(r, c));
-    for (const [unitRow, unitColumn] of cellsJustifyingHiddenSingle(board, frame, digit)) {
+    for (const [unitRow, unitColumn] of cellsJustifyingHiddenSingle(question, frame, digit)) {
       involvedCells.add(cellKey(unitRow, unitColumn));
     }
   }
@@ -82,13 +92,17 @@ export function involvedCellsOf(
  * A hidden single is justified by its unit: every cell of that unit that still holds the digit
  * shows that the digit has no other place. None for a naked single or the hypothesis.
  */
-function cellsJustifyingHiddenSingle(board: BoardData, frame: Frame, digit: number): Cell[] {
+function cellsJustifyingHiddenSingle(
+  question: ExerciseQuestionData,
+  frame: Frame,
+  digit: number,
+): Cell[] {
   const unit = hiddenSingleUnitOf(frame);
   if (unit === null) {
     return [];
   }
   return allCells().filter(
-    (cell) => isInUnit(cell, unit) && candidatesOf(board, cell).includes(digit),
+    (cell) => isInUnit(cell, unit) && candidatesOf(question, cell).includes(digit),
   );
 }
 

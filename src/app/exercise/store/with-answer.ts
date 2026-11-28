@@ -7,8 +7,9 @@ import {
   withLinkedState,
   withMethods,
 } from '@ngrx/signals';
-import { candidatesOf, cellName } from '../../board/board-cells';
-import { Frame } from '../../board/board-solution/board-solution-model';
+import { cellName } from '../../board/board-cells';
+import { candidatesOf } from '../exercise-cells';
+import { Frame } from '../exercise-solution/exercise-solution-model';
 import { ExerciseQuestionData } from '../exercise-model';
 
 /**

@@ -1,0 +1,37 @@
+<!-- Elements prefixed with `svg:`: this template has no <svg> ancestor, so without the prefix
+     Angular would create HTML elements, which the browser does not draw. -->
+@for (arrow of arrows(); track arrow.key) {
+  <svg:path
+    [attr.d]="arrow.path"
+    fill="none"
+    [attr.stroke]="arrow.color"
+    stroke-width="3.2"
+    [attr.display]="arrow.hidden ? 'none' : null"
+  />
+  <svg:path
+    [attr.d]="arrow.head"
+    [attr.fill]="arrow.color"
+    [attr.display]="arrow.hidden ? 'none' : null"
+  />
+}
+@for (badge of badges(); track badge.key) {
+  <svg:circle
+    [attr.cx]="badge.x"
+    [attr.cy]="badge.y"
+    r="13"
+    [attr.fill]="badge.color"
+    [attr.display]="badge.hidden ? 'none' : null"
+  />
+  <svg:text
+    [attr.x]="badge.x"
+    [attr.y]="badge.textY"
+    text-anchor="middle"
+    [attr.fill]="theme.badgeText"
+    font-family="Barlow"
+    font-weight="700"
+    font-size="17"
+    [attr.display]="badge.hidden ? 'none' : null"
+  >
+    {{ badge.label }}
+  </svg:text>
+}

@@ -1,4 +1,4 @@
-/** Types of the arrow placement (board-solution-arrows.ts). */
+/** Types of the arrow routing (board-arrows-routing.ts). */
 import { Point } from '../../geometry/board-coordinates-model';
 
 /** Something an arrow or a badge should not cross: a disc, heavier when it matters more. */
@@ -9,11 +9,11 @@ export interface Obstacle {
   weight: number;
 }
 
-/** An arrow ready to draw: SVG paths of its curve and of its head, and where its badge goes. */
-export interface Arrow {
+/** An arrow routed between two candidates: SVG paths of its curve and of its head, and where its badge goes. */
+export interface RoutedArrow {
   path: string;
   head: string;
-  /** Centre of the numbered badge of the step. */
+  /** Centre of the badge; its place is kept free even when the arrow has no badge. */
   badge: Point;
 }
 

@@ -1,0 +1,109 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`board > renders an empty drawing as the grid alone 1`] = `
+"svg aria-label="Sudoku grid" class="block h-auto w-full" role="img" viewBox="-4 -4 872 872"
+  defs
+    pattern height="14" id="hatch" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="14"
+      rect fill="#fbd8d3" height="14" opacity="0.55" width="14"
+      line opacity="0.55" stroke-width="2.2" stroke="#e0342a" x1="0" x2="0" y1="0" y2="14"
+  rect fill="#ffffff" height="864" width="864" x="0" y="0"
+  g appBoardGridLines=""
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="96" y2="96"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="96" x2="96" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="192" y2="192"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="192" x2="192" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="384" y2="384"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="384" x2="384" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="480" y2="480"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="480" x2="480" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="672" y2="672"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="672" x2="672" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="768" y2="768"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="768" x2="768" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="0" y2="0"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="0" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="288" y2="288"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="288" x2="288" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="576" y2="576"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="576" x2="576" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="864" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="864" x2="864" y1="0" y2="864"
+  g appBoardZones=""
+  g appBoardDigits=""
+  g appBoardCandidates=""
+  g appBoardArrows="""
+`;
+
+exports[`board > renders every kind of element as before 1`] = `
+"svg aria-label="Sudoku grid" class="block h-auto w-full" role="img" viewBox="-4 -4 872 872"
+  defs
+    pattern height="14" id="hatch" patternTransform="rotate(45)" patternUnits="userSpaceOnUse" width="14"
+      rect fill="#fbd8d3" height="14" opacity="0.55" width="14"
+      line opacity="0.55" stroke-width="2.2" stroke="#e0342a" x1="0" x2="0" y1="0" y2="14"
+  rect fill="#ffffff" height="864" width="864" x="0" y="0"
+  g appBoardGridLines=""
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="96" y2="96"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="96" x2="96" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="192" y2="192"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="192" x2="192" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="384" y2="384"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="384" x2="384" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="480" y2="480"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="480" x2="480" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="672" y2="672"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="672" x2="672" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="0" x2="864" y1="768" y2="768"
+    line stroke-linecap="square" stroke-width="1.8" stroke="#2b2d30" x1="768" x2="768" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="0" y2="0"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="0" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="288" y2="288"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="288" x2="288" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="576" y2="576"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="576" x2="576" y1="0" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="0" x2="864" y1="864" y2="864"
+    line stroke-linecap="square" stroke-width="7" stroke="#123a66" x1="864" x2="864" y1="0" y2="864"
+  g appBoardZones=""
+    rect class="mix-blend-multiply" fill="url(#hatch)" height="96" width="864" x="0" y="288"
+    rect fill="none" height="90" stroke-dasharray="12 7" stroke-width="4" stroke="#e0342a" width="858" x="3" y="291"
+    rect class="mix-blend-multiply" fill="url(#hatch)" height="96" width="96" x="192" y="192"
+    rect fill="none" height="88" stroke-width="5" stroke="#e0342a" width="88" x="196" y="196"
+    rect class="mix-blend-multiply" fill="#d2f2df" height="96" width="96" x="96" y="96"
+    rect fill="none" height="88" stroke-width="5" stroke="#15924f" width="88" x="100" y="100"
+  g appBoardDigits=""
+    text fill="#0f2a4a" font-family="Barlow" font-size="58" font-weight="700" text-anchor="middle" x="48" y="68" | 5
+    text fill="#0f2a4a" font-family="Barlow" font-size="58" font-weight="700" text-anchor="middle" x="432" y="452" | 9
+  g appBoardCandidates=""
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="116" y="29" | 1
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="144" y="29" | 2
+    line stroke-linecap="round" stroke-width="2.4" stroke="#111111" x1="136" x2="152" y1="34" y2="34"
+    text fill="#a3b4c8" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="268" y="29" | 3
+    line stroke-linecap="round" stroke-width="2.4" stroke="#a3b4c8" x1="260" x2="276" y1="34" y2="34"
+    text fill="#a3b4c8" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="212" y="56" | 4
+    line stroke-linecap="round" stroke-width="2" stroke="#a3b4c8" x1="203" x2="221" y1="57" y2="39"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="48" y="152" | 5
+    line stroke-linecap="round" stroke-width="3" stroke="#e0342a" x1="39" x2="57" y1="153" y2="135"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="76" y="152" | 6
+    line display="none" stroke-linecap="round" stroke-width="3" stroke="#e0342a" x1="67" x2="85" y1="153" y2="135"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="116" y="179" | 7
+    circle cx="116" cy="171" fill="none" r="14" stroke-width="3.6" stroke="#15924f"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="144" y="179" | 8
+    circle cx="144" cy="171" fill="none" r="14" stroke-width="3" stroke="#1f6fd6"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="268" y="179" | 9
+    circle cx="268" cy="171" display="none" fill="none" r="14" stroke-width="3" stroke="#9b3fd4"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="788" y="317" | 1
+    rect class="mix-blend-multiply" fill="#fbd8d3" height="28" rx="5" stroke-width="1.5" stroke="#e0342a" width="28" x="774" y="295"
+    line stroke-linecap="round" stroke-width="3" stroke="#e0342a" x1="779" x2="797" y1="318" y2="300"
+    text fill="#1d3557" font-family="Barlow" font-size="23" font-weight="600" text-anchor="middle" x="816" y="317" | 2
+    rect class="mix-blend-multiply" display="none" fill="#d2f2df" height="28" rx="5" stroke-width="1.5" stroke="#15924f" width="28" x="802" y="295"
+  g appBoardArrows=""
+    path d="M133 171 Q125 181.08 117 171" fill="none" stroke-width="3.2" stroke="#1f6fd6"
+    path d="M110.1617635447959 162.38382206644283 L122.09137786982924 166.95922391283395 L111.90862213017076 175.04077608716605 Z" fill="#1f6fd6"
+    path d="M160.62264103931597 174.56199450842485 Q455.590987929613 264.71235455634564 761.5993348199099 303.3427146042664" fill="none" stroke-width="3.2" stroke="#e07800"
+    path d="M772.5127183731688 304.72041537709725 L760.7852389086917 309.7915321584648 L762.4134307311282 296.893897050068 Z" fill="#e07800"
+    path d="M133 171 Q187 116.28 241 171" display="none" fill="none" stroke-width="3.2" stroke="#9b3fd4"
+    path d="M248.72649407166134 178.8295139926168 L236.3734690043628 175.56565558779988 L245.6265309956372 166.43434441220012 Z" display="none" fill="#9b3fd4"
+    circle cx="125" cy="195.04000000000002" fill="#1f6fd6" r="13"
+    text fill="#ffffff" font-family="Barlow" font-size="17" font-weight="700" text-anchor="middle" x="125" y="201.04000000000002" | 1
+    circle cx="187" cy="143.64" display="none" fill="#9b3fd4" r="13"
+    text display="none" fill="#ffffff" font-family="Barlow" font-size="17" font-weight="700" text-anchor="middle" x="187" y="149.64" | 2"
+`;

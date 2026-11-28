@@ -50,10 +50,24 @@ module.exports = defineConfig([
     },
   },
   {
-    // The board layers: inside an <svg>, a custom element is not drawn, so a layer is an
-    // attribute on a <g> (g[appBoardGridLines]). Everywhere else, components are elements.
+    // Rules of the board domain.
     files: ['src/app/board/**/*.ts'],
     rules: {
+      // The board is generic: it draws a BoardDrawing and knows nothing about exercises or pages.
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/exercise', '**/exercise/**', '**/pages', '**/pages/**'],
+              message:
+                'The board is generic: it must not depend on the exercise or the pages (callers build a BoardDrawing).',
+            },
+          ],
+        },
+      ],
+      // The board layers: inside an <svg>, a custom element is not drawn, so a layer is an
+      // attribute on a <g> (g[appBoardGridLines]). Everywhere else, components are elements.
       '@angular-eslint/component-selector': [
         'error',
         [

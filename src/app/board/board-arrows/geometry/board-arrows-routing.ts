@@ -1,27 +1,26 @@
 /**
- * Arrows of the solution diagram. Each arrow goes from the circle of a placement to the circle of
- * the placement it forces, as a quadratic curve that avoids what is already drawn: placed digits,
- * circles, struck candidates, and the arrows and badges placed before it.
+ * Routing of the arrows. Each arrow goes from a candidate to another, as a quadratic curve that
+ * avoids what is already drawn: placed digits, circles, struck candidates, and the arrows and
+ * badges placed before it.
  *
  * Port of the arrow routing of `renderCard` (docs/sudoku-training-modele.html): same constants and
  * same operations in the same order, so the curves come out exactly the same.
  */
-import { BoardData, CellDigit } from '../../board-model';
-import { cellValueOf } from '../../board-cells';
+import { Cell, CellDigit } from '../../board-model';
 import { GRID_SIZE, candidateCenter, cellCenter } from '../../geometry/board-coordinates';
 import { Point } from '../../geometry/board-coordinates-model';
-import { Arrow, Curve, Obstacle } from './board-solution-arrows-model';
+import { RoutedArrow, Curve, Obstacle } from './board-arrows-routing-model';
 
 /** Size and weight of each kind of obstacle. */
-const PLACED_DIGIT_OBSTACLE = { radius: 32, weight: 1 };
+const DIGIT_OBSTACLE = { radius: 32, weight: 1 };
 const CIRCLE_OBSTACLE = { radius: 27, weight: 3 };
 const STRUCK_CANDIDATE_OBSTACLE = { radius: 17, weight: 1 };
 const BADGE_OBSTACLE = { radius: 28, weight: 4 };
 const CURVE_OBSTACLE = { radius: 14, weight: 1.2 };
 
-/** The curve starts this far from the centre of the cause circle, outside the circle… */
+/** The curve starts this far from the centre of the start candidate, outside its circle… */
 const START_GAP = 17;
-/** …and stops this far from the centre of the forced circle, leaving room for the head. */
+/** …and stops this far from the centre of the end candidate, leaving room for the head. */
 const END_GAP = 27;
 
 /**
@@ -49,18 +48,14 @@ const HEAD_HALF_WIDTH = 6.5;
 
 /** What the arrows must avoid before any arrow is drawn. */
 export function obstaclesOf(
-  board: BoardData,
+  digitCells: Cell[],
   circledCandidates: CellDigit[],
   struckCandidates: CellDigit[],
 ): Obstacle[] {
   const obstacles: Obstacle[] = [];
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (cellValueOf(board, [r, c]) !== 0) {
-        const [x, y] = cellCenter([r, c]);
-        obstacles.push({ x, y, ...PLACED_DIGIT_OBSTACLE });
-      }
-    }
+  for (const cell of digitCells) {
+    const [x, y] = cellCenter(cell);
+    obstacles.push({ x, y, ...DIGIT_OBSTACLE });
   }
   for (const candidate of circledCandidates) {
     const [x, y] = candidateCenter(candidate);
@@ -77,7 +72,11 @@ export function obstaclesOf(
  * Curved arrow from candidate `from` to candidate `to`, avoiding the obstacles; null when both are
  * the same candidate. Adds the arrow and its badge to `obstacles`, so later arrows avoid them.
  */
-export function placeArrow(from: CellDigit, to: CellDigit, obstacles: Obstacle[]): Arrow | null {
+export function placeArrow(
+  from: CellDigit,
+  to: CellDigit,
+  obstacles: Obstacle[],
+): RoutedArrow | null {
   const [fromX, fromY] = candidateCenter(from);
   const [toX, toY] = candidateCenter(to);
   const deltaX = toX - fromX;

@@ -5,14 +5,14 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 ## État d'avancement
 
-> État court, à tenir à jour à la fin de chaque fonctionnalité : ce qui est fait, les prochaines étapes, les points ouverts. Pas de journal daté : l'historique est dans git. Dernière mise à jour : 2026-11-27.
+> État court, à tenir à jour à la fin de chaque fonctionnalité : ce qui est fait, les prochaines étapes, les points ouverts. Pas de journal daté : l'historique est dans git. Dernière mise à jour : 2026-11-28.
 
 ### Fait
 
 - **Socle** : Angular 22 + Tailwind 4, génération statique (`outputMode: "static"`, toutes les routes pré-rendues au build, serveur Express retiré). Organisation `pages/` / `exercise/` / `board/` (voir `CLAUDE.md`).
 - **Identité** : logo dans l'en-tête (pleine largeur), polices Google Fonts, couleurs en tokens Tailwind (`src/styles.css`), thème clair, fond blanc.
 - **Accueil** (`/`, chargé en lazy) : grille du 14 novembre **codée en dur** (`public/data/exercices-2026-11-14.json`), navigation libre entre les questions (‹ › et ← →, ligne « date · k / N »).
-- **Grille SVG** (`Board`) : rendu de la question et du schéma de solution, porté de `renderCard` (cercles, chiffres barrés, flèches numérotées par branche, cases non concernées en gris) + mise en évidence des derniers candidats de la zone rouge.
+- **Grille SVG** (`Board`) : composant générique, sans notion d'exercice, de solution ni d'étape. Il dessine un `BoardDrawing` : chiffres, candidats (soulignés, grisés, barrés, cerclés, encadrés), zones (verte, rouge hachurée), flèches avec pastille ; un élément `hidden` garde sa place sans être dessiné. Rendu porté de `renderCard`. L'exercice traduit une question et sa solution en dessin (`exercise-board-drawing.ts`), en masquant les étapes pas encore montrées.
 - **Exercice** : question avec badges vert/rouge, boutons des candidats, « Found! » / « Lost », explication + piste, « ↺ Reset », « Next move → », question masquée après la réponse, focus et annonces pour les lecteurs d'écran.
 - **Pas à pas** : animation des étapes du schéma (0,6 s par étape) et ronds numérotés cliquables pour n'afficher la solution que jusqu'à une étape.
 - **Outillage** : Prettier (tout le projet, `.prettierignore`), ESLint avec angular-eslint (`pnpm lint`, règles d'accessibilité des templates et conventions du `CLAUDE.md`).
@@ -22,8 +22,8 @@ Textes de l'interface **en anglais**. Coordonnées affichées **RxCy** (ligne x,
 
 Revue composant par composant avec l'utilisateur, pour rendre le code explicite. Le détail de chaque changement est dans l'historique git.
 
-- Fait : `App`, `Home`, l'exercice (`Exercise`, ses composants de présentation, `ExerciseStore` en trois features) et le board (calques SVG, géométrie rangée par sujet, tests ciblés).
-- Tests : `pnpm test` couvre le board (géométrie et lecture de la solution). L'instantané des flèches (`board-solution-arrows.spec.ts`) prouve que le placement reste celui de `renderCard` : ne jamais le régénérer pour faire passer un test.
+- Fait : `App`, `Home`, l'exercice (`Exercise`, ses composants de présentation, `ExerciseStore` en trois features) et le board (calques SVG, géométrie rangée par sujet, tests ciblés, puis board générique piloté par un `BoardDrawing`).
+- Tests : `pnpm test` couvre le board (géométrie, marques, flèches) et l'exercice (traduction en dessin, lecture de la solution). L'instantané des flèches (`exercise-board-arrows.spec.ts`, de la question à la scène du board) prouve que le placement reste celui de `renderCard` : ne jamais le régénérer pour faire passer un test. Deux autres instantanés fixent le rendu : le SVG du board pour un dessin qui utilise tout (`board.spec.ts`) et le dessin de vraies questions (`exercise-board-drawing.spec.ts`). Données de test partagées : `board/testing/`, `exercise/testing/`.
 - À faire : les modèles (noms de champs du JSON en franglais, côté export Python).
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)

@@ -1,0 +1,1802 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`exercise board drawing > of questions of the grid file > draws question 1 at step 1 as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 greyed
+candidate R1C1 8 greyed
+candidate R1C5 1 greyed
+candidate R1C5 2 greyed
+candidate R1C5 7 greyed
+candidate R1C5 8 greyed
+candidate R1C6 1 greyed
+candidate R1C6 7 greyed
+candidate R1C6 8 greyed struck(red)
+candidate R1C6 9 underlined greyed
+candidate R1C7 2 underlined
+candidate R1C7 8
+candidate R1C7 9 underlined
+candidate R1C8 1 underlined
+candidate R1C8 2
+candidate R1C8 8
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1 greyed
+candidate R2C5 6 greyed struck(red)
+candidate R2C5 8 greyed
+candidate R2C6 1 struck(red)
+candidate R2C6 6 circled(green bold)
+candidate R2C6 8 struck(red)
+candidate R2C6 9 underlined struck(red)
+candidate R2C7 6 underlined struck(red) framed(red hidden)
+candidate R2C7 8
+candidate R2C7 9
+candidate R2C9 1 underlined
+candidate R2C9 4 underlined
+candidate R2C9 8
+candidate R2C9 9
+candidate R3C2 4 underlined greyed
+candidate R3C2 7 greyed
+candidate R3C2 8 greyed
+candidate R3C3 7 greyed
+candidate R3C3 8 greyed
+candidate R3C3 9 underlined greyed
+candidate R3C4 2 greyed
+candidate R3C4 6 greyed struck(red)
+candidate R3C4 8 greyed
+candidate R3C5 2 greyed
+candidate R3C5 6 greyed struck(red)
+candidate R3C5 7 greyed
+candidate R3C5 8 greyed
+candidate R3C8 2
+candidate R3C8 4 underlined
+candidate R3C8 6 underlined struck(red hidden) framed(red hidden)
+candidate R3C8 8
+candidate R3C9 2
+candidate R3C9 4
+candidate R3C9 8
+candidate R3C9 9 underlined
+candidate R4C2 3 greyed
+candidate R4C2 6 greyed
+candidate R4C2 7 greyed
+candidate R4C2 8 greyed
+candidate R4C3 3 greyed
+candidate R4C3 7 greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed struck(red)
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed struck(red hidden)
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 7 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 greyed
+candidate R5C1 6 underlined greyed
+candidate R5C1 8 greyed
+candidate R5C2 3 greyed
+candidate R5C2 6 greyed
+candidate R5C2 8 greyed
+candidate R5C2 9 underlined greyed
+candidate R5C7 3 greyed
+candidate R5C7 6 underlined greyed struck(red hidden)
+candidate R5C7 8 greyed
+candidate R5C7 9 greyed
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed struck(red hidden)
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 greyed
+candidate R6C2 7 underlined greyed
+candidate R6C2 9 underlined greyed
+candidate R6C6 6 underlined struck(red)
+candidate R6C6 8 underlined circled(blue)
+candidate R6C7 7 underlined greyed
+candidate R6C7 9 underlined greyed
+candidate R6C8 6 underlined circled(blue hidden)
+candidate R6C8 8 underlined struck(red)
+candidate R7C1 3 greyed
+candidate R7C1 4 greyed
+candidate R7C1 7 greyed
+candidate R7C1 8 greyed
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 7 greyed
+candidate R7C2 8 greyed
+candidate R7C5 1 underlined greyed
+candidate R7C5 4 underlined greyed
+candidate R7C5 7 greyed
+candidate R7C5 8 greyed
+candidate R7C6 1 underlined greyed
+candidate R7C6 7 greyed
+candidate R7C6 8 greyed struck(red)
+candidate R7C7 3 greyed
+candidate R7C7 7 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3 greyed
+candidate R8C1 4 underlined greyed
+candidate R8C1 6 underlined greyed
+candidate R8C1 7 greyed
+candidate R8C1 8 greyed
+candidate R8C4 2 greyed
+candidate R8C4 3 underlined greyed
+candidate R8C4 6 greyed
+candidate R8C4 8 greyed
+candidate R8C5 2 greyed
+candidate R8C5 4 underlined greyed
+candidate R8C5 6 greyed
+candidate R8C5 7 greyed
+candidate R8C5 8 greyed
+candidate R8C6 6 greyed struck(red)
+candidate R8C6 7 greyed
+candidate R8C6 8 greyed struck(red)
+candidate R8C7 2 underlined greyed
+candidate R8C7 3 greyed
+candidate R8C7 7 greyed
+candidate R8C7 8 greyed
+candidate R8C9 2 greyed
+candidate R8C9 7 greyed
+candidate R8C9 8 greyed
+candidate R9C2 3 greyed
+candidate R9C2 6 underlined greyed
+candidate R9C2 7 greyed
+candidate R9C2 8 greyed
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed
+candidate R9C4 2 greyed
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed
+candidate R9C4 8 greyed
+candidate R9C5 2 greyed
+candidate R9C5 6 greyed
+candidate R9C5 7 greyed
+candidate R9C5 8 greyed
+candidate R9C8 1 underlined greyed
+candidate R9C8 2 greyed
+candidate R9C8 3 greyed
+candidate R9C8 8 greyed
+candidate R9C9 1 underlined greyed
+candidate R9C9 2 greyed
+candidate R9C9 7 greyed
+candidate R9C9 8 greyed
+zone red-hatched dashed R1C7 R1C8 R1C9 R2C7 R2C8 R2C9 R3C7 R3C8 R3C9
+zone green solid R2C6
+arrow R2C6 6 -> R6C6 8 blue label 1
+arrow R6C6 8 -> R6C8 6 blue label 2 hidden"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 1 before the answer as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7
+candidate R1C1 8
+candidate R1C5 1
+candidate R1C5 2
+candidate R1C5 7
+candidate R1C5 8
+candidate R1C6 1
+candidate R1C6 7
+candidate R1C6 8
+candidate R1C6 9 underlined
+candidate R1C7 2 underlined
+candidate R1C7 8
+candidate R1C7 9 underlined
+candidate R1C8 1 underlined
+candidate R1C8 2
+candidate R1C8 8
+candidate R2C1 3 underlined
+candidate R2C1 4 underlined
+candidate R2C1 8
+candidate R2C3 3 underlined
+candidate R2C3 8
+candidate R2C3 9 underlined
+candidate R2C5 1
+candidate R2C5 6
+candidate R2C5 8
+candidate R2C6 1
+candidate R2C6 6
+candidate R2C6 8
+candidate R2C6 9 underlined
+candidate R2C7 6 underlined
+candidate R2C7 8
+candidate R2C7 9
+candidate R2C9 1 underlined
+candidate R2C9 4 underlined
+candidate R2C9 8
+candidate R2C9 9
+candidate R3C2 4 underlined
+candidate R3C2 7
+candidate R3C2 8
+candidate R3C3 7
+candidate R3C3 8
+candidate R3C3 9 underlined
+candidate R3C4 2
+candidate R3C4 6
+candidate R3C4 8
+candidate R3C5 2
+candidate R3C5 6
+candidate R3C5 7
+candidate R3C5 8
+candidate R3C8 2
+candidate R3C8 4 underlined
+candidate R3C8 6 underlined
+candidate R3C8 8
+candidate R3C9 2
+candidate R3C9 4
+candidate R3C9 8
+candidate R3C9 9 underlined
+candidate R4C2 3
+candidate R4C2 6
+candidate R4C2 7
+candidate R4C2 8
+candidate R4C3 3
+candidate R4C3 7
+candidate R4C3 8
+candidate R4C4 6 underlined
+candidate R4C4 8 underlined
+candidate R4C8 2 underlined
+candidate R4C8 3
+candidate R4C8 6
+candidate R4C8 8
+candidate R4C9 2 underlined
+candidate R4C9 7 underlined
+candidate R4C9 8
+candidate R5C1 3
+candidate R5C1 6 underlined
+candidate R5C1 8
+candidate R5C2 3
+candidate R5C2 6
+candidate R5C2 8
+candidate R5C2 9 underlined
+candidate R5C7 3
+candidate R5C7 6 underlined
+candidate R5C7 8
+candidate R5C7 9
+candidate R5C8 3
+candidate R5C8 4 underlined
+candidate R5C8 6
+candidate R5C8 8
+candidate R5C9 4 underlined
+candidate R5C9 8
+candidate R5C9 9
+candidate R6C2 7 underlined
+candidate R6C2 9 underlined
+candidate R6C6 6 underlined
+candidate R6C6 8 underlined
+candidate R6C7 7 underlined
+candidate R6C7 9 underlined
+candidate R6C8 6 underlined
+candidate R6C8 8 underlined
+candidate R7C1 3
+candidate R7C1 4
+candidate R7C1 7
+candidate R7C1 8
+candidate R7C2 3
+candidate R7C2 4 underlined
+candidate R7C2 7
+candidate R7C2 8
+candidate R7C5 1 underlined
+candidate R7C5 4 underlined
+candidate R7C5 7
+candidate R7C5 8
+candidate R7C6 1 underlined
+candidate R7C6 7
+candidate R7C6 8
+candidate R7C7 3
+candidate R7C7 7
+candidate R7C7 8
+candidate R8C1 3
+candidate R8C1 4 underlined
+candidate R8C1 6 underlined
+candidate R8C1 7
+candidate R8C1 8
+candidate R8C4 2
+candidate R8C4 3 underlined
+candidate R8C4 6
+candidate R8C4 8
+candidate R8C5 2
+candidate R8C5 4 underlined
+candidate R8C5 6
+candidate R8C5 7
+candidate R8C5 8
+candidate R8C6 6
+candidate R8C6 7
+candidate R8C6 8
+candidate R8C7 2 underlined
+candidate R8C7 3
+candidate R8C7 7
+candidate R8C7 8
+candidate R8C9 2
+candidate R8C9 7
+candidate R8C9 8
+candidate R9C2 3
+candidate R9C2 6 underlined
+candidate R9C2 7
+candidate R9C2 8
+candidate R9C3 3
+candidate R9C3 7
+candidate R9C3 8
+candidate R9C4 2
+candidate R9C4 3 underlined
+candidate R9C4 6
+candidate R9C4 8
+candidate R9C5 2
+candidate R9C5 6
+candidate R9C5 7
+candidate R9C5 8
+candidate R9C8 1 underlined
+candidate R9C8 2
+candidate R9C8 3
+candidate R9C8 8
+candidate R9C9 1 underlined
+candidate R9C9 2
+candidate R9C9 7
+candidate R9C9 8
+zone red-hatched dashed R1C7 R1C8 R1C9 R2C7 R2C8 R2C9 R3C7 R3C8 R3C9
+zone green solid R2C6"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 1 with the whole solution as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 greyed
+candidate R1C1 8 greyed
+candidate R1C5 1 greyed
+candidate R1C5 2 greyed
+candidate R1C5 7 greyed
+candidate R1C5 8 greyed
+candidate R1C6 1 greyed
+candidate R1C6 7 greyed
+candidate R1C6 8 greyed struck(red)
+candidate R1C6 9 underlined greyed
+candidate R1C7 2 underlined
+candidate R1C7 8
+candidate R1C7 9 underlined
+candidate R1C8 1 underlined
+candidate R1C8 2
+candidate R1C8 8
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1 greyed
+candidate R2C5 6 greyed struck(red)
+candidate R2C5 8 greyed
+candidate R2C6 1 struck(red)
+candidate R2C6 6 circled(green bold)
+candidate R2C6 8 struck(red)
+candidate R2C6 9 underlined struck(red)
+candidate R2C7 6 underlined struck(red) framed(red)
+candidate R2C7 8
+candidate R2C7 9
+candidate R2C9 1 underlined
+candidate R2C9 4 underlined
+candidate R2C9 8
+candidate R2C9 9
+candidate R3C2 4 underlined greyed
+candidate R3C2 7 greyed
+candidate R3C2 8 greyed
+candidate R3C3 7 greyed
+candidate R3C3 8 greyed
+candidate R3C3 9 underlined greyed
+candidate R3C4 2 greyed
+candidate R3C4 6 greyed struck(red)
+candidate R3C4 8 greyed
+candidate R3C5 2 greyed
+candidate R3C5 6 greyed struck(red)
+candidate R3C5 7 greyed
+candidate R3C5 8 greyed
+candidate R3C8 2
+candidate R3C8 4 underlined
+candidate R3C8 6 underlined struck(red) framed(red)
+candidate R3C8 8
+candidate R3C9 2
+candidate R3C9 4
+candidate R3C9 8
+candidate R3C9 9 underlined
+candidate R4C2 3 greyed
+candidate R4C2 6 greyed
+candidate R4C2 7 greyed
+candidate R4C2 8 greyed
+candidate R4C3 3 greyed
+candidate R4C3 7 greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed struck(red)
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed struck(red)
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 7 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 greyed
+candidate R5C1 6 underlined greyed
+candidate R5C1 8 greyed
+candidate R5C2 3 greyed
+candidate R5C2 6 greyed
+candidate R5C2 8 greyed
+candidate R5C2 9 underlined greyed
+candidate R5C7 3 greyed
+candidate R5C7 6 underlined greyed struck(red)
+candidate R5C7 8 greyed
+candidate R5C7 9 greyed
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed struck(red)
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 greyed
+candidate R6C2 7 underlined greyed
+candidate R6C2 9 underlined greyed
+candidate R6C6 6 underlined struck(red)
+candidate R6C6 8 underlined circled(blue)
+candidate R6C7 7 underlined greyed
+candidate R6C7 9 underlined greyed
+candidate R6C8 6 underlined circled(blue)
+candidate R6C8 8 underlined struck(red)
+candidate R7C1 3 greyed
+candidate R7C1 4 greyed
+candidate R7C1 7 greyed
+candidate R7C1 8 greyed
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 7 greyed
+candidate R7C2 8 greyed
+candidate R7C5 1 underlined greyed
+candidate R7C5 4 underlined greyed
+candidate R7C5 7 greyed
+candidate R7C5 8 greyed
+candidate R7C6 1 underlined greyed
+candidate R7C6 7 greyed
+candidate R7C6 8 greyed struck(red)
+candidate R7C7 3 greyed
+candidate R7C7 7 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3 greyed
+candidate R8C1 4 underlined greyed
+candidate R8C1 6 underlined greyed
+candidate R8C1 7 greyed
+candidate R8C1 8 greyed
+candidate R8C4 2 greyed
+candidate R8C4 3 underlined greyed
+candidate R8C4 6 greyed
+candidate R8C4 8 greyed
+candidate R8C5 2 greyed
+candidate R8C5 4 underlined greyed
+candidate R8C5 6 greyed
+candidate R8C5 7 greyed
+candidate R8C5 8 greyed
+candidate R8C6 6 greyed struck(red)
+candidate R8C6 7 greyed
+candidate R8C6 8 greyed struck(red)
+candidate R8C7 2 underlined greyed
+candidate R8C7 3 greyed
+candidate R8C7 7 greyed
+candidate R8C7 8 greyed
+candidate R8C9 2 greyed
+candidate R8C9 7 greyed
+candidate R8C9 8 greyed
+candidate R9C2 3 greyed
+candidate R9C2 6 underlined greyed
+candidate R9C2 7 greyed
+candidate R9C2 8 greyed
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed
+candidate R9C4 2 greyed
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed
+candidate R9C4 8 greyed
+candidate R9C5 2 greyed
+candidate R9C5 6 greyed
+candidate R9C5 7 greyed
+candidate R9C5 8 greyed
+candidate R9C8 1 underlined greyed
+candidate R9C8 2 greyed
+candidate R9C8 3 greyed
+candidate R9C8 8 greyed
+candidate R9C9 1 underlined greyed
+candidate R9C9 2 greyed
+candidate R9C9 7 greyed
+candidate R9C9 8 greyed
+zone red-hatched dashed R1C7 R1C8 R1C9 R2C7 R2C8 R2C9 R3C7 R3C8 R3C9
+zone green solid R2C6
+arrow R2C6 6 -> R6C6 8 blue label 1
+arrow R6C6 8 -> R6C8 6 blue label 2"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 6 at step 1 as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 circled(blue)
+candidate R1C1 8 struck(red)
+candidate R1C5 1
+candidate R1C5 2
+candidate R1C5 7 struck(red)
+candidate R1C5 8
+candidate R1C6 1 greyed
+candidate R1C6 7 greyed struck(red)
+candidate R1C6 9 underlined greyed
+candidate R1C7 2 underlined greyed
+candidate R1C7 8 greyed
+candidate R1C7 9 underlined greyed
+candidate R1C8 1 underlined greyed
+candidate R1C8 2 greyed
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed struck(red)
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1
+candidate R2C5 6 underlined struck(red hidden) framed(red hidden)
+candidate R2C5 8
+candidate R2C6 1 greyed
+candidate R2C6 8 greyed
+candidate R2C6 9 underlined greyed
+candidate R2C7 6 underlined circled(orange hidden)
+candidate R2C7 8 struck(red hidden)
+candidate R2C7 9 struck(red hidden)
+candidate R2C9 1 underlined greyed
+candidate R2C9 4 underlined greyed
+candidate R2C9 8 greyed
+candidate R2C9 9 greyed
+candidate R3C2 4 underlined
+candidate R3C2 7 struck(red)
+candidate R3C2 8
+candidate R3C3 7 struck(red)
+candidate R3C3 8
+candidate R3C3 9 underlined
+candidate R3C4 2 greyed
+candidate R3C4 6 greyed
+candidate R3C4 8 greyed
+candidate R3C5 2 struck(red hidden)
+candidate R3C5 6 struck(red hidden) framed(red hidden)
+candidate R3C5 7 circled(blue hidden)
+candidate R3C5 8 struck(red hidden)
+candidate R3C8 2 greyed
+candidate R3C8 4 underlined greyed
+candidate R3C8 6 underlined greyed struck(red hidden)
+candidate R3C8 8 greyed
+candidate R3C9 2 greyed
+candidate R3C9 4 greyed
+candidate R3C9 8 greyed
+candidate R3C9 9 underlined greyed
+candidate R4C2 3
+candidate R4C2 6 struck(red hidden)
+candidate R4C2 7
+candidate R4C2 8
+candidate R4C3 3 greyed
+candidate R4C3 7 greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 7 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 struck(red hidden)
+candidate R5C1 6 underlined circled(orange hidden)
+candidate R5C1 8 struck(red)
+candidate R5C2 3
+candidate R5C2 6 struck(red hidden)
+candidate R5C2 8
+candidate R5C2 9 underlined
+candidate R5C7 3
+candidate R5C7 6 underlined struck(red hidden)
+candidate R5C7 8
+candidate R5C7 9
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed struck(red hidden)
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 greyed
+candidate R6C2 7 underlined greyed
+candidate R6C2 9 underlined greyed
+candidate R6C6 6 underlined greyed
+candidate R6C6 8 underlined greyed
+candidate R6C7 7 underlined greyed
+candidate R6C7 9 underlined greyed
+candidate R6C8 6 underlined greyed
+candidate R6C8 8 underlined greyed
+candidate R7C1 3 greyed
+candidate R7C1 4 greyed
+candidate R7C1 7 greyed struck(red)
+candidate R7C1 8 greyed struck(red)
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 8 greyed struck(red)
+candidate R7C5 1 underlined
+candidate R7C5 4 underlined struck(red hidden)
+candidate R7C5 7 struck(red hidden)
+candidate R7C5 8
+candidate R7C6 1 underlined greyed
+candidate R7C6 7 greyed
+candidate R7C6 8 greyed
+candidate R7C7 3 greyed
+candidate R7C7 7 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3 struck(red)
+candidate R8C1 4 underlined struck(red)
+candidate R8C1 6 underlined struck(red)
+candidate R8C1 7 struck(red)
+candidate R8C1 8 circled(green bold)
+candidate R8C4 2 greyed
+candidate R8C4 3 underlined greyed
+candidate R8C4 6 greyed
+candidate R8C4 8 greyed struck(red)
+candidate R8C5 2 struck(red hidden)
+candidate R8C5 4 underlined circled(violet hidden)
+candidate R8C5 6 struck(red hidden) framed(red hidden)
+candidate R8C5 7 struck(red hidden)
+candidate R8C5 8 struck(red)
+candidate R8C6 6 underlined greyed
+candidate R8C6 7 greyed
+candidate R8C6 8 greyed struck(red)
+candidate R8C7 2 underlined greyed
+candidate R8C7 3 greyed
+candidate R8C7 7 greyed
+candidate R8C7 8 greyed struck(red)
+candidate R8C9 2 greyed
+candidate R8C9 7 greyed
+candidate R8C9 8 greyed struck(red)
+candidate R9C2 3 struck(red hidden)
+candidate R9C2 6 underlined circled(orange hidden)
+candidate R9C2 7 struck(red hidden)
+candidate R9C2 8 struck(red)
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed struck(red)
+candidate R9C4 2 greyed
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed struck(red hidden)
+candidate R9C4 8 greyed
+candidate R9C5 2
+candidate R9C5 6 struck(red hidden) framed(red hidden)
+candidate R9C5 7 struck(red hidden)
+candidate R9C5 8
+candidate R9C8 1 underlined greyed
+candidate R9C8 2 greyed
+candidate R9C8 3 greyed
+candidate R9C8 8 greyed
+candidate R9C9 1 underlined greyed
+candidate R9C9 7 greyed
+candidate R9C9 8 greyed
+zone red-hatched dashed R1C5 R2C5 R3C5 R4C5 R5C5 R6C5 R7C5 R8C5 R9C5
+zone green solid R8C1
+arrow R8C1 8 -> R1C1 7 blue label 1
+arrow R1C1 7 -> R3C5 7 blue label 2 hidden
+arrow R8C1 8 -> R8C5 4 violet label 3 hidden
+arrow R8C1 8 -> R5C1 6 orange label 4 hidden
+arrow R5C1 6 -> R9C2 6 orange label 5 hidden
+arrow R5C1 6 -> R2C7 6 orange label 6 hidden"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 6 before the answer as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7
+candidate R1C1 8
+candidate R1C5 1
+candidate R1C5 2
+candidate R1C5 7
+candidate R1C5 8
+candidate R1C6 1
+candidate R1C6 7
+candidate R1C6 9 underlined
+candidate R1C7 2 underlined
+candidate R1C7 8
+candidate R1C7 9 underlined
+candidate R1C8 1 underlined
+candidate R1C8 2
+candidate R2C1 3 underlined
+candidate R2C1 4 underlined
+candidate R2C1 8
+candidate R2C3 3 underlined
+candidate R2C3 8
+candidate R2C3 9 underlined
+candidate R2C5 1
+candidate R2C5 6 underlined
+candidate R2C5 8
+candidate R2C6 1
+candidate R2C6 8
+candidate R2C6 9 underlined
+candidate R2C7 6 underlined
+candidate R2C7 8
+candidate R2C7 9
+candidate R2C9 1 underlined
+candidate R2C9 4 underlined
+candidate R2C9 8
+candidate R2C9 9
+candidate R3C2 4 underlined
+candidate R3C2 7
+candidate R3C2 8
+candidate R3C3 7
+candidate R3C3 8
+candidate R3C3 9 underlined
+candidate R3C4 2
+candidate R3C4 6
+candidate R3C4 8
+candidate R3C5 2
+candidate R3C5 6
+candidate R3C5 7
+candidate R3C5 8
+candidate R3C8 2
+candidate R3C8 4 underlined
+candidate R3C8 6 underlined
+candidate R3C8 8
+candidate R3C9 2
+candidate R3C9 4
+candidate R3C9 8
+candidate R3C9 9 underlined
+candidate R4C2 3
+candidate R4C2 6
+candidate R4C2 7
+candidate R4C2 8
+candidate R4C3 3
+candidate R4C3 7
+candidate R4C3 8
+candidate R4C4 6 underlined
+candidate R4C4 8 underlined
+candidate R4C8 2 underlined
+candidate R4C8 3
+candidate R4C8 6
+candidate R4C8 8
+candidate R4C9 2 underlined
+candidate R4C9 7 underlined
+candidate R4C9 8
+candidate R5C1 3
+candidate R5C1 6 underlined
+candidate R5C1 8
+candidate R5C2 3
+candidate R5C2 6
+candidate R5C2 8
+candidate R5C2 9 underlined
+candidate R5C7 3
+candidate R5C7 6 underlined
+candidate R5C7 8
+candidate R5C7 9
+candidate R5C8 3
+candidate R5C8 4 underlined
+candidate R5C8 6
+candidate R5C8 8
+candidate R5C9 4 underlined
+candidate R5C9 8
+candidate R5C9 9
+candidate R6C2 7 underlined
+candidate R6C2 9 underlined
+candidate R6C6 6 underlined
+candidate R6C6 8 underlined
+candidate R6C7 7 underlined
+candidate R6C7 9 underlined
+candidate R6C8 6 underlined
+candidate R6C8 8 underlined
+candidate R7C1 3
+candidate R7C1 4
+candidate R7C1 7
+candidate R7C1 8
+candidate R7C2 3
+candidate R7C2 4 underlined
+candidate R7C2 8
+candidate R7C5 1 underlined
+candidate R7C5 4 underlined
+candidate R7C5 7
+candidate R7C5 8
+candidate R7C6 1 underlined
+candidate R7C6 7
+candidate R7C6 8
+candidate R7C7 3
+candidate R7C7 7
+candidate R7C7 8
+candidate R8C1 3
+candidate R8C1 4 underlined
+candidate R8C1 6 underlined
+candidate R8C1 7
+candidate R8C1 8
+candidate R8C4 2
+candidate R8C4 3 underlined
+candidate R8C4 6
+candidate R8C4 8
+candidate R8C5 2
+candidate R8C5 4 underlined
+candidate R8C5 6
+candidate R8C5 7
+candidate R8C5 8
+candidate R8C6 6 underlined
+candidate R8C6 7
+candidate R8C6 8
+candidate R8C7 2 underlined
+candidate R8C7 3
+candidate R8C7 7
+candidate R8C7 8
+candidate R8C9 2
+candidate R8C9 7
+candidate R8C9 8
+candidate R9C2 3
+candidate R9C2 6 underlined
+candidate R9C2 7
+candidate R9C2 8
+candidate R9C3 3
+candidate R9C3 7
+candidate R9C3 8
+candidate R9C4 2
+candidate R9C4 3 underlined
+candidate R9C4 6
+candidate R9C4 8
+candidate R9C5 2
+candidate R9C5 6
+candidate R9C5 7
+candidate R9C5 8
+candidate R9C8 1 underlined
+candidate R9C8 2
+candidate R9C8 3
+candidate R9C8 8
+candidate R9C9 1 underlined
+candidate R9C9 7
+candidate R9C9 8
+zone red-hatched dashed R1C5 R2C5 R3C5 R4C5 R5C5 R6C5 R7C5 R8C5 R9C5
+zone green solid R8C1"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 6 with the whole solution as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 circled(blue)
+candidate R1C1 8 struck(red)
+candidate R1C5 1
+candidate R1C5 2
+candidate R1C5 7 struck(red)
+candidate R1C5 8
+candidate R1C6 1 greyed
+candidate R1C6 7 greyed struck(red)
+candidate R1C6 9 underlined greyed
+candidate R1C7 2 underlined greyed
+candidate R1C7 8 greyed
+candidate R1C7 9 underlined greyed
+candidate R1C8 1 underlined greyed
+candidate R1C8 2 greyed
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed struck(red)
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1
+candidate R2C5 6 underlined struck(red) framed(red)
+candidate R2C5 8
+candidate R2C6 1 greyed
+candidate R2C6 8 greyed
+candidate R2C6 9 underlined greyed
+candidate R2C7 6 underlined circled(orange)
+candidate R2C7 8 struck(red)
+candidate R2C7 9 struck(red)
+candidate R2C9 1 underlined greyed
+candidate R2C9 4 underlined greyed
+candidate R2C9 8 greyed
+candidate R2C9 9 greyed
+candidate R3C2 4 underlined
+candidate R3C2 7 struck(red)
+candidate R3C2 8
+candidate R3C3 7 struck(red)
+candidate R3C3 8
+candidate R3C3 9 underlined
+candidate R3C4 2 greyed
+candidate R3C4 6 greyed
+candidate R3C4 8 greyed
+candidate R3C5 2 struck(red)
+candidate R3C5 6 struck(red) framed(red)
+candidate R3C5 7 circled(blue)
+candidate R3C5 8 struck(red)
+candidate R3C8 2 greyed
+candidate R3C8 4 underlined greyed
+candidate R3C8 6 underlined greyed struck(red)
+candidate R3C8 8 greyed
+candidate R3C9 2 greyed
+candidate R3C9 4 greyed
+candidate R3C9 8 greyed
+candidate R3C9 9 underlined greyed
+candidate R4C2 3
+candidate R4C2 6 struck(red)
+candidate R4C2 7
+candidate R4C2 8
+candidate R4C3 3 greyed
+candidate R4C3 7 greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 7 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 struck(red)
+candidate R5C1 6 underlined circled(orange)
+candidate R5C1 8 struck(red)
+candidate R5C2 3
+candidate R5C2 6 struck(red)
+candidate R5C2 8
+candidate R5C2 9 underlined
+candidate R5C7 3
+candidate R5C7 6 underlined struck(red)
+candidate R5C7 8
+candidate R5C7 9
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed struck(red)
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 greyed
+candidate R6C2 7 underlined greyed
+candidate R6C2 9 underlined greyed
+candidate R6C6 6 underlined greyed
+candidate R6C6 8 underlined greyed
+candidate R6C7 7 underlined greyed
+candidate R6C7 9 underlined greyed
+candidate R6C8 6 underlined greyed
+candidate R6C8 8 underlined greyed
+candidate R7C1 3 greyed
+candidate R7C1 4 greyed
+candidate R7C1 7 greyed struck(red)
+candidate R7C1 8 greyed struck(red)
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 8 greyed struck(red)
+candidate R7C5 1 underlined
+candidate R7C5 4 underlined struck(red)
+candidate R7C5 7 struck(red)
+candidate R7C5 8
+candidate R7C6 1 underlined greyed
+candidate R7C6 7 greyed
+candidate R7C6 8 greyed
+candidate R7C7 3 greyed
+candidate R7C7 7 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3 struck(red)
+candidate R8C1 4 underlined struck(red)
+candidate R8C1 6 underlined struck(red)
+candidate R8C1 7 struck(red)
+candidate R8C1 8 circled(green bold)
+candidate R8C4 2 greyed
+candidate R8C4 3 underlined greyed
+candidate R8C4 6 greyed
+candidate R8C4 8 greyed struck(red)
+candidate R8C5 2 struck(red)
+candidate R8C5 4 underlined circled(violet)
+candidate R8C5 6 struck(red) framed(red)
+candidate R8C5 7 struck(red)
+candidate R8C5 8 struck(red)
+candidate R8C6 6 underlined greyed
+candidate R8C6 7 greyed
+candidate R8C6 8 greyed struck(red)
+candidate R8C7 2 underlined greyed
+candidate R8C7 3 greyed
+candidate R8C7 7 greyed
+candidate R8C7 8 greyed struck(red)
+candidate R8C9 2 greyed
+candidate R8C9 7 greyed
+candidate R8C9 8 greyed struck(red)
+candidate R9C2 3 struck(red)
+candidate R9C2 6 underlined circled(orange)
+candidate R9C2 7 struck(red)
+candidate R9C2 8 struck(red)
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed struck(red)
+candidate R9C4 2 greyed
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed struck(red)
+candidate R9C4 8 greyed
+candidate R9C5 2
+candidate R9C5 6 struck(red) framed(red)
+candidate R9C5 7 struck(red)
+candidate R9C5 8
+candidate R9C8 1 underlined greyed
+candidate R9C8 2 greyed
+candidate R9C8 3 greyed
+candidate R9C8 8 greyed
+candidate R9C9 1 underlined greyed
+candidate R9C9 7 greyed
+candidate R9C9 8 greyed
+zone red-hatched dashed R1C5 R2C5 R3C5 R4C5 R5C5 R6C5 R7C5 R8C5 R9C5
+zone green solid R8C1
+arrow R8C1 8 -> R1C1 7 blue label 1
+arrow R1C1 7 -> R3C5 7 blue label 2
+arrow R8C1 8 -> R8C5 4 violet label 3
+arrow R8C1 8 -> R5C1 6 orange label 4
+arrow R5C1 6 -> R9C2 6 orange label 5
+arrow R5C1 6 -> R2C7 6 orange label 6"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 11 at step 1 as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C2 9
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C7 7
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 circled(blue hidden)
+candidate R1C1 8 struck(red hidden)
+candidate R1C5 1 struck(red)
+candidate R1C5 2 struck(red)
+candidate R1C5 7 struck(red hidden)
+candidate R1C5 8 circled(blue hidden)
+candidate R1C6 1 struck(red)
+candidate R1C6 7 struck(red hidden)
+candidate R1C6 9 underlined circled(violet hidden)
+candidate R1C7 2 underlined circled(green bold)
+candidate R1C7 8 struck(red)
+candidate R1C7 9 underlined struck(red)
+candidate R1C8 1 underlined circled(blue)
+candidate R1C8 2 struck(red)
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1 struck(red hidden)
+candidate R2C5 6 underlined circled(blue hidden)
+candidate R2C5 8 struck(red hidden)
+candidate R2C6 1 circled(blue hidden)
+candidate R2C6 8 struck(red hidden)
+candidate R2C6 9 underlined struck(red hidden)
+candidate R2C7 6 underlined greyed struck(red hidden)
+candidate R2C7 8 greyed
+candidate R2C7 9 greyed
+candidate R2C9 1 underlined greyed struck(red)
+candidate R2C9 4 underlined greyed
+candidate R2C9 8 greyed
+candidate R2C9 9 greyed
+candidate R3C2 4 underlined greyed
+candidate R3C2 7 greyed struck(red hidden)
+candidate R3C2 8 greyed
+candidate R3C3 7 greyed struck(red hidden)
+candidate R3C3 8 greyed
+candidate R3C3 9 underlined greyed
+candidate R3C4 2 struck(red hidden) framed(red hidden)
+candidate R3C4 6 struck(red hidden) framed(red hidden)
+candidate R3C4 8 struck(red hidden) framed(red hidden)
+candidate R3C5 2 greyed
+candidate R3C5 6 greyed struck(red hidden)
+candidate R3C5 7 greyed
+candidate R3C5 8 greyed struck(red hidden)
+candidate R3C8 2 greyed struck(red)
+candidate R3C8 4 underlined greyed
+candidate R3C8 6 underlined greyed
+candidate R3C8 8 greyed
+candidate R3C9 2 underlined greyed struck(red)
+candidate R3C9 4 greyed
+candidate R3C9 8 greyed
+candidate R3C9 9 underlined greyed
+candidate R4C2 3 greyed
+candidate R4C2 6 greyed
+candidate R4C2 7 underlined greyed
+candidate R4C2 8 greyed
+candidate R4C3 3 greyed
+candidate R4C3 7 underlined greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 greyed
+candidate R5C1 6 underlined greyed
+candidate R5C1 8 greyed
+candidate R5C2 3 greyed
+candidate R5C2 6 greyed
+candidate R5C2 8 greyed
+candidate R5C7 3 greyed
+candidate R5C7 6 underlined greyed
+candidate R5C7 8 greyed
+candidate R5C7 9 underlined greyed
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 underlined greyed
+candidate R6C6 6 underlined greyed
+candidate R6C6 8 underlined greyed
+candidate R6C8 6 underlined greyed
+candidate R6C8 8 underlined greyed
+candidate R7C1 3
+candidate R7C1 4
+candidate R7C1 7 struck(red hidden)
+candidate R7C1 8
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 8 greyed
+candidate R7C5 1 underlined circled(blue hidden)
+candidate R7C5 4 underlined struck(red hidden)
+candidate R7C5 7 struck(red hidden)
+candidate R7C5 8 struck(red hidden)
+candidate R7C6 1 underlined struck(red hidden)
+candidate R7C6 7 circled(blue hidden)
+candidate R7C6 8 struck(red hidden)
+candidate R7C7 3 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3
+candidate R8C1 4 underlined struck(red hidden)
+candidate R8C1 6 underlined
+candidate R8C1 7 struck(red hidden)
+candidate R8C4 2 circled(blue hidden)
+candidate R8C4 3 underlined struck(red hidden)
+candidate R8C4 6 struck(red hidden)
+candidate R8C4 8 struck(red hidden)
+candidate R8C5 2 struck(red hidden)
+candidate R8C5 4 underlined circled(blue hidden)
+candidate R8C5 6 struck(red hidden)
+candidate R8C5 8 struck(red hidden)
+candidate R8C6 6 underlined
+candidate R8C6 7 struck(red hidden)
+candidate R8C6 8
+candidate R8C7 2 underlined struck(red)
+candidate R8C7 3
+candidate R8C7 8
+candidate R8C9 7 underlined circled(blue hidden)
+candidate R8C9 8 struck(red hidden)
+candidate R9C2 3 greyed
+candidate R9C2 6 underlined greyed
+candidate R9C2 7 greyed
+candidate R9C2 8 greyed
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed
+candidate R9C4 2 greyed struck(red hidden)
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed
+candidate R9C4 8 greyed
+candidate R9C5 2 greyed struck(red hidden)
+candidate R9C5 6 greyed struck(red hidden)
+candidate R9C5 7 greyed struck(red hidden)
+candidate R9C5 8 greyed struck(red hidden)
+candidate R9C8 1 underlined struck(red)
+candidate R9C8 2 underlined
+candidate R9C8 3
+candidate R9C8 8
+candidate R9C9 1 underlined circled(blue hidden)
+candidate R9C9 7 underlined struck(red hidden)
+candidate R9C9 8 struck(red hidden)
+zone red-hatched solid R3C4
+zone green solid R1C7
+arrow R1C7 2 -> R1C8 1 blue label 1
+arrow R1C7 2 -> R1C6 9 violet label 2 hidden
+arrow R1C8 1 -> R9C9 1 blue label 3 hidden
+arrow R9C9 1 -> R8C9 7 blue label 4 hidden
+arrow R8C9 7 -> R7C6 7 blue label 5 hidden
+arrow R7C6 7 -> R1C1 7 blue label 6 hidden
+arrow R1C1 7 -> R1C5 8 blue label 7 hidden
+arrow R1C5 8 -> R2C6 1 blue label 8 hidden
+arrow R2C6 1 -> R2C5 6 blue label 9 hidden
+arrow R7C6 7 -> R7C5 1 blue label 10 hidden
+arrow R7C5 1 -> R8C5 4 blue label 11 hidden
+arrow R8C5 4 -> R8C4 2 blue label 12 hidden"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 11 before the answer as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C2 9
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C7 7
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7
+candidate R1C1 8
+candidate R1C5 1
+candidate R1C5 2
+candidate R1C5 7
+candidate R1C5 8
+candidate R1C6 1
+candidate R1C6 7
+candidate R1C6 9 underlined
+candidate R1C7 2 underlined
+candidate R1C7 8
+candidate R1C7 9 underlined
+candidate R1C8 1 underlined
+candidate R1C8 2
+candidate R2C1 3 underlined
+candidate R2C1 4 underlined
+candidate R2C1 8
+candidate R2C3 3 underlined
+candidate R2C3 8
+candidate R2C3 9 underlined
+candidate R2C5 1
+candidate R2C5 6 underlined
+candidate R2C5 8
+candidate R2C6 1
+candidate R2C6 8
+candidate R2C6 9 underlined
+candidate R2C7 6 underlined
+candidate R2C7 8
+candidate R2C7 9
+candidate R2C9 1 underlined
+candidate R2C9 4 underlined
+candidate R2C9 8
+candidate R2C9 9
+candidate R3C2 4 underlined
+candidate R3C2 7
+candidate R3C2 8
+candidate R3C3 7
+candidate R3C3 8
+candidate R3C3 9 underlined
+candidate R3C4 2
+candidate R3C4 6
+candidate R3C4 8
+candidate R3C5 2
+candidate R3C5 6
+candidate R3C5 7
+candidate R3C5 8
+candidate R3C8 2
+candidate R3C8 4 underlined
+candidate R3C8 6 underlined
+candidate R3C8 8
+candidate R3C9 2 underlined
+candidate R3C9 4
+candidate R3C9 8
+candidate R3C9 9 underlined
+candidate R4C2 3
+candidate R4C2 6
+candidate R4C2 7 underlined
+candidate R4C2 8
+candidate R4C3 3
+candidate R4C3 7 underlined
+candidate R4C3 8
+candidate R4C4 6 underlined
+candidate R4C4 8 underlined
+candidate R4C8 2 underlined
+candidate R4C8 3
+candidate R4C8 6
+candidate R4C8 8
+candidate R4C9 2 underlined
+candidate R4C9 8
+candidate R5C1 3
+candidate R5C1 6 underlined
+candidate R5C1 8
+candidate R5C2 3
+candidate R5C2 6
+candidate R5C2 8
+candidate R5C7 3
+candidate R5C7 6 underlined
+candidate R5C7 8
+candidate R5C7 9 underlined
+candidate R5C8 3
+candidate R5C8 4 underlined
+candidate R5C8 6
+candidate R5C8 8
+candidate R5C9 4 underlined
+candidate R5C9 8
+candidate R5C9 9 underlined
+candidate R6C6 6 underlined
+candidate R6C6 8 underlined
+candidate R6C8 6 underlined
+candidate R6C8 8 underlined
+candidate R7C1 3
+candidate R7C1 4
+candidate R7C1 7
+candidate R7C1 8
+candidate R7C2 3
+candidate R7C2 4 underlined
+candidate R7C2 8
+candidate R7C5 1 underlined
+candidate R7C5 4 underlined
+candidate R7C5 7
+candidate R7C5 8
+candidate R7C6 1 underlined
+candidate R7C6 7
+candidate R7C6 8
+candidate R7C7 3
+candidate R7C7 8
+candidate R8C1 3
+candidate R8C1 4 underlined
+candidate R8C1 6 underlined
+candidate R8C1 7
+candidate R8C4 2
+candidate R8C4 3 underlined
+candidate R8C4 6
+candidate R8C4 8
+candidate R8C5 2
+candidate R8C5 4 underlined
+candidate R8C5 6
+candidate R8C5 8
+candidate R8C6 6 underlined
+candidate R8C6 7
+candidate R8C6 8
+candidate R8C7 2 underlined
+candidate R8C7 3
+candidate R8C7 8
+candidate R8C9 7 underlined
+candidate R8C9 8
+candidate R9C2 3
+candidate R9C2 6 underlined
+candidate R9C2 7
+candidate R9C2 8
+candidate R9C3 3
+candidate R9C3 7
+candidate R9C3 8
+candidate R9C4 2
+candidate R9C4 3 underlined
+candidate R9C4 6
+candidate R9C4 8
+candidate R9C5 2
+candidate R9C5 6
+candidate R9C5 7
+candidate R9C5 8
+candidate R9C8 1 underlined
+candidate R9C8 2 underlined
+candidate R9C8 3
+candidate R9C8 8
+candidate R9C9 1 underlined
+candidate R9C9 7 underlined
+candidate R9C9 8
+zone red-hatched solid R3C4
+zone green solid R1C7"
+`;
+
+exports[`exercise board drawing > of questions of the grid file > draws question 11 with the whole solution as before 1`] = `
+"digit R1C2 5
+digit R1C3 6
+digit R1C4 4
+digit R1C9 3
+digit R2C2 2
+digit R2C4 5
+digit R2C8 7
+digit R3C1 1
+digit R3C6 3
+digit R3C7 5
+digit R4C1 5
+digit R4C5 9
+digit R4C6 4
+digit R4C7 1
+digit R5C3 1
+digit R5C4 7
+digit R5C5 5
+digit R5C6 2
+digit R6C1 2
+digit R6C2 9
+digit R6C3 4
+digit R6C4 1
+digit R6C5 3
+digit R6C7 7
+digit R6C9 5
+digit R7C3 2
+digit R7C4 9
+digit R7C8 5
+digit R7C9 6
+digit R8C2 1
+digit R8C3 5
+digit R8C8 9
+digit R9C1 9
+digit R9C6 5
+digit R9C7 4
+candidate R1C1 7 circled(blue)
+candidate R1C1 8 struck(red)
+candidate R1C5 1 struck(red)
+candidate R1C5 2 struck(red)
+candidate R1C5 7 struck(red)
+candidate R1C5 8 circled(blue)
+candidate R1C6 1 struck(red)
+candidate R1C6 7 struck(red)
+candidate R1C6 9 underlined circled(violet)
+candidate R1C7 2 underlined circled(green bold)
+candidate R1C7 8 struck(red)
+candidate R1C7 9 underlined struck(red)
+candidate R1C8 1 underlined circled(blue)
+candidate R1C8 2 struck(red)
+candidate R2C1 3 underlined greyed
+candidate R2C1 4 underlined greyed
+candidate R2C1 8 greyed
+candidate R2C3 3 underlined greyed
+candidate R2C3 8 greyed
+candidate R2C3 9 underlined greyed
+candidate R2C5 1 struck(red)
+candidate R2C5 6 underlined circled(blue)
+candidate R2C5 8 struck(red)
+candidate R2C6 1 circled(blue)
+candidate R2C6 8 struck(red)
+candidate R2C6 9 underlined struck(red)
+candidate R2C7 6 underlined greyed struck(red)
+candidate R2C7 8 greyed
+candidate R2C7 9 greyed
+candidate R2C9 1 underlined greyed struck(red)
+candidate R2C9 4 underlined greyed
+candidate R2C9 8 greyed
+candidate R2C9 9 greyed
+candidate R3C2 4 underlined greyed
+candidate R3C2 7 greyed struck(red)
+candidate R3C2 8 greyed
+candidate R3C3 7 greyed struck(red)
+candidate R3C3 8 greyed
+candidate R3C3 9 underlined greyed
+candidate R3C4 2 struck(red) framed(red)
+candidate R3C4 6 struck(red) framed(red)
+candidate R3C4 8 struck(red) framed(red)
+candidate R3C5 2 greyed
+candidate R3C5 6 greyed struck(red)
+candidate R3C5 7 greyed
+candidate R3C5 8 greyed struck(red)
+candidate R3C8 2 greyed struck(red)
+candidate R3C8 4 underlined greyed
+candidate R3C8 6 underlined greyed
+candidate R3C8 8 greyed
+candidate R3C9 2 underlined greyed struck(red)
+candidate R3C9 4 greyed
+candidate R3C9 8 greyed
+candidate R3C9 9 underlined greyed
+candidate R4C2 3 greyed
+candidate R4C2 6 greyed
+candidate R4C2 7 underlined greyed
+candidate R4C2 8 greyed
+candidate R4C3 3 greyed
+candidate R4C3 7 underlined greyed
+candidate R4C3 8 greyed
+candidate R4C4 6 underlined greyed
+candidate R4C4 8 underlined greyed
+candidate R4C8 2 underlined greyed
+candidate R4C8 3 greyed
+candidate R4C8 6 greyed
+candidate R4C8 8 greyed
+candidate R4C9 2 underlined greyed
+candidate R4C9 8 greyed
+candidate R5C1 3 greyed
+candidate R5C1 6 underlined greyed
+candidate R5C1 8 greyed
+candidate R5C2 3 greyed
+candidate R5C2 6 greyed
+candidate R5C2 8 greyed
+candidate R5C7 3 greyed
+candidate R5C7 6 underlined greyed
+candidate R5C7 8 greyed
+candidate R5C7 9 underlined greyed
+candidate R5C8 3 greyed
+candidate R5C8 4 underlined greyed
+candidate R5C8 6 greyed
+candidate R5C8 8 greyed
+candidate R5C9 4 underlined greyed
+candidate R5C9 8 greyed
+candidate R5C9 9 underlined greyed
+candidate R6C6 6 underlined greyed
+candidate R6C6 8 underlined greyed
+candidate R6C8 6 underlined greyed
+candidate R6C8 8 underlined greyed
+candidate R7C1 3
+candidate R7C1 4
+candidate R7C1 7 struck(red)
+candidate R7C1 8
+candidate R7C2 3 greyed
+candidate R7C2 4 underlined greyed
+candidate R7C2 8 greyed
+candidate R7C5 1 underlined circled(blue)
+candidate R7C5 4 underlined struck(red)
+candidate R7C5 7 struck(red)
+candidate R7C5 8 struck(red)
+candidate R7C6 1 underlined struck(red)
+candidate R7C6 7 circled(blue)
+candidate R7C6 8 struck(red)
+candidate R7C7 3 greyed
+candidate R7C7 8 greyed
+candidate R8C1 3
+candidate R8C1 4 underlined struck(red)
+candidate R8C1 6 underlined
+candidate R8C1 7 struck(red)
+candidate R8C4 2 circled(blue)
+candidate R8C4 3 underlined struck(red)
+candidate R8C4 6 struck(red)
+candidate R8C4 8 struck(red)
+candidate R8C5 2 struck(red)
+candidate R8C5 4 underlined circled(blue)
+candidate R8C5 6 struck(red)
+candidate R8C5 8 struck(red)
+candidate R8C6 6 underlined
+candidate R8C6 7 struck(red)
+candidate R8C6 8
+candidate R8C7 2 underlined struck(red)
+candidate R8C7 3
+candidate R8C7 8
+candidate R8C9 7 underlined circled(blue)
+candidate R8C9 8 struck(red)
+candidate R9C2 3 greyed
+candidate R9C2 6 underlined greyed
+candidate R9C2 7 greyed
+candidate R9C2 8 greyed
+candidate R9C3 3 greyed
+candidate R9C3 7 greyed
+candidate R9C3 8 greyed
+candidate R9C4 2 greyed struck(red)
+candidate R9C4 3 underlined greyed
+candidate R9C4 6 greyed
+candidate R9C4 8 greyed
+candidate R9C5 2 greyed struck(red)
+candidate R9C5 6 greyed struck(red)
+candidate R9C5 7 greyed struck(red)
+candidate R9C5 8 greyed struck(red)
+candidate R9C8 1 underlined struck(red)
+candidate R9C8 2 underlined
+candidate R9C8 3
+candidate R9C8 8
+candidate R9C9 1 underlined circled(blue)
+candidate R9C9 7 underlined struck(red)
+candidate R9C9 8 struck(red)
+zone red-hatched solid R3C4
+zone green solid R1C7
+arrow R1C7 2 -> R1C8 1 blue label 1
+arrow R1C7 2 -> R1C6 9 violet label 2
+arrow R1C8 1 -> R9C9 1 blue label 3
+arrow R9C9 1 -> R8C9 7 blue label 4
+arrow R8C9 7 -> R7C6 7 blue label 5
+arrow R7C6 7 -> R1C1 7 blue label 6
+arrow R1C1 7 -> R1C5 8 blue label 7
+arrow R1C5 8 -> R2C6 1 blue label 8
+arrow R2C6 1 -> R2C5 6 blue label 9
+arrow R7C6 7 -> R7C5 1 blue label 10
+arrow R7C5 1 -> R8C5 4 blue label 11
+arrow R8C5 4 -> R8C4 2 blue label 12"
+`;

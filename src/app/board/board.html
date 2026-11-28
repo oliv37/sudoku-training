@@ -8,13 +8,13 @@
       patternUnits="userSpaceOnUse"
       patternTransform="rotate(45)"
     >
-      <rect width="14" height="14" [attr.fill]="theme.badBg" opacity="0.55" />
+      <rect width="14" height="14" [attr.fill]="hatchBackground" opacity="0.55" />
       <line
         x1="0"
         y1="0"
         x2="0"
         y2="14"
-        [attr.stroke]="theme.bad"
+        [attr.stroke]="hatchLine"
         stroke-width="2.2"
         opacity="0.55"
       />
@@ -30,16 +30,9 @@
   />
 
   <g appBoardGridLines [lines]="boardScene().lines"></g>
-  <!-- Question marks, drawn over the grid lines (their backgrounds keep the lines visible) -->
-  @if (boardScene().redZone; as redZone) {
-    <g appBoardRedZone [redZone]="redZone" [hatchUrl]="hatchUrl"></g>
-  }
-  @if (boardScene().start; as start) {
-    <g appBoardStartCell [start]="start"></g>
-  }
-  <g appBoardValues [values]="boardScene().values"></g>
+  <!-- Zones, drawn over the grid lines (their backgrounds keep the lines visible) -->
+  <g appBoardZones [zones]="boardScene().zones" [hatchUrl]="hatchUrl"></g>
+  <g appBoardDigits [digits]="boardScene().digits"></g>
   <g appBoardCandidates [candidates]="boardScene().candidates"></g>
-  @if (shownSolutionScene(); as scene) {
-    <g appBoardSolutionDiagram [scene]="scene"></g>
-  }
+  <g appBoardArrows [arrows]="arrowsScene().arrows" [badges]="arrowsScene().badges"></g>
 </svg>

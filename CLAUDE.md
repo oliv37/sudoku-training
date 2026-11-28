@@ -12,7 +12,7 @@ Today's exercise type: find which candidate of the green start cell must be elim
 
 - Do not make design, product or code-structure choices on your own (naming, where state lives, how to split a component…): when something is ambiguous, several options are reasonable, or you are unsure what the user prefers, ask first.
 - Commits: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`…), subject line only. Commit only when the user explicitly asks, for that change: the user reviews all the code first. A plan that mentions commits, or a "go" on that plan, is not a commit request.
-- Linting: run `pnpm lint` before each commit, or when the user asks; not after every edit. Fix what it reports (ask first if a fix changes behavior or a rule seems wrong).
+- Linting and tests: run `pnpm lint` and `pnpm test` before each commit, or when the user asks; not after every edit. Fix what they report (ask first if a fix changes behavior or a rule seems wrong).
 - Formatting: run Prettier (`pnpm exec prettier --write <files>`) on every file you create or edit, before finishing. The user's editor formats on save with the project's `.prettierrc`, so unformatted files show up as unexpected changes. `.prettierignore` excludes the exercise data and the reference HTML.
 
 ## Code readability (priority)
@@ -26,8 +26,8 @@ The code must be easy to understand for a human reading it. Prefer more lines of
 - Break long expressions and conditions into named intermediate variables or helper functions (e.g. `isExpectedAnswer(digit)` rather than a raw comparison inside a bigger condition).
 - Avoid dense one-liners (`flatMap` + ternary + spread in one expression…) when a short loop or two steps read better.
 - Comments explain _why_ (intent, constraints, non-obvious choices), not what the code already says.
-- Functions are named as actions or relations (`highlightsOf`, `toCandidateButton`), values as nouns (`questionHighlights`). Never use a leading `_` just to avoid a name clash (`_` means private or unused).
-- No special value whose meaning must be guessed (e.g. `null` meaning "everything"): group the value with what it depends on (`BoardSolution` = frames + `shownStep`).
+- Functions are named as actions or relations (`boardDrawingOf`, `toCandidateButton`), values as nouns (`greyedCells`). Never use a leading `_` just to avoid a name clash (`_` means private or unused).
+- No special value whose meaning must be guessed (e.g. `null` meaning "everything"): group the value with what it depends on (`ShownSolution` = frames + `shownStep`).
 
 ## Commands
 
@@ -40,13 +40,15 @@ The code must be easy to understand for a human reading it. Prefer more lines of
 
 - Static site generation: `outputMode: "static"`, every route is prerendered (`app.routes.server.ts`). No Node server in production; `main.server.ts` / `app.config.server.ts` are only used at build time.
 - Organized by domain, then by subject, then by nature; no type-based folders, no `shared/` unless really needed. File names in kebab-case, without a dotted type suffix (`board.ts`, `board-model.ts`, `exercise-store.ts`); only the Angular CLI files keep their usual names (`app.config.ts`, `main.server.ts`…).
-- Naming: every file, folder, class and selector of a domain starts with its name (`exercise…`, `board…`), so a search for it lists the whole domain. A component subfolder has the same name as its files; a sub-subject folder (`board-solution/`) prefixes its files with its own name. Names inside the code (`solutionSceneOf`…) are not prefixed. Exception: the store files go in `store/`, its features named after their function (`with-answer.ts`).
+- Naming: every file, folder, class and selector of a domain starts with its name (`exercise…`, `board…`), so a search for it lists the whole domain. A component subfolder has the same name as its files; a sub-subject folder (`exercise-solution/`) prefixes its files with its own name. Names inside the code (`candidateShapes`…) are not prefixed. Exception: the store files go in `store/`, its features named after their function (`with-answer.ts`).
 - Types: a `-model.ts` file holds only types, no functions. Every type, internal ones included, goes in the `-model.ts` next to the file that uses it (`x.ts` → `x-model.ts`), never in a computation file.
 - `src/app/pages/<page>/` — components loaded by a route, each lazy-loaded with `loadComponent`. Pages only load data: `Home` loads one grid file and renders `<app-exercise [exercise]>`.
-- `src/app/exercise/` — an exercise is the sequence of questions of one grid. `Exercise` lays out the screen (CSS grid on its host), connects its presentational children to `ExerciseStore` (`store/`, one `signalStoreFeature` per concern) and moves the focus; `exercise.html` holds every condition that shows or hides a part. Vocabulary: a "question" is one item of the exercise; "step" is reserved for the steps of a solution chain.
-- `src/app/board/` — reusable SVG board, knows nothing about exercises (its tests neither: they read the grid file without the exercise types). Inputs: `board`, `highlights` (question marks, fixed for a question), `solution` (frames + step drawn, kept apart so the animation only recomputes the step filter). `Board` has no store: it holds no state. Everything about the solution is in `board-solution/`.
-  - Geometry: pure functions (`geometry/`, `board-solution/geometry/`) compute the scene, the templates render it with `@for` / `@if`; no `ElementRef`, no imperative DOM. It is a port of `renderCard`: keep the algorithm as is (same constants, same operations in the same order). The arrows snapshot (`board-solution-arrows.spec.ts`) proves it: never regenerate it to make a test pass.
+- `src/app/exercise/` — an exercise is the sequence of questions of one grid. `Exercise` lays out the screen (CSS grid on its host), connects its presentational children to `ExerciseStore` (`store/`, one `signalStoreFeature` per concern) and moves the focus; `exercise.html` holds every condition that shows or hides a part. Vocabulary: a "question" is one item of the exercise; "step" is reserved for the steps of a solution chain. Its board: `exercise-board/exercise-board-drawing.ts` turns a question and its shown solution into a `BoardDrawing` (elements of the steps not shown yet are `hidden`); reading the solution (frames, branches, involved cells) is in `exercise-solution/`.
+- `src/app/board/` — generic SVG board: knows nothing about exercises, solutions or steps (its tests neither). Inputs: `drawing` (`BoardDrawing`, in sudoku terms: digits, candidates and their marks — underlined, greyed, struck, circled, framed —, zones, arrows) and `label`. An element with `hidden` keeps its place (still an obstacle for the arrows) but is not drawn. A new kind of mark, zone or color is a new property or tone of `BoardDrawing`, not a new input. `Board` has no store: it holds no state.
+  - Geometry: pure functions (`geometry/`, `board-arrows/geometry/`) compute the scene, the templates render it with `@for` / `@if`; no `ElementRef`, no imperative DOM. It is a port of `renderCard`: keep the algorithm as is (same constants, same operations in the same order). The arrows snapshot (`exercise-board-arrows.spec.ts`, from a question to the board scene) proves it: never regenerate it to make a test pass.
+  - Rendering snapshots: `board.spec.ts` fixes the SVG rendered for a drawing using every kind of element (DOM order, so the painting order too); `exercise-board-drawing.spec.ts` fixes the drawing of real questions. Update them only for an intended visual change, after reading the diff; a change in a refactor is a regression.
   - SVG layers: `board.html` lists them in drawing order (later elements are painted on top), one presentational component per layer. SVG has no `z-index`: a background drawn over lines or digits uses `mix-blend-multiply`, so one shape stays in one component. A custom element is not drawn inside an `<svg>`, so a layer is an attribute selector on a `<g>` (`g[appBoardGridLines]`, allowed by ESLint in `src/app/board/` only), and its template prefixes its top-level elements with `svg:` (otherwise Angular creates HTML elements, silently not drawn).
+- Test data shared between spec files goes in `<domain>/testing/<domain>-fixtures.ts`, excluded from the app build (`tsconfig.app.json`).
 - Vocabulary: "grid" means a magazine puzzle (a JSON file with its questions, route `/grid/:nom`); "board" means the 9×9 drawing.
 
 ## Data
@@ -112,4 +114,4 @@ Project choices on top of current Angular practice (Angular 22, signals, standal
 ## Styling
 
 - Tailwind utility classes in templates; no per-component CSS files.
-- Theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values; the SVG board keeps its colors in `THEME` (`board/board-theme.ts`).
+- Theme tokens from `src/styles.css` (colors, fonts) instead of hard-coded values; the SVG board keeps its colors in `THEME` and the named tones `TONE_COLORS` / `TONE_BACKGROUNDS` (`board/board-theme.ts`).

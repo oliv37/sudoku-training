@@ -8,8 +8,8 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { BoardSolution, Frame } from '../../board/board-solution/board-solution-model';
-import { lastStep, solutionSteps } from '../../board/board-solution/board-solution';
+import { ShownSolution, Frame } from '../exercise-solution/exercise-solution-model';
+import { lastStep, solutionSteps } from '../exercise-solution/exercise-solution';
 
 /** Delay between two steps of the solution animation. */
 const STEP_DELAY_MS = 600;
@@ -50,7 +50,7 @@ export function withSolutionSteps() {
 
     withComputed(({ solution, shownStep, animating }) => ({
       /** The solution as the board draws it: its frames and the step reached; null = nothing drawn. */
-      drawnSolution: computed((): BoardSolution | null => {
+      drawnSolution: computed((): ShownSolution | null => {
         const frames = solution();
         const step = shownStep();
         if (frames === null || step === null) {

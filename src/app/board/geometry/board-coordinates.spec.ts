@@ -9,7 +9,7 @@ import {
   cellTop,
   cellsRect,
 } from './board-coordinates';
-import { boxCells, rowCells } from '../board-test-data';
+import { boxCells, rowCells } from '../testing/board-fixtures';
 
 describe('board coordinates', () => {
   describe('grid', () => {

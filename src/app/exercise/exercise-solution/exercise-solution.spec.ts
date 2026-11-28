@@ -1,10 +1,10 @@
-import { Cell } from '../board-model';
-import { BRANCH_COLORS } from '../board-theme';
-import { branchesOf, involvedCellsOf, lastStep, solutionSteps } from './board-solution';
-import { Frame } from './board-solution-model';
-import { boardWith, contradiction, forced, hypothesis } from '../board-test-data';
+import { Cell } from '../../board/board-model';
+import { toneColor } from '../../board/board-theme';
+import { contradiction, forced, hypothesis, questionWith } from '../testing/exercise-fixtures';
+import { branchesOf, involvedCellsOf, lastStep, solutionSteps } from './exercise-solution';
+import { Frame } from './exercise-solution-model';
 
-describe('board solution', () => {
+describe('exercise solution', () => {
   describe('lastStep', () => {
     it('is the last forced placement, the frame before the contradiction', () => {
       const frames = [
@@ -54,7 +54,8 @@ describe('board solution', () => {
     });
 
     it('numbers the steps with the color of their branch', () => {
-      const [firstBranch, secondBranch] = BRANCH_COLORS;
+      const firstBranch = toneColor('blue');
+      const secondBranch = toneColor('violet');
       expect(solutionSteps(frames)).toEqual([
         { step: 1, color: firstBranch },
         { step: 2, color: firstBranch },
@@ -67,16 +68,16 @@ describe('board solution', () => {
 
   describe('involved cells', () => {
     it('are the red zone and the cells of the chain', () => {
-      const board = boardWith({ candidates: {} });
+      const question = questionWith({ candidates: {} });
       const frames = [hypothesis([0, 0, 5]), forced([1, 1, 2], 0), contradiction()];
       const redZone: Cell[] = [[8, 8]];
 
-      expect(involvedCellsOf(board, frames, redZone)).toEqual(new Set(['8,8', '0,0', '1,1']));
+      expect(involvedCellsOf(question, frames, redZone)).toEqual(new Set(['8,8', '0,0', '1,1']));
     });
 
     it('include, for a hidden single in a row, the cells of the row that still hold the digit', () => {
       // 7 is forced in R2C5 because no other cell of row 2 can hold it.
-      const board = boardWith({
+      const question = questionWith({
         candidates: { '1,4': [7, 8], '1,6': [2, 7], '1,8': [3], '2,4': [7] },
       });
       const frames = [
@@ -85,29 +86,29 @@ describe('board solution', () => {
         contradiction(),
       ];
 
-      expect(involvedCellsOf(board, frames, [])).toEqual(new Set(['0,0', '1,4', '1,6']));
+      expect(involvedCellsOf(question, frames, [])).toEqual(new Set(['0,0', '1,4', '1,6']));
     });
 
     it('include, for a hidden single in a column, the cells of the column that still hold the digit', () => {
-      const board = boardWith({ candidates: { '2,4': [9], '6,4': [1, 9], '6,5': [9] } });
+      const question = questionWith({ candidates: { '2,4': [9], '6,4': [1, 9], '6,5': [9] } });
       const frames = [
         hypothesis([0, 0, 5]),
         forced([2, 4, 9], 0, [], 'caché colonne 5'),
         contradiction(),
       ];
 
-      expect(involvedCellsOf(board, frames, [])).toEqual(new Set(['0,0', '2,4', '6,4']));
+      expect(involvedCellsOf(question, frames, [])).toEqual(new Set(['0,0', '2,4', '6,4']));
     });
 
     it('include, for a hidden single in a box, the cells of the box that still hold the digit', () => {
-      const board = boardWith({ candidates: { '6,6': [4], '8,8': [4, 6], '5,8': [4] } });
+      const question = questionWith({ candidates: { '6,6': [4], '8,8': [4, 6], '5,8': [4] } });
       const frames = [
         hypothesis([0, 0, 5]),
         forced([7, 7, 4], 0, [], 'caché bloc 9'),
         contradiction(),
       ];
 
-      expect(involvedCellsOf(board, frames, [])).toEqual(new Set(['0,0', '7,7', '6,6', '8,8']));
+      expect(involvedCellsOf(question, frames, [])).toEqual(new Set(['0,0', '7,7', '6,6', '8,8']));
     });
   });
 });
