@@ -1,4 +1,4 @@
-/** Types used while building the board drawing of a question (exercise-board-drawing.ts). */
+/** Types used while building the solution part of the board drawing (exercise-board-solution-drawing.ts). */
 import {
   CandidateCircle,
   CandidateFrame,
