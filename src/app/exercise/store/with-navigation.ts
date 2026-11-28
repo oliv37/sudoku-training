@@ -15,7 +15,7 @@ interface NavigationState {
    * (the store is created before Angular sets the inputs).
    */
   exercise: ExerciseData | null;
-  /** Index of the current question in `exercise.exos` (0 = first question). */
+  /** Index of the current question in `exercise.questions` (0 = first question). */
   questionIndex: number;
 }
 
@@ -35,7 +35,7 @@ export function withNavigation() {
         if (current === null) {
           return 0;
         }
-        return current.exos.length;
+        return current.questions.length;
       });
 
       /** Name of the exercise (its grid date), shown in the navigation. */
@@ -44,7 +44,7 @@ export function withNavigation() {
         if (current === null) {
           return '';
         }
-        return current.nom;
+        return current.name;
       });
 
       const question = computed((): ExerciseQuestionData | null => {
@@ -52,7 +52,7 @@ export function withNavigation() {
         if (current === null) {
           return null;
         }
-        return current.exos[questionIndex()];
+        return current.questions[questionIndex()];
       });
 
       /** Number of the current question, as shown to the user (1 = first question). */

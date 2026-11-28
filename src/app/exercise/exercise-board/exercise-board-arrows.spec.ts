@@ -7,18 +7,17 @@ import gridFile from '../../../../public/data/exercices-2026-11-14.json';
 import { arrowsSceneOf } from '../../board/board-arrows/geometry/board-arrows-scene';
 import { BoardDrawing } from '../../board/board-model';
 import { lastStep } from '../exercise-solution/exercise-solution';
-import { ExerciseData, ExerciseQuestionData } from '../exercise-model';
+import { ExerciseQuestionData } from '../exercise-model';
+import { parseExerciseFile } from '../exercise-file/exercise-file';
 import { boardDrawingOf } from './exercise-board-drawing';
 
-// TypeScript infers a literal type from the JSON content (each question its own `cands` keys),
-// which does not match `ExerciseData` directly.
-const questions = (gridFile as unknown as ExerciseData).exos;
+const questions = parseExerciseFile(gridFile).questions;
 
 /** The drawing of a question with its whole solution shown. */
 function wholeSolutionDrawingOf(question: ExerciseQuestionData): BoardDrawing {
   return boardDrawingOf(question, {
-    frames: question.frames,
-    shownStep: lastStep(question.frames),
+    frames: question.solution,
+    shownStep: lastStep(question.solution),
   });
 }
 
@@ -64,7 +63,8 @@ describe('board solution arrows', () => {
     // Snapshot of every arrow and badge of the 20 questions of the 2026-11-14 grid, taken from
     // code checked against `renderCard` (the scene snapshot taken before the refactor). Never
     // update it to make a test pass: if it differs, the routing changed.
-    it.each(questions.map((question) => [question.coup, question] as const))(
+    // Questions are numbered from 1, in the order of the file.
+    it.each(questions.map((question, index) => [index + 1, question] as const))(
       'places the arrows of question %i as before',
       (_questionNumber, question) => {
         expect(inSnapshotShape(question)).toMatchSnapshot();

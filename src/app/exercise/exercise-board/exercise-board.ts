@@ -40,8 +40,8 @@ export class ExerciseBoard {
   /** Description of the board for screen readers. */
   protected readonly label = computed(() => {
     const question = this.question();
-    const startCell = cellName(question.depart);
-    const label = `Sudoku grid, question ${this.questionNumber()}. Green start cell ${startCell}, red zone ${question.arrivee.nom}.`;
+    const startCell = cellName(question.startCell);
+    const label = `Sudoku grid, question ${this.questionNumber()}. Green start cell ${startCell}, red zone ${question.redZone.name}.`;
     if (this.solution() === null) {
       return label;
     }

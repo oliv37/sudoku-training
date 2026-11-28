@@ -80,7 +80,7 @@ export function withAnswer() {
         if (current === null || !answered()) {
           return null;
         }
-        return acceptedFrames() ?? current.frames;
+        return acceptedFrames() ?? current.solution;
       });
 
       const candidates = computed((): ExerciseCandidate[] => {
@@ -90,10 +90,14 @@ export function withAnswer() {
         }
         const chosen = answer();
         const isFound = found();
-        const digits = candidatesOf(current, current.depart);
+        const digits = candidatesOf(current, current.startCell);
         return digits.map((digit) => ({
           digit,
-          state: candidateState(digit, { chosen, found: isFound, expected: current.reponse }),
+          state: candidateState(digit, {
+            chosen,
+            found: isFound,
+            expected: current.expectedAnswer,
+          }),
         }));
       });
 
@@ -107,7 +111,7 @@ export function withAnswer() {
         return {
           found: isFound,
           explanation: explanationOf(current, eliminatedDigit(current, chosen, isFound)),
-          missedClue: isFound ? null : current.piste,
+          missedClue: isFound ? null : current.missedClue,
         };
       });
 
@@ -136,14 +140,14 @@ export function withAnswer() {
  * accepted answers), null otherwise.
  */
 function acceptedSolution(question: ExerciseQuestionData, digit: number): Frame[] | null {
-  if (digit === question.reponse) {
-    return question.frames;
+  if (digit === question.expectedAnswer) {
+    return question.solution;
   }
-  const otherAnswer = question.autresReponses.find((other) => other.v === digit);
+  const otherAnswer = question.otherAnswers.find((other) => other.answer === digit);
   if (otherAnswer === undefined) {
     return null;
   }
-  return otherAnswer.frames;
+  return otherAnswer.solution;
 }
 
 /** What the user answered, as needed to color each candidate button. */
@@ -152,7 +156,7 @@ interface AnswerSummary {
   chosen: number | null;
   /** Whether the chosen candidate is accepted. */
   found: boolean;
-  /** The expected answer (`reponse`). */
+  /** The expected answer (`question.expectedAnswer`). */
   expected: number;
 }
 
@@ -176,10 +180,10 @@ function eliminatedDigit(question: ExerciseQuestionData, chosen: number, found: 
   if (found) {
     return chosen;
   }
-  return question.reponse;
+  return question.expectedAnswer;
 }
 
 function explanationOf(question: ExerciseQuestionData, eliminated: number): string {
-  const startCell = cellName(question.depart);
-  return `${question.texte}, so ${startCell} ≠ ${eliminated}.`;
+  const startCell = cellName(question.startCell);
+  return `${question.contradiction}, so ${startCell} ≠ ${eliminated}.`;
 }

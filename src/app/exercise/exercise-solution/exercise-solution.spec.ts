@@ -1,6 +1,12 @@
 import { Cell } from '../../board/board-model';
 import { toneColor } from '../../board/board-theme';
-import { contradiction, forced, hypothesis, questionWith } from '../testing/exercise-fixtures';
+import {
+  contradiction,
+  forced,
+  hiddenSingleIn,
+  hypothesis,
+  questionWith,
+} from '../testing/exercise-fixtures';
 import { branchesOf, involvedCellsOf, lastStep, solutionSteps } from './exercise-solution';
 import { Frame } from './exercise-solution-model';
 
@@ -82,7 +88,7 @@ describe('exercise solution', () => {
       });
       const frames = [
         hypothesis([0, 0, 5]),
-        forced([1, 4, 7], 0, [], 'caché ligne 2'),
+        forced([1, 4, 7], 0, [], hiddenSingleIn('row', 1)),
         contradiction(),
       ];
 
@@ -93,7 +99,7 @@ describe('exercise solution', () => {
       const question = questionWith({ candidates: { '2,4': [9], '6,4': [1, 9], '6,5': [9] } });
       const frames = [
         hypothesis([0, 0, 5]),
-        forced([2, 4, 9], 0, [], 'caché colonne 5'),
+        forced([2, 4, 9], 0, [], hiddenSingleIn('column', 4)),
         contradiction(),
       ];
 
@@ -104,7 +110,7 @@ describe('exercise solution', () => {
       const question = questionWith({ candidates: { '6,6': [4], '8,8': [4, 6], '5,8': [4] } });
       const frames = [
         hypothesis([0, 0, 5]),
-        forced([7, 7, 4], 0, [], 'caché bloc 9'),
+        forced([7, 7, 4], 0, [], hiddenSingleIn('box', 8)),
         contradiction(),
       ];
 

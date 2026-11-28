@@ -13,7 +13,7 @@ import { Frame, Unit } from './exercise-solution-model';
 export function lastStep(frames: Frame[]): number {
   let last = 0;
   frames.forEach((frame, index) => {
-    if (frame.kind === 'dom') {
+    if (frame.kind === 'forced') {
       last = index;
     }
   });
@@ -29,14 +29,14 @@ export function branchesOf(frames: Frame[]): number[] {
   const branches: number[] = [];
   let nextBranch = 0;
   frames.forEach((frame, index) => {
-    if (frame.kind !== 'dom') {
+    if (frame.kind !== 'forced') {
       return;
     }
-    if (frame.cause === 0) {
+    if (frame.causeStep === 0) {
       branches[index] = nextBranch;
       nextBranch++;
     } else {
-      branches[index] = branches[frame.cause];
+      branches[index] = branches[frame.causeStep];
     }
   });
   return branches;
@@ -55,7 +55,7 @@ export function solutionSteps(frames: Frame[]): { step: number; color: string }[
   const branches = branchesOf(frames);
   const steps: { step: number; color: string }[] = [];
   frames.forEach((frame, index) => {
-    if (frame.kind === 'dom') {
+    if (frame.kind === 'forced') {
       steps.push({ step: index, color: toneColor(branchTone(branches[index])) });
     }
   });
@@ -76,10 +76,10 @@ export function involvedCellsOf(
     involvedCells.add(cellKey(r, c));
   }
   for (const frame of frames) {
-    if (frame.kind === 'bad') {
+    if (frame.kind === 'contradiction') {
       continue;
     }
-    const [r, c, digit] = frame.circle;
+    const [r, c, digit] = frame.placement;
     involvedCells.add(cellKey(r, c));
     for (const [unitRow, unitColumn] of cellsJustifyingHiddenSingle(question, frame, digit)) {
       involvedCells.add(cellKey(unitRow, unitColumn));
@@ -106,27 +106,21 @@ function cellsJustifyingHiddenSingle(
   );
 }
 
-/** The unit of a hidden single, read from its reason ("caché colonne 2"); null otherwise. */
+/** The unit of a hidden single; null for a naked single, the hypothesis or the contradiction. */
 function hiddenSingleUnitOf(frame: Frame): Unit | null {
-  if (frame.kind !== 'dom') {
+  if (frame.kind !== 'forced' || frame.reason.kind !== 'hidden-single') {
     return null;
   }
-  const match = /^caché (ligne|colonne|bloc) (\d)$/.exec(frame.why);
-  if (match === null) {
-    return null;
-  }
-  const kind = match[1] as Unit['kind'];
-  const index = Number(match[2]) - 1;
-  return { kind, index };
+  return frame.reason.unit;
 }
 
 function isInUnit([r, c]: Cell, unit: Unit): boolean {
   switch (unit.kind) {
-    case 'ligne':
+    case 'row':
       return r === unit.index;
-    case 'colonne':
+    case 'column':
       return c === unit.index;
-    case 'bloc':
+    case 'box':
       return boxOf([r, c]) === unit.index;
   }
 }

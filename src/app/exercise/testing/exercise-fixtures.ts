@@ -3,64 +3,85 @@
  * `*.spec.ts` files only.
  */
 import { Cell, CellDigit } from '../../board/board-model';
-import { Arrival, ExerciseQuestionData } from '../exercise-model';
-import { BadFrame, DomFrame, HypFrame } from '../exercise-solution/exercise-solution-model';
+import { ExerciseQuestionData, RedZone } from '../exercise-model';
+import {
+  ContradictionFrame,
+  ForcedFrame,
+  ForcedReason,
+  HypothesisFrame,
+  Unit,
+} from '../exercise-solution/exercise-solution-model';
 
 /**
- * A question with only the given placed digits, candidates (both keyed "r,c"), underlined
+ * A question with only the given placed digits and candidates (both keyed "r,c"), underlined
  * candidates, start cell and red zone; the other fields are left empty.
  */
 export function questionWith({
-  values = {},
+  digits = {},
   candidates = {},
   underlined = [],
-  start = [0, 0],
-  redZone = { type: 'cell', nom: 'R9C9', chiffre: null, cases: [[8, 8]] },
+  startCell = [0, 0],
+  redZone = { kind: 'cell', name: 'R9C9', digit: null, cells: [[8, 8]] },
 }: {
-  values?: Record<string, number>;
+  digits?: Record<string, number>;
   candidates?: Record<string, number[]>;
   underlined?: CellDigit[];
-  start?: Cell;
-  redZone?: Arrival;
+  startCell?: Cell;
+  redZone?: RedZone;
 }): ExerciseQuestionData {
-  const vals = new Array<number>(81).fill(0);
-  for (const [key, value] of Object.entries(values)) {
-    const [r, c] = key.split(',').map(Number);
-    vals[r * 9 + c] = value;
+  const digitsByCell = new Array<number>(81).fill(0);
+  const candidatesByCell: number[][] = [];
+  for (let index = 0; index < 81; index++) {
+    candidatesByCell.push([]);
+  }
+  for (const [key, digit] of Object.entries(digits)) {
+    digitsByCell[cellIndexOf(key)] = digit;
+  }
+  for (const [key, cellCandidates] of Object.entries(candidates)) {
+    candidatesByCell[cellIndexOf(key)] = cellCandidates;
   }
   return {
-    coup: 1,
-    vals,
-    givens: new Array<number>(81).fill(0),
-    cands: candidates,
-    under: underlined,
-    depart: start,
-    reponse: 0,
-    autresReponses: [],
-    arrivee: redZone,
-    texte: '',
-    frames: [],
-    etapes: 0,
-    piste: null,
+    digits: digitsByCell,
+    candidates: candidatesByCell,
+    underlined,
+    startCell,
+    redZone,
+    expectedAnswer: 0,
+    otherAnswers: [],
+    solution: [],
+    stepCount: 0,
+    contradiction: '',
+    missedClue: null,
   };
 }
 
-/** Frame 0 of a chain: the hypothesis. */
-export function hypothesis(circle: CellDigit, strikes: CellDigit[] = []): HypFrame {
-  return { kind: 'hyp', circle, strikes };
+/** Index r × 9 + c of the cell keyed "r,c". */
+function cellIndexOf(key: string): number {
+  const [r, c] = key.split(',').map(Number);
+  return r * 9 + c;
 }
 
-/** A forced placement caused by the frame `cause`; a naked single unless `why` says otherwise. */
+/** Frame 0 of a chain: the hypothesis. */
+export function hypothesis(placement: CellDigit, eliminations: CellDigit[] = []): HypothesisFrame {
+  return { kind: 'hypothesis', placement, eliminations };
+}
+
+/** A forced placement caused by the frame `causeStep`; a naked single unless `reason` says otherwise. */
 export function forced(
-  circle: CellDigit,
-  cause: number,
-  strikes: CellDigit[] = [],
-  why = 'nu',
-): DomFrame {
-  return { kind: 'dom', circle, strikes, cause, why };
+  placement: CellDigit,
+  causeStep: number,
+  eliminations: CellDigit[] = [],
+  reason: ForcedReason = { kind: 'naked-single' },
+): ForcedFrame {
+  return { kind: 'forced', placement, eliminations, causeStep, reason };
+}
+
+/** The reason of a hidden single in a unit (index 0..8). */
+export function hiddenSingleIn(kind: Unit['kind'], index: number): ForcedReason {
+  return { kind: 'hidden-single', unit: { kind, index } };
 }
 
 /** Last frame of a chain: the contradiction. */
-export function contradiction(): BadFrame {
-  return { kind: 'bad', cells: [], unit: null };
+export function contradiction(): ContradictionFrame {
+  return { kind: 'contradiction', cells: [] };
 }

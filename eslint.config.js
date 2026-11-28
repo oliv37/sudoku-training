@@ -50,6 +50,27 @@ module.exports = defineConfig([
     },
   },
   {
+    // The grid file format (French field names) stays in exercise-file/: the rest of the app
+    // uses the model of exercise-model.ts, read from the file by parseExerciseFile.
+    // (The board block below has its own no-restricted-imports, which also forbids this import.)
+    files: ['src/app/**/*.ts'],
+    ignores: ['src/app/exercise/exercise-file/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/exercise-file-model'],
+              message:
+                'The grid file format stays in exercise/exercise-file/: use the model of exercise-model.ts.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Rules of the board domain.
     files: ['src/app/board/**/*.ts'],
     rules: {

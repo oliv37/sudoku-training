@@ -21,10 +21,10 @@ import { ExerciseQuestionData } from '../exercise-model';
         startCell()
       }}</span>
       must be eliminated to
-      @if (question().arrivee.type === 'cell') {
+      @if (question().redZone.kind === 'cell') {
         leave
         <span class="whitespace-nowrap rounded-md border-2 border-bad bg-bad-bg px-1.5">{{
-          question().arrivee.nom
+          question().redZone.name
         }}</span>
         without candidates?
       } @else {
@@ -38,12 +38,12 @@ import { ExerciseQuestionData } from '../exercise-model';
     <p
       class="text-center font-mono text-xs tracking-wider text-muted uppercase md:landscape:text-sm"
     >
-      {{ question().etapes }}-step chain
+      {{ question().stepCount }}-step chain
     </p>
   `,
 })
 export class ExerciseQuestion {
   readonly question = input.required<ExerciseQuestionData>();
 
-  protected readonly startCell = computed(() => cellName(this.question().depart));
+  protected readonly startCell = computed(() => cellName(this.question().startCell));
 }

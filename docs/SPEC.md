@@ -24,7 +24,7 @@ Revue composant par composant avec l'utilisateur, pour rendre le code explicite.
 
 - Fait : `App`, `Home`, l'exercice (`Exercise`, ses composants de présentation, `ExerciseStore` en trois features) et le board (calques SVG, géométrie rangée par sujet, tests ciblés, puis board générique piloté par un `BoardDrawing`).
 - Tests : `pnpm test` couvre le board (géométrie, marques, flèches) et l'exercice (traduction en dessin, lecture de la solution). L'instantané des flèches (`exercise-board-arrows.spec.ts`, de la question à la scène du board) prouve que le placement reste celui de `renderCard` : ne jamais le régénérer pour faire passer un test. Deux autres instantanés fixent le rendu : le SVG du board pour un dessin qui utilise tout (`board.spec.ts`) et le dessin de vraies questions (`exercise-board-drawing.spec.ts`). Données de test partagées : `board/testing/`, `exercise/testing/`.
-- À faire : les modèles (noms de champs du JSON en franglais, côté export Python).
+- Modèles : le fichier de grille est lu au chargement par `parseExerciseFile` (`exercise/exercise-file/`) vers un modèle en anglais ; ses noms de champs français n'apparaissent plus ailleurs (règle ESLint).
 
 ### Prochaines étapes (ordre proposé, à confirmer avec l'utilisateur)
 
@@ -41,7 +41,7 @@ Revue composant par composant avec l'utilisateur, pour rendre le code explicite.
 - Contraste : texte blanc sur les couleurs des 3e et 4e branches (orange `#e07800`, turquoise `#0f9aa0`) sous le seuil WCAG AA (ronds numérotés et pastilles de la grille) ; à décider (assombrir ces couleurs ou non).
 - À tester sur un vrai téléphone (lisibilité du texte et de la grille), et dans Safari et Firefox : les fonds de la zone rouge et de la case de départ, et les carrés rouges des derniers candidats, comptent sur `mix-blend-mode: multiply` pour laisser voir les lignes et les chiffres (vérifié seulement dans Chromium).
 - Numéro du coup dans l'URL : non pour l'instant ; à envisager sur `/grid/:nom`.
-- Noms de champs du JSON en franglais : à revoir plus tard, côté export Python.
+- Noms de champs du JSON en franglais : isolés dans `exercise/exercise-file/` ; à revoir côté export Python seulement si on veut changer le format du fichier lui-même.
 - Langue de cette SPEC : gardée en français pour l'instant ; à passer en anglais plus tard, comme le reste du dépôt (mettre à jour la mention « in French » du `CLAUDE.md`).
 
 ## Données

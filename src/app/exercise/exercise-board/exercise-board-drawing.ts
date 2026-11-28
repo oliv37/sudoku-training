@@ -24,7 +24,7 @@ import {
   involvedCellsOf,
   lastStep,
 } from '../exercise-solution/exercise-solution';
-import { Arrival, ExerciseQuestionData } from '../exercise-model';
+import { ExerciseQuestionData, RedZone } from '../exercise-model';
 import { CandidateMarks, MarkedCandidate } from './exercise-board-drawing-model';
 
 /** `solution`: the solution shown on the board and its step reached; null before the user answers. */
@@ -73,7 +73,7 @@ function digitsOf(question: ExerciseQuestionData): DrawnDigit[] {
 }
 
 /**
- * Candidates of the empty cells, row by row, underlined when listed in `under`, with the marks of
+ * Candidates of the empty cells, row by row, underlined when listed in `underlined`, with the marks of
  * the solution. Row by row is also the order in which the arrows avoid the marks.
  */
 function drawnCandidatesOf(
@@ -81,7 +81,7 @@ function drawnCandidatesOf(
   greyedCells: Set<string>,
   solutionMarks: Map<string, MarkedCandidate>,
 ): DrawnCandidate[] {
-  const underlinedKeys = new Set(question.under.map(candidateKey));
+  const underlinedKeys = new Set(question.underlined.map(candidateKey));
   const candidates: DrawnCandidate[] = [];
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
@@ -113,7 +113,7 @@ function greyedCellsOf(
     return greyedCells;
   }
   // Those of the whole solution, whatever the step shown: the greyed cells do not change.
-  const involvedCells = involvedCellsOf(question, solution.frames, question.arrivee.cases);
+  const involvedCells = involvedCellsOf(question, solution.frames, question.redZone.cells);
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
       if (!involvedCells.has(cellKey(r, c))) {
@@ -127,17 +127,17 @@ function greyedCellsOf(
 /** The red zone, then the green start cell on top of it. */
 function zonesOf(question: ExerciseQuestionData): DrawnZone[] {
   const redZone: DrawnZone = {
-    cells: question.arrivee.cases,
+    cells: question.redZone.cells,
     fill: 'red-hatched',
-    outline: redZoneOutlineOf(question.arrivee),
+    outline: redZoneOutlineOf(question.redZone),
   };
-  const startCell: DrawnZone = { cells: [question.depart], fill: 'green', outline: 'solid' };
+  const startCell: DrawnZone = { cells: [question.startCell], fill: 'green', outline: 'solid' };
   return [redZone, startCell];
 }
 
 /** Dashed around a whole unit, solid around a single cell. */
-function redZoneOutlineOf(arrival: Arrival): ZoneOutline {
-  if (arrival.type === 'unit') {
+function redZoneOutlineOf(redZone: RedZone): ZoneOutline {
+  if (redZone.kind === 'unit') {
     return 'dashed';
   }
   return 'solid';
@@ -155,7 +155,7 @@ function solutionMarksOf(
   const marks = new Map<string, MarkedCandidate>();
   addCircles(marks, solution);
   addStrikes(marks, solution);
-  addLastCandidateFrames(marks, question.arrivee, solution);
+  addLastCandidateFrames(marks, question.redZone, solution);
   return marks;
 }
 
@@ -174,23 +174,23 @@ function marksOf(marks: Map<string, MarkedCandidate>, candidate: CellDigit): Can
 function addCircles(marks: Map<string, MarkedCandidate>, solution: ShownSolution): void {
   const branches = branchesOf(solution.frames);
   solution.frames.forEach((frame, index) => {
-    if (frame.kind === 'bad') {
+    if (frame.kind === 'contradiction') {
       return;
     }
-    const isHypothesis = frame.kind === 'hyp';
+    const isHypothesis = frame.kind === 'hypothesis';
     const tone = isHypothesis ? 'green' : branchTone(branches[index]);
     const hidden = isNotShownYet(index, solution);
-    marksOf(marks, frame.circle).circled = { tone, bold: isHypothesis, hidden };
+    marksOf(marks, frame.placement).circled = { tone, bold: isHypothesis, hidden };
   });
 }
 
 /** Each eliminated candidate struck once, at the first step that eliminates it. */
 function addStrikes(marks: Map<string, MarkedCandidate>, solution: ShownSolution): void {
   solution.frames.forEach((frame, index) => {
-    if (frame.kind === 'bad') {
+    if (frame.kind === 'contradiction') {
       return;
     }
-    for (const candidate of frame.strikes) {
+    for (const candidate of frame.eliminations) {
       const candidateMarks = marksOf(marks, candidate);
       if (candidateMarks.struck === undefined) {
         candidateMarks.struck = { tone: 'red', hidden: isNotShownYet(index, solution) };
@@ -205,7 +205,7 @@ function addStrikes(marks: Map<string, MarkedCandidate>, solution: ShownSolution
  */
 function addLastCandidateFrames(
   marks: Map<string, MarkedCandidate>,
-  redZone: Arrival,
+  redZone: RedZone,
   solution: ShownSolution,
 ): void {
   const hidden = isNotShownYet(lastStep(solution.frames), solution);
@@ -222,18 +222,18 @@ function isStruckOnly({ struck, circled }: CandidateMarks): boolean {
 }
 
 /** Whether a candidate is one of those that disappear from the red zone. */
-function isLastCandidateOfRedZone([r, c, digit]: CellDigit, redZone: Arrival): boolean {
-  const isInRedZone = redZone.cases.some(
+function isLastCandidateOfRedZone([r, c, digit]: CellDigit, redZone: RedZone): boolean {
+  const isInRedZone = redZone.cells.some(
     ([zoneRow, zoneColumn]) => zoneRow === r && zoneColumn === c,
   );
   if (!isInRedZone) {
     return false;
   }
   // A single cell loses all its candidates; a unit loses one digit.
-  if (redZone.type === 'cell') {
+  if (redZone.kind === 'cell') {
     return true;
   }
-  return digit === redZone.chiffre;
+  return digit === redZone.digit;
 }
 
 /**
@@ -245,16 +245,16 @@ function solutionArrowsOf(solution: ShownSolution): DrawnArrow[] {
   const branches = branchesOf(frames);
   const arrows: DrawnArrow[] = [];
   frames.forEach((frame, index) => {
-    if (frame.kind !== 'dom') {
+    if (frame.kind !== 'forced') {
       return;
     }
-    const cause = frames[frame.cause];
-    if (cause === undefined || cause.kind === 'bad') {
+    const cause = frames[frame.causeStep];
+    if (cause === undefined || cause.kind === 'contradiction') {
       return;
     }
     arrows.push({
-      from: cause.circle,
-      to: frame.circle,
+      from: cause.placement,
+      to: frame.placement,
       tone: branchTone(branches[index]),
       label: String(index),
       hidden: isNotShownYet(index, solution),

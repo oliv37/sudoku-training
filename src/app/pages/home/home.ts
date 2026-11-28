@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { httpResource } from '@angular/common/http';
 import { Exercise } from '../../exercise/exercise';
-import { ExerciseData } from '../../exercise/exercise-model';
+import { parseExerciseFile } from '../../exercise/exercise-file/exercise-file';
 
 /** For now: a single hard-coded exercise (the November 14 grid). */
 const EXERCISE_URL = '/data/exercices-2026-11-14.json';
@@ -27,5 +27,8 @@ const EXERCISE_URL = '/data/exercices-2026-11-14.json';
   `,
 })
 export class Home {
-  protected readonly exerciseResource = httpResource<ExerciseData>(() => EXERCISE_URL);
+  /** Read into the app model as soon as it is loaded: the file format stays in exercise-file/. */
+  protected readonly exerciseResource = httpResource(() => EXERCISE_URL, {
+    parse: parseExerciseFile,
+  });
 }

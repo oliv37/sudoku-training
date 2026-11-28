@@ -12,12 +12,11 @@ import { rowCells } from '../../board/testing/board-fixtures';
 import { lastStep } from '../exercise-solution/exercise-solution';
 import { Frame, ShownSolution } from '../exercise-solution/exercise-solution-model';
 import { contradiction, forced, hypothesis, questionWith } from '../testing/exercise-fixtures';
-import { Arrival, ExerciseData, ExerciseQuestionData } from '../exercise-model';
+import { ExerciseQuestionData, RedZone } from '../exercise-model';
+import { parseExerciseFile } from '../exercise-file/exercise-file';
 import { boardDrawingOf } from './exercise-board-drawing';
 
-// TypeScript infers a literal type from the JSON content (each question its own `cands` keys),
-// which does not match `ExerciseData` directly.
-const gridQuestions = (gridFile as unknown as ExerciseData).exos;
+const gridQuestions = parseExerciseFile(gridFile).questions;
 
 /**
  * Questions of the grid file whose drawing is recorded: a box red zone with one branch (1), a
@@ -26,7 +25,8 @@ const gridQuestions = (gridFile as unknown as ExerciseData).exos;
 const RECORDED_QUESTION_NUMBERS = [1, 6, 11];
 
 function gridQuestionNumbered(questionNumber: number): ExerciseQuestionData {
-  const question = gridQuestions.find(({ coup }) => coup === questionNumber);
+  // Questions are numbered from 1, in the order of the file.
+  const question = gridQuestions.at(questionNumber - 1);
   if (question === undefined) {
     throw new Error(`No question ${questionNumber} in the grid file`);
   }
@@ -37,8 +37,11 @@ function gridQuestionNumbered(questionNumber: number): ExerciseQuestionData {
 function recordedSolutionsOf(question: ExerciseQuestionData): [string, ShownSolution | null][] {
   return [
     ['before the answer', null],
-    ['at step 1', { frames: question.frames, shownStep: 1 }],
-    ['with the whole solution', { frames: question.frames, shownStep: lastStep(question.frames) }],
+    ['at step 1', { frames: question.solution, shownStep: 1 }],
+    [
+      'with the whole solution',
+      { frames: question.solution, shownStep: lastStep(question.solution) },
+    ],
   ];
 }
 
@@ -112,7 +115,7 @@ function arrowLineOf({ from, to, tone, label, hidden }: DrawnArrow): string {
 describe('exercise board drawing', () => {
   describe('digits', () => {
     it('are the placed digits, row by row', () => {
-      const question = questionWith({ values: { '4,7': 3, '0,0': 5 } });
+      const question = questionWith({ digits: { '4,7': 3, '0,0': 5 } });
       expect(boardDrawingOf(question, null).digits).toEqual([
         { cell: [0, 0], digit: 5 },
         { cell: [4, 7], digit: 3 },
@@ -123,7 +126,7 @@ describe('exercise board drawing', () => {
   describe('candidates', () => {
     it('are those of the empty cells, row by row', () => {
       const question = questionWith({
-        values: { '0,1': 7 },
+        digits: { '0,1': 7 },
         candidates: { '8,8': [2], '0,0': [1, 9], '0,1': [4] },
       });
       const candidates = boardDrawingOf(question, null).candidates;
@@ -150,7 +153,7 @@ describe('exercise board drawing', () => {
     it('are greyed, once the solution is shown, outside the red zone and the cells of the chain', () => {
       const question = questionWith({
         candidates: { '0,0': [1], '2,2': [5], '4,4': [3], '8,8': [2] },
-        redZone: { type: 'cell', nom: 'R9C9', chiffre: null, cases: [[8, 8]] },
+        redZone: { kind: 'cell', name: 'R9C9', digit: null, cells: [[8, 8]] },
       });
       const frames: Frame[] = [hypothesis([0, 0, 1]), forced([4, 4, 3], 0), contradiction()];
       // The greyed cells are those of the whole solution, whatever the step shown.
@@ -166,7 +169,7 @@ describe('exercise board drawing', () => {
 
   describe('zones', () => {
     it('are the red zone, then the green start cell on top of it', () => {
-      const question = questionWith({ start: [1, 2] });
+      const question = questionWith({ startCell: [1, 2] });
       const zones = boardDrawingOf(question, null).zones;
       expect(zones.map(({ fill }) => fill)).toEqual(['red-hatched', 'green']);
       expect(zones[1]).toEqual({ cells: [[1, 2]], fill: 'green', outline: 'solid' });
@@ -175,7 +178,7 @@ describe('exercise board drawing', () => {
     it('outline a whole unit with dashes', () => {
       const row = rowCells(3);
       const question = questionWith({
-        redZone: { type: 'unit', nom: 'row 4', chiffre: 6, cases: row },
+        redZone: { kind: 'unit', name: 'row 4', digit: 6, cells: row },
       });
       const [redZone] = boardDrawingOf(question, null).zones;
       expect(redZone).toEqual({ cells: row, fill: 'red-hatched', outline: 'dashed' });
@@ -183,7 +186,7 @@ describe('exercise board drawing', () => {
 
     it('outline a single cell with a solid line', () => {
       const question = questionWith({
-        redZone: { type: 'cell', nom: 'R5C9', chiffre: null, cases: [[4, 8]] },
+        redZone: { kind: 'cell', name: 'R5C9', digit: null, cells: [[4, 8]] },
       });
       const [redZone] = boardDrawingOf(question, null).zones;
       expect(redZone).toEqual({ cells: [[4, 8]], fill: 'red-hatched', outline: 'solid' });
@@ -226,7 +229,7 @@ describe('exercise board drawing', () => {
       '1,0': [7],
       '4,4': [5],
     };
-    const lastCell: Arrival = { type: 'cell', nom: 'R1C9', chiffre: null, cases: [[0, 8]] };
+    const lastCell: RedZone = { kind: 'cell', name: 'R1C9', digit: null, cells: [[0, 8]] };
     const question = questionWith({ candidates, redZone: lastCell });
 
     /** The drawn candidate of R`r`C`c`, digit `digit` (coordinates 0..8). */
@@ -305,11 +308,11 @@ describe('exercise board drawing', () => {
     });
 
     it('frames, for a red unit, only the struck candidates of its digit', () => {
-      const firstRowWithout3: Arrival = {
-        type: 'unit',
-        nom: 'row 1',
-        chiffre: 3,
-        cases: rowCells(0),
+      const firstRowWithout3: RedZone = {
+        kind: 'unit',
+        name: 'row 1',
+        digit: 3,
+        cells: rowCells(0),
       };
       const unitDrawing = boardDrawingOf(
         questionWith({ candidates, redZone: firstRowWithout3 }),

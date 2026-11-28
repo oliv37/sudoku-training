@@ -1,48 +1,46 @@
 /**
- * The solution of a question, as exported by the Python script: a chain of deductions from a
- * hypothesis to a contradiction. What it means (steps, branches, cells involved) is read in
- * exercise-solution.ts.
+ * The solution of a question: a chain of deductions from a hypothesis to a contradiction. What it
+ * means (steps, branches, cells involved) is read in exercise-solution.ts.
  */
 import { Cell, CellDigit } from '../../board/board-model';
 
-/** Frame 0: the hypothesis, a candidate supposed placed (green circle). */
-export interface HypFrame {
-  kind: 'hyp';
-  circle: CellDigit;
-  strikes: CellDigit[];
+/** Frame 0: the hypothesis, a candidate supposed placed. */
+export interface HypothesisFrame {
+  kind: 'hypothesis';
+  placement: CellDigit;
+  /** Candidates it eliminates. */
+  eliminations: CellDigit[];
 }
 
-/** Frames 1..n: forced placements, the steps of the chain (numbered circles, arrow from `cause`). */
-export interface DomFrame {
-  kind: 'dom';
-  circle: CellDigit;
-  strikes: CellDigit[];
-  /** Index of the frame whose circle causes this one. */
-  cause: number;
-  /** "nu" (naked single) or "caché ligne 3" / "caché colonne 2" / "caché bloc 5" (hidden single). */
-  why: string;
+/** Frames 1..n: forced placements, the steps of the chain. */
+export interface ForcedFrame {
+  kind: 'forced';
+  placement: CellDigit;
+  /** Candidates it eliminates. */
+  eliminations: CellDigit[];
+  /** Index of the frame whose placement forces this one. */
+  causeStep: number;
+  reason: ForcedReason;
 }
 
-/** A row, column or box, as named in the reason of a hidden single ("caché ligne 3"). */
+/** Why a placement is forced: the only candidate of its cell, or the only place of its digit in a unit. */
+export type ForcedReason = { kind: 'naked-single' } | { kind: 'hidden-single'; unit: Unit };
+
+/** A row, column or box. */
 export interface Unit {
-  kind: 'ligne' | 'colonne' | 'bloc';
-  /** 0..8 (the reason counts from 1). */
+  kind: 'row' | 'column' | 'box';
+  /** 0..8; boxes numbered row by row. */
   index: number;
 }
 
-/** Last frame: the contradiction, the unit or cell that becomes empty. */
-export interface BadFrame {
-  kind: 'bad';
+/** Last frame: the contradiction, the cells left without candidates. */
+export interface ContradictionFrame {
+  kind: 'contradiction';
   cells: Cell[];
-  unit: string | null;
 }
 
-/**
- * One moment of the solution chain. A solution is a list of frames, as exported by the Python
- * script: the hypothesis, the forced placements, then the contradiction ("Format du schéma" in
- * docs/SPEC.md).
- */
-export type Frame = HypFrame | DomFrame | BadFrame;
+/** One moment of the solution chain: the hypothesis, the forced placements, then the contradiction. */
+export type Frame = HypothesisFrame | ForcedFrame | ContradictionFrame;
 
 /** A solution shown on the board, and how much of it is drawn. */
 export interface ShownSolution {

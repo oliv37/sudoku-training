@@ -4,10 +4,10 @@ import { questionWith } from './testing/exercise-fixtures';
 describe('exercise cells', () => {
   describe('cellValueOf', () => {
     // Values are stored row by row: R2C6 is at index 1 × 9 + 5 = 14.
-    const question = questionWith({ values: { '1,5': 6, '8,8': 9 } });
+    const question = questionWith({ digits: { '1,5': 6, '8,8': 9 } });
 
     it('reads the digit placed in a cell, row by row', () => {
-      expect(question.vals[14]).toBe(6);
+      expect(question.digits[14]).toBe(6);
       expect(cellValueOf(question, [1, 5])).toBe(6);
       expect(cellValueOf(question, [8, 8])).toBe(9);
     });
@@ -20,7 +20,7 @@ describe('exercise cells', () => {
   describe('candidatesOf', () => {
     const question = questionWith({ candidates: { '1,5': [2, 7] } });
 
-    it('reads the candidates of a cell, keyed "r,c" in the grid file', () => {
+    it('reads the candidates of a cell', () => {
       expect(candidatesOf(question, [1, 5])).toEqual([2, 7]);
     });
 
