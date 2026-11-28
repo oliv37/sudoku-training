@@ -38,8 +38,13 @@ Revue composant par composant avec l'utilisateur, pour rendre le code explicite.
 - Schéma de solution vérifié à l'œil seulement (pas de comparaison automatique avec le rendu de référence).
 - `autresReponses` : géré dans le code mais jamais testé (la grille du 14 novembre n'en a aucune).
 - Aucun audit AXE lancé pour l'instant, ni test avec un vrai lecteur d'écran (VoiceOver, NVDA), notamment l'annonce du verdict (zone `aria-live`).
-- Contraste : texte blanc sur les couleurs des 3e et 4e branches (orange `#e07800`, turquoise `#0f9aa0`) sous le seuil WCAG AA (ronds numérotés et pastilles de la grille) ; à décider (assombrir ces couleurs ou non).
+- Couleurs à deux endroits : le vert et le rouge existent en tokens Tailwind (`src/styles.css`) et dans `TONE_COLORS` (`board/board-theme.ts`), et les ronds numérotés des étapes reçoivent les couleurs hexadécimales du board (`toneColor`). À ramener à une seule source (par exemple des variables CSS lues par les deux), en même temps que la décision sur le contraste ci-dessous.
+- Contraste : texte blanc sur les couleurs des 3e et 4e branches (orange `#e07800`, turquoise `#0f9aa0`) sous le seuil WCAG AA (ronds numérotés et pastilles de la grille) ; à décider (assombrir ces couleurs ou non, ce qui change le rendu de référence).
 - À tester sur un vrai téléphone (lisibilité du texte et de la grille), et dans Safari et Firefox : les fonds de la zone rouge et de la case de départ, et les carrés rouges des derniers candidats, comptent sur `mix-blend-mode: multiply` pour laisser voir les lignes et les chiffres (vérifié seulement dans Chromium).
+- **Plus tard, quand la grille sera jouable** (à ne pas faire avant) :
+  - zones : `Board` dessine une zone comme le rectangle qui entoure ses cases ; une zone en L ou en cases éparses demanderait un contour par case ou un vrai tracé ;
+  - interaction : `Board` n'a aucune sortie (case cliquée), pas de navigation au clavier, et son accessibilité se limite à `role="img"` avec une étiquette ; une grille jouable demande un modèle d'accessibilité de type grille ;
+  - tests : aucun audit AXE automatisé, et à part `board.spec.ts` aucun test n'affiche de composant (les templates de l'exercice ne sont vérifiés que par le build) ; ajouter des tests de composants avec `axe-core`.
 - Numéro du coup dans l'URL : non pour l'instant ; à envisager sur `/grid/:nom`.
 - Noms de champs du JSON en franglais : isolés dans `exercise/exercise-file/` ; à revoir côté export Python seulement si on veut changer le format du fichier lui-même.
 - Langue de cette SPEC : gardée en français pour l'instant ; à passer en anglais plus tard, comme le reste du dépôt (mettre à jour la mention « in French » du `CLAUDE.md`).
